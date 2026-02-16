@@ -1,6 +1,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class ThirdPersonCameraController : MonoBehaviour
 {
@@ -14,12 +15,21 @@ public class ThirdPersonCameraController : MonoBehaviour
     [SerializeField] private InputActionReference rotateAction;
     [SerializeField] private InputActionReference zoomAction;
 
+    [Header("Toggle Settings")]
+    [SerializeField] private InputActionReference toggleRotateAction; 
+    private bool isToggleActive = false;
+
+    [Header("UI Elements")]
+    [SerializeField] private GameObject crosshairUI;
+
     private CinemachineCamera cam;
     private CinemachineOrbitalFollow orbital;
     private CinemachineInputAxisController axisController;
 
     private float targetZoom;
     private float currentZoom;
+    public bool IsInRotationMode => axisController != null && axisController.enabled;
+
 
     private void Awake()
     {
@@ -40,10 +50,7 @@ public class ThirdPersonCameraController : MonoBehaviour
             targetZoom = currentZoom;
         }
 
-
-        if (axisController != null) axisController.enabled = false;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        SetRotationState(false);
     }
 
     private void OnEnable()
@@ -68,27 +75,34 @@ public class ThirdPersonCameraController : MonoBehaviour
     {
         if (axisController == null || rotateAction == null) return;
 
-        // เช็คสถานะการกดค้าง (Hold)
-        bool isRightClickHeld = rotateAction.action.IsPressed();
-
-        // 1. ควบคุมการหมุนกล้อง (เปิด/ปิด Axis Controller)
-        if (axisController.enabled != isRightClickHeld)
+        if (toggleRotateAction != null && toggleRotateAction.action.WasPressedThisFrame())
         {
-            axisController.enabled = isRightClickHeld;
+            isToggleActive = !isToggleActive;
+        }
 
-            // 2. (Optional) จัดการ Cursor เมาส์
-            // ถ้ากดค้าง -> ล็อกเมาส์และซ่อน (เพื่อให้หมุนได้ต่อเนื่องไม่หลุดจอ)
-            // ถ้าปล่อย -> ปล่อยเมาส์และแสดง
-            if (isRightClickHeld)
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
+        bool shouldRotate = rotateAction.action.IsPressed() || isToggleActive;
+
+        if (axisController.enabled != shouldRotate)
+        {
+            SetRotationState(shouldRotate);
+        }
+    }
+
+    void SetRotationState(bool state)
+    {
+        if (axisController != null) axisController.enabled = state;
+
+        if (state)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            if (crosshairUI != null) crosshairUI.SetActive(true);
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            if (crosshairUI != null) crosshairUI.SetActive(false);
         }
     }
 
@@ -98,8 +112,6 @@ public class ThirdPersonCameraController : MonoBehaviour
 
         float scrollInput = zoomAction.action.ReadValue<float>();
 
-        // Normalize ค่า Scroll (Input System บางทีส่งค่ามาเยอะ หรือน้อย ขึ้นอยู่กับ Hardware)
-        // ใช้ Mathf.Sign หรือ Clamp เพื่อให้ค่าคงที่
         if (Mathf.Abs(scrollInput) > 0.01f)
         {
             float direction = scrollInput > 0 ? -1 : 1; // สลับทิศทางตามความถนัด
@@ -110,4 +122,5 @@ public class ThirdPersonCameraController : MonoBehaviour
         currentZoom = Mathf.Lerp(currentZoom, targetZoom, Time.deltaTime * zoomLerpSpeed);
         orbital.Radius = currentZoom;
     }
+
 }

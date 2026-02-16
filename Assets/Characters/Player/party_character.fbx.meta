@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1604970b3a6c10c40b3dd512e09a5a0b
+guid: 50d91f7040156ad4e8a4f5f78d4e67d7
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,13 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Atlas
-    second: {fileID: 2100000, guid: ca585925f276a6f4db2600c62b007d92, type: 2}
+      name: body
+    second: {fileID: 2100000, guid: 86233cda5f45e034b8d782a0dd1287fa, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Window
-    second: {fileID: 2100000, guid: ca585925f276a6f4db2600c62b007d92, type: 2}
+      name: face
+    second: {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -60,7 +60,7 @@ ModelImporter:
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
-    bakeAxisConversion: 0
+    bakeAxisConversion: 1
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4

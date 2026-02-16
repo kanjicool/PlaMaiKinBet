@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private bool isRuning;
     private Animator animator;
+    private ThirdPersonCameraController cameraCtrl;
 
     private void Awake()
     {
@@ -39,6 +40,11 @@ public class PlayerController : MonoBehaviour
     private void OnDisable()
     {
         inputActions.Player.Disable();
+    }
+
+    private void Start()
+    {
+        cameraCtrl = FindFirstObjectByType<ThirdPersonCameraController>();
     }
 
     private void Update()
