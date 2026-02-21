@@ -60,7 +60,6 @@ public class PlayerController : MonoBehaviour
         CheckGrounded();
     }
 
-
     private void HandleMovement()
     {
         Vector3 cameraForward = Camera.main.transform.forward;
@@ -73,27 +72,43 @@ public class PlayerController : MonoBehaviour
 
         Vector3 moveDirection = (cameraForward * moveInput.y + cameraRight * moveInput.x).normalized;
 
-        if (moveDirection.magnitude >= 0.1f)
+        if (cameraCtrl != null && cameraCtrl.IsAiming)
         {
-            Vector3 velocity = moveDirection * moveSpeed;
-            rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
-
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            Quaternion targetRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-        
-            isRuning = true;
-                
+
+            if (moveDirection.magnitude >= 0.1f)
+            {
+                Vector3 velocity = moveDirection * moveSpeed;
+                rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+                isRuning = true;
+            }
+            else
+            {
+                isRuning = false;
+                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            }
         }
         else
         {
-            isRuning = false;
-            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
-        
+            if (moveDirection.magnitude >= 0.1f)
+            {
+                Vector3 velocity = moveDirection * moveSpeed;
+                rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+
+                Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+
+                isRuning = true;
+            }
+            else
+            {
+                isRuning = false;
+                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            }
         }
 
         animator.SetBool("run", isRuning);
-
-
     }
 
 
