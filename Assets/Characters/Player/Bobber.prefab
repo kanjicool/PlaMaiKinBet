@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3688065826591885721}
   - component: {fileID: 3845456621556850024}
   - component: {fileID: 5770681108370573347}
+  - component: {fileID: 150000528657391962}
   m_Layer: 0
   m_Name: Bobber
   m_TagString: Untagged
@@ -139,3 +140,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &150000528657391962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308696332304291891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 644e7ec6c88eb35458830df75eb65856, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Bobber
+  floatOffset: 0.05
+  buoyancyForce: 35
+  waterDrag: 3
+  waterAngularDrag: 2

@@ -93,18 +93,14 @@ public class ThirdPersonCameraController : MonoBehaviour
         if (toggleAimAction != null && toggleAimAction.action.WasPressedThisFrame())
         {
             IsAiming = !IsAiming;
-            Debug.Log($">>> IsAiming : {IsAiming}");
             if (crosshairUI != null) crosshairUI.SetActive(IsAiming);
         }
     }
 
     void HandleCameraRotationAndCursor()
     {
-        Debug.Log($">>> axisController BF : {axisController}");
 
         if (axisController == null) return;
-
-        Debug.Log($">>> axisController AF : {axisController}");
 
         bool isRightClicking = rotateAction != null && rotateAction.action.IsPressed();        
 
