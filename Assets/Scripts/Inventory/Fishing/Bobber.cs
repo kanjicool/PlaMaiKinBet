@@ -5,6 +5,7 @@ using Bitgem.VFX.StylisedWater;
 public class Bobber : MonoBehaviour
 {
     private Rigidbody rb;
+    private AudioSource audioSource;
     private bool isInWater = false;
     private float waterBaseY = 0f;
 
@@ -14,9 +15,17 @@ public class Bobber : MonoBehaviour
     public float waterDrag = 3f;          // ความหนืดของน้ำ (ป้องกันไม่ให้ทุ่นเด้งดึ๋งไม่หยุด)
     public float waterAngularDrag = 2f;   // ความหนืดในการหมุน
 
+    [Header("VFX & SFX")]
+    public GameObject splashParticlePrefab;
+    public AudioClip splashSound;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f;
     }
 
     void FixedUpdate()
@@ -55,10 +64,21 @@ public class Bobber : MonoBehaviour
         isInWater = true;
         waterBaseY = hitY;
 
-        // ไม่ปิด Gravity ปล่อยให้มันมีน้ำหนักตามปกติ!
-        // แต่เราเพิ่มความหนืด(Drag) เพื่อจำลองแรงเสียดทานของน้ำแทน
         rb.linearDamping = waterDrag;
         rb.angularDamping = waterAngularDrag;
+
+        if (splashParticlePrefab != null)
+        {
+            Vector3 splashPos = new Vector3(transform.position.x, hitY, transform.position.z);
+            GameObject splash = Instantiate(splashParticlePrefab, splashPos, Quaternion.identity);
+
+            Destroy(splash, 2f);
+        }
+
+        if (splashSound != null)
+        {
+            audioSource.PlayOneShot(splashSound);
+        }
 
         Debug.Log("ทุ่นตกน้ำ! ระบบฟิสิกส์ลอยตัวเริ่มทำงาน");
     }
