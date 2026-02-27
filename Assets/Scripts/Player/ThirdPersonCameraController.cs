@@ -41,8 +41,6 @@ public class ThirdPersonCameraController : MonoBehaviour
     private void Awake()
     {
         cam = GetComponent<CinemachineCamera>();
-        Debug.Log($">>> GGGGGGGGGG axisController : {axisController}");
-
         if (cam != null)
         {
             if (axisController == null)
