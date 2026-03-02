@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68ced3a65ff0a734786b7c660190593e, type: 3}
   m_Name: GoldFish
   m_EditorClassIdentifier: Assembly-CSharp::FishData
-  fishName: 
-  fishPrefab: {fileID: 0}
+  fishName: GoldFish
+  fishPrefab: {fileID: 8373583083066088231, guid: c43bbd439271c2548947a76bd51e631c, type: 3}
+  price: 10
   escapePower: 5
   stamina: 100
   biteDelay: 2
+  detectionRadius: 5
+  fleeRaius: 3
+  fleeSpeedMultiplier: 2

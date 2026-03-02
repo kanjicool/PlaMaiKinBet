@@ -61,20 +61,18 @@ public class FishingRod : MonoBehaviour
         {
             currentCharge += chargeSpeed * chargeDirection * Time.deltaTime;
 
-            // ถ้าพลังถึงจุดสูงสุด ให้สลับทิศทางให้เกจลดลง
             if (currentCharge >= maxCastForce)
             {
                 currentCharge = maxCastForce;
                 chargeDirection = -1;
             }
-            // ถ้าพลังลดลงมาถึง 0 ให้สลับทิศทางให้เกจเพิ่มขึ้น
             else if (currentCharge <= 0)
             {
                 currentCharge = 0;
                 chargeDirection = 1;
             }
 
-            // ปริ้นค่าดูใน Console ก่อน (เดี๋ยวเราค่อยเอาไปผูกกับ UI หลอดพลังทีหลัง)
+            UIManager.Instance.UpdateCastBar(currentCharge, maxCastForce);
             //Debug.Log($"กำลังชาร์จพลัง... {currentCharge:F1}");
         }
     }
@@ -83,19 +81,19 @@ public class FishingRod : MonoBehaviour
     {
         if (!gameObject.activeInHierarchy) return;
 
-        // ถ้ามีทุ่นอยู่ในฉากอยู่แล้ว ให้ดึงเบ็ดกลับมาแทนที่จะปาใหม่
         if (currentBobber != null)
         {
             Destroy(currentBobber);
             lineRenderer.enabled = false;
-            isCharging = false; // ป้องกันบัคชาร์จค้าง
+            isCharging = false;
+            UIManager.Instance.HideCastBar();
         }
         else
         {
-            // ถ้ายังไม่มีทุ่น ให้เริ่มเข้าสู่สถานะชาร์จพลัง
             isCharging = true;
             currentCharge = 0f;
             chargeDirection = 1;
+            UIManager.Instance.ShowCastBar();
         }
     }
 
@@ -105,18 +103,16 @@ public class FishingRod : MonoBehaviour
 
         isCharging = false;
 
-        // 1. เสกทุ่นออกมาที่ "ปลายไม้เบ็ด" ก่อน
+        UIManager.Instance.HideCastBar();
+
         currentBobber = Instantiate(bobberPrefab, rodTip.position, Quaternion.identity);
         lineRenderer.enabled = true;
 
-        // 2. ดึง Rigidbody ของทุ่นมาเพื่อใส่แรงผลัก
         Rigidbody bobberRb = currentBobber.GetComponent<Rigidbody>();
         if (bobberRb != null)
         {
-            // คำนวณทิศทาง: พุ่งไปข้างหน้ากล้อง + งัดขึ้นบนนิดหน่อย
             Vector3 forceDirection = (Camera.main.transform.forward * currentCharge) + (Vector3.up * upwardForce);
 
-            // ใส่แรงผลักแบบ Impulse (ผลักตู้มเดียว)
             bobberRb.AddForce(forceDirection, ForceMode.Impulse);
         }
 

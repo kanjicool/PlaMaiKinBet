@@ -12,4 +12,9 @@ public class FishData : ScriptableObject
     public float escapePower = 5f;
     public float stamina = 100f;
     public float biteDelay = 2f;
+
+    [Header("AI Settings")]
+    public float detectionRadius = 10f;
+    public float fleeRaius = 5f;
+    public float fleeSpeedMultiplier = 2.5f;
 }
