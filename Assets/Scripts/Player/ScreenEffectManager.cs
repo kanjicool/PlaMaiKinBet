@@ -49,7 +49,24 @@ public class ScreenEffectManager : MonoBehaviour
             }
         }
 
-        underwaterVolume.weight = Mathf.Lerp(underwaterVolume.weight, targetWeight, Time.deltaTime * filterBlendSpeed); ;
+        underwaterVolume.weight = Mathf.Lerp(underwaterVolume.weight, targetWeight, Time.deltaTime * filterBlendSpeed);
+
+        if (targetWeight == 0f && underwaterVolume.weight < 0.001f)
+        {
+            underwaterVolume.weight = 0f;
+
+            if (underwaterVolume.enabled)
+            {
+                underwaterVolume.enabled = false;
+            }
+        }
+        else
+        {
+            if (!underwaterVolume.enabled)
+            {
+                underwaterVolume.enabled = true;
+            }
+        }
     }
 
     public void SetLowHealthEffect(float intensity)
@@ -57,6 +74,8 @@ public class ScreenEffectManager : MonoBehaviour
         if (lowHealthVolume != null)
         {
             lowHealthVolume.weight = intensity;
+
+            lowHealthVolume.enabled = (intensity > 0.001f);
         }
     }
 

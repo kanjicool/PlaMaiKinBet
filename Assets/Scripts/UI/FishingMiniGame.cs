@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using System.Xml.Serialization;
 
 public class FishingMiniGame : MonoBehaviour
 {
-    // ทำ Singleton เพื่อให้ระบบอื่นเรียกใช้ได้ง่ายๆ
     public static FishingMiniGame Instance { get; private set; }
 
     [Header("UI References")]
@@ -12,13 +12,16 @@ public class FishingMiniGame : MonoBehaviour
     public Slider tensionSlider;       // หลอดตึง/หย่อน (0-100)
     public Image catchProgressBar;     // หลอดความสำเร็จ (0-100%)
 
+    [Header("Dynamic Sweet Spot UI")]
+    public RectTransform sweetSpotUI;
+
     [Header("Game Settings")]
     public float playerPullForce = 40f; // แรงดึงเวลาเรากดคลิกค้าง
     public float tensionDropRate = 25f; // ความเร็วที่สายจะหย่อนลงเวลาปล่อยเมาส์
 
-    [Header("Sweet Spot (โซนสีเขียว)")]
-    public float sweetSpotMin = 30f;
-    public float sweetSpotMax = 70f;
+    [Header("Sweet Spot")]
+    public float sweetSpotWidth = 30f;
+    public float baseMoveSpeed = 15f;
     public float catchSpeed = 20f;      // ความเร็วหลอดจับปลาเพิ่มขึ้น
     public float loseSpeed = 10f;       // ความเร็วหลอดจับปลาลดลง (ถ้าหลุดโซน)
 
@@ -27,18 +30,29 @@ public class FishingMiniGame : MonoBehaviour
     private bool isPlaying = false;
     private FishController hookedFish;
 
+    private float sweetSpotCenter = 50f;
+    private float targetSweetSpotCenter = 50f;
+    private float changeTargetTimer = 0f;
+
+    private float SweetSpotMin => sweetSpotCenter - (sweetSpotWidth / 2f);
+    private float SweetSpotMax => sweetSpotCenter + (sweetSpotWidth / 2f);
+
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
         if (miniGamePanel != null) miniGamePanel.SetActive(false);
     }
 
-    // เริ่มมินิเกม (เรียกโดยทุ่นตอนปลากินเบ็ด)
     public void StartMiniGame(FishController fish)
     {
         hookedFish = fish;
-        currentTension = 50f; // เริ่มที่ตรงกลาง
+        currentTension = 50f;
         catchProgress = 0f;
+
+        sweetSpotCenter = 50f;
+        targetSweetSpotCenter = 50f;
+        
         isPlaying = true;
 
         if (miniGamePanel != null) miniGamePanel.SetActive(true);
@@ -49,13 +63,13 @@ public class FishingMiniGame : MonoBehaviour
         if (!isPlaying) return;
 
         HandleTension();
+        MoveSweetSpot();
         CheckSweetSpot();
         UpdateUI();
     }
 
     private void HandleTension()
     {
-        // 1. จำลองแรงของผู้เล่น (ผมใส่เป็นคลิกขวา Mouse1 ไว้ก่อนนะครับ คุณเปลี่ยนเป็น Action ได้)
         if (Mouse.current.rightButton.isPressed)
         {
             currentTension += playerPullForce * Time.deltaTime;
@@ -65,35 +79,45 @@ public class FishingMiniGame : MonoBehaviour
             currentTension -= tensionDropRate * Time.deltaTime;
         }
 
-        // 2. จำลองแรงปลาดึงสู้ (ดึงลง)
-        // ดึง escapePower จาก FishData มาใช้ ยิ่งปลาโหด ยิ่งดึงแรง
-        float fishForce = hookedFish.myData.escapePower * 2f;
+        float fishForce = hookedFish != null ? hookedFish.myData.escapePower * 2f : 10f;
         currentTension -= fishForce * Time.deltaTime;
 
-        // ล็อคไม่ให้ค่าเกิน 0-100
         currentTension = Mathf.Clamp(currentTension, 0f, 100f);
 
-        // 3. ตรวจสอบเงื่อนไขแพ้
         if (currentTension >= 100f) EndGame(false, "ดึงแรงเกินไป สายเบ็ดขาด!");
         if (currentTension <= 0f) EndGame(false, "หย่อนเกินไป ปลาหลุดหนีไปได้!");
     }
 
+    private void MoveSweetSpot()
+    {
+        changeTargetTimer -= Time.deltaTime;
+        if (changeTargetTimer <= 0f || Mathf.Abs(sweetSpotCenter - targetSweetSpotCenter) < 1f)
+        {
+            float halfWidth = sweetSpotWidth / 2f;
+            targetSweetSpotCenter = Random.Range(halfWidth, 100f - halfWidth);
+
+            changeTargetTimer = Random.Range(0.5f, 2f);
+        }
+
+        float moveSpeed = baseMoveSpeed + (hookedFish != null ? hookedFish.myData.escapePower : 0);
+        sweetSpotCenter = Mathf.MoveTowards(sweetSpotCenter, targetSweetSpotCenter, moveSpeed * Time.deltaTime);
+    }
+
+
     private void CheckSweetSpot()
     {
-        // ถ้าอยู่ในโซนสีเขียว
-        if (currentTension >= sweetSpotMin && currentTension <= sweetSpotMax)
+        if (currentTension >= SweetSpotMin && currentTension <= SweetSpotMax)
         {
             catchProgress += catchSpeed * Time.deltaTime;
 
-            // ถ้าหลอดจับปลาเต็ม 100% = ชนะ!
             if (catchProgress >= 100f)
             {
-                EndGame(true, $"ตกปลาสำเร็จ! ได้ {hookedFish.myData.fishName} มาแล้ว!");
+                string fishName = hookedFish != null ? hookedFish.myData.fishName : "ปลาปริศนา";
+                EndGame(true, $"ตกปลาสำเร็จ! ได้ {fishName} มาแล้ว!");
             }
         }
         else
         {
-            // ถ้าหลุดโซนสีเขียว หลอดจับปลาจะค่อยๆ ลดลง
             catchProgress -= loseSpeed * Time.deltaTime;
             catchProgress = Mathf.Max(catchProgress, 0f);
         }
@@ -103,6 +127,22 @@ public class FishingMiniGame : MonoBehaviour
     {
         if (tensionSlider != null) tensionSlider.value = currentTension;
         if (catchProgressBar != null) catchProgressBar.fillAmount = catchProgress / 100f;
+
+        // อัปเดตตำแหน่งและขนาดของโซนสีเขียวบน UI
+        if (sweetSpotUI != null)
+        {
+            // แปลงค่า 0-100 ให้เป็นแกน 0-1 สำหรับ Anchor
+            float minAnchor = SweetSpotMin / 100f;
+            float maxAnchor = SweetSpotMax / 100f;
+
+            // ปรับ Anchor X (สมมติว่าหลอดเป็นแนวนอน)
+            sweetSpotUI.anchorMin = new Vector2(minAnchor, sweetSpotUI.anchorMin.y);
+            sweetSpotUI.anchorMax = new Vector2(maxAnchor, sweetSpotUI.anchorMax.y);
+
+            // เคลียร์ค่า Offset เพื่อให้ภาพขยายเต็มพื้นที่ Anchor พอดี
+            sweetSpotUI.offsetMin = new Vector2(0, sweetSpotUI.offsetMin.y);
+            sweetSpotUI.offsetMax = new Vector2(0, sweetSpotUI.offsetMax.y);
+        }
     }
 
     private void EndGame(bool isWin, string message)
@@ -113,12 +153,11 @@ public class FishingMiniGame : MonoBehaviour
 
         if (isWin)
         {
-            // ถ้าชนะ ดึงปลาเข้าหาตัวละคร
-            // (เดี๋ยวเราค่อยไปอัปเดต FishController เพื่อทำให้มันลอยเข้ากระเป๋า)
+            // โลจิกเมื่อชนะ
         }
         else
         {
-            // ถ้าแพ้ ปลาว่ายหนี
+            // โลจิกเมื่อแพ้
         }
     }
 }
