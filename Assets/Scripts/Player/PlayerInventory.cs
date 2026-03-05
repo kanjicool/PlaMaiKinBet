@@ -9,7 +9,7 @@ public class PlayerInventory : MonoBehaviour
     public List<ItemData> myItems = new List<ItemData>();
 
     [Header("Hotbar Slots")]
-    public Transform handTransform; // เพิ่มบรรทัดนี้: ตำแหน่งที่ของจะไปโผล่ในมือ
+    public Transform handTransform;
     public GameObject[] itemSlots = new GameObject[6];
 
     private InputSystem_Actions inputActions;
@@ -58,7 +58,6 @@ public class PlayerInventory : MonoBehaviour
             myItems.Add(item);
             Debug.Log($"ซื้อ {item.itemName} สำเร็จ! เงินเหลือ: {money}");
 
-            // เรียกใช้ฟังก์ชันนำไอเทมเข้า Hotbar
             UpdateHotbarAfterPurchase(item);
 
             return true;
@@ -70,7 +69,6 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
-    // --- อัปเดตฟังก์ชันนี้ ---
     private void UpdateHotbarAfterPurchase(ItemData item)
     {
         if (item.itemPrefab == null)
@@ -90,19 +88,48 @@ public class PlayerInventory : MonoBehaviour
 
                 spawnedItem.SetActive(false);
 
-                // เอาของใส่ช่อง
                 itemSlots[i] = spawnedItem;
                 Debug.Log($"นำ {item.itemName} ใส่ใน Hotbar ช่องที่ {i + 1} แล้ว!");
 
-                // 👇 --- เพิ่ม 4 บรรทัดนี้เข้าไป --- 👇
-                if (currentItemIndex == -1) // เช็กว่าถ้าตอนนี้ไม่ได้ถืออะไรอยู่เลย
+                if (currentItemIndex == -1)
                 {
-                    EquipItem(i); // สั่งให้หยิบของที่เพิ่งซื้อขึ้นมาถือทันที!
+                    EquipItem(i);
                 }
 
                 return;
             }
         }
         Debug.Log("Hotbar เต็มแล้ว! (ไม่มีช่องว่าง)");
+    }
+
+    // --- ส่วนที่ใช้สำหรับระบบขายของ ---
+    public GameObject GetHeldItem()
+    {
+        if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
+        {
+            return itemSlots[currentItemIndex];
+        }
+
+        return null;
+    }
+
+    public void SellItem(GameObject itemToSell, int price)
+    {
+        money += price;
+        Debug.Log($"ขายของสำเร็จ! ได้เงินมา {price} เหรียญ ตอนนี้มีเงินทั้งหมด: {money}");
+
+        if (currentItemIndex != -1)
+        {
+            itemSlots[currentItemIndex] = null;
+            currentItemIndex = -1;
+        }
+
+        ItemHolder holder = itemToSell.GetComponent<ItemHolder>();
+        if (holder != null && myItems.Contains(holder.itemData))
+        {
+            myItems.Remove(holder.itemData);
+        }
+
+        Destroy(itemToSell);
     }
 }
