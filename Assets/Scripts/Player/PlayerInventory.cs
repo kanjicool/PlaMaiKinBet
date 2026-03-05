@@ -99,7 +99,6 @@ public class PlayerInventory : MonoBehaviour
                 {
                     EquipItem(i); // สั่งให้หยิบของที่เพิ่งซื้อขึ้นมาถือทันที!
                 }
-                // 👆 ---------------------------- 👆
 
                 return;
             }

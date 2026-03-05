@@ -27,6 +27,9 @@ public class FishController : MonoBehaviour
     private Transform currentBait;
     private Animator anim;
 
+    private Transform playerTarget;
+    private System.Action onCatchComplete;
+
     void Start ()
     {
         startPosition = transform.position;
@@ -71,6 +74,25 @@ public class FishController : MonoBehaviour
                 }
                 break;
             case FishState.Hooked:
+                break;
+
+            case FishState.Caught:
+                if (playerTarget != null)
+                {
+                    Vector3 directionToPlayer = (playerTarget.position - transform.position).normalized;
+                    if (directionToPlayer != Vector3.zero)
+                    {
+                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(directionToPlayer), Time.deltaTime * 10f);
+                    }
+
+                    transform.position = Vector3.MoveTowards(transform.position, playerTarget.position, 15f * Time.deltaTime); // 15f คือความเร็วในการดึง
+
+                    if (Vector3.Distance(transform.position, playerTarget.position) < 1.0f)
+                    {
+                        onCatchComplete?.Invoke(); // เรียก Event ว่าจับปลาเสร็จแล้ว
+                        Destroy(gameObject); // ทำลายโมเดลปลาทิ้ง
+                    }
+                }
                 break;
         }
     }
@@ -136,15 +158,13 @@ public class FishController : MonoBehaviour
 
     private void HandleMovement(float speed)
     {
-        // 1. เช็คระยะห่างในแนวราบ (X, Z) ละเว้นแกน Y เพื่อป้องกันปลาว่ายติดพื้นดินใต้น้ำ
         Vector3 currentPos2D = new Vector3(transform.position.x, 0, transform.position.z);
         Vector3 targetPos2D = new Vector3(targetPosition.x, 0, targetPosition.z);
         float distanceToTarget = Vector3.Distance(currentPos2D, targetPos2D);
 
-        // 2. ถ้าถึงเป้าหมายแล้ว ให้หยุดพัก
         if (currentState == FishState.Wander && distanceToTarget < 0.5f)
         {
-            if (anim != null) anim.SetInteger("SwimState", 0); // หยุดอนิเมชัน
+            if (anim != null) anim.SetInteger("SwimState", 0);
 
             waitTimer -= Time.deltaTime;
             if (waitTimer <= 0f)
@@ -152,10 +172,8 @@ public class FishController : MonoBehaviour
                 SetNewTargetPosition();
             }
         }
-        // 3. ถ้ายังไม่ถึงเป้าหมาย ให้ว่ายต่อไป
         else
         {
-            // บังคับเล่นอนิเมชันว่ายน้ำ
             if (anim != null && currentState == FishState.Wander) anim.SetInteger("SwimState", 1);
 
             Vector3 directionToTarget = (targetPosition - transform.position).normalized;
@@ -165,7 +183,6 @@ public class FishController : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
             }
 
-            // เคลื่อนที่ไปหาเป้าหมาย
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
         }
     }
@@ -193,6 +210,42 @@ public class FishController : MonoBehaviour
         {
             Debug.Log("Struggle");
         }
+    }
+
+    public void StartReeling(Transform target, System.Action onComplete)
+    {
+        currentState = FishState.Caught;
+        playerTarget = target;
+        onCatchComplete = onComplete;
+
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        if (anim != null) anim.SetInteger("SwimState", 1);
+        Debug.Log($"กำลังดึงปลา {myData.fishName} เข้าหาตัว!");
+    }
+
+    public void Escape()
+    {
+        Debug.Log($"{myData.fishName} ดิ้นหลุดไปได้!");
+
+        currentState = FishState.Flee;
+
+        Vector3 fleeDirection = (transform.position - Camera.main.transform.position).normalized;
+
+        Vector3 potentialTarget = transform.position + (fleeDirection * myData.fleeRaius * 3f);
+        targetPosition = EnsureUnderwater(potentialTarget);
+
+        if (anim != null) anim.SetInteger("SwimState", 2); // เล่นอนิเมชันว่ายน้ำเร็ว
+
+        // ตั้งให้ปลาค่อยๆ กลับไปสู่โหมดปกติ (Wander) หลังจากหนีไปสักพัก
+        Invoke(nameof(ResetToWander), 3f);
+    }
+
+    private void ResetToWander()
+    {
+        currentState = FishState.Wander;
+        SetNewTargetPosition();
     }
 
     private void SetNewTargetPosition()

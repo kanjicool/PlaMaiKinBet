@@ -8,6 +8,8 @@ public class FishData : ScriptableObject
     public GameObject fishPrefab;
     public int price;
 
+    public ItemData fishItemData;
+
     [Header("Difficulty Settings")]
     public float escapePower = 5f;
     public float stamina = 100f;

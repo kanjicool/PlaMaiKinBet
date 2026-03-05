@@ -15,6 +15,7 @@ MonoBehaviour:
   fishName: GoldFish
   fishPrefab: {fileID: 8373583083066088231, guid: c43bbd439271c2548947a76bd51e631c, type: 3}
   price: 10
+  fishItemData: {fileID: 11400000, guid: 776cd6095eb56144f9c6ba704a73aca1, type: 2}
   escapePower: 5
   stamina: 100
   biteDelay: 2

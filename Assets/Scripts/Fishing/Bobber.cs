@@ -18,6 +18,8 @@ public class Bobber : MonoBehaviour
     public GameObject splashParticlePrefab;
     public AudioClip splashSound;
 
+    [HideInInspector] public FishingRod myRod;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -101,7 +103,7 @@ public class Bobber : MonoBehaviour
 
         if (FishingMiniGame.Instance != null)
         {
-            FishingMiniGame.Instance.StartMiniGame(fish);
+            FishingMiniGame.Instance.StartMiniGame(fish, myRod);
         }
     }
 }

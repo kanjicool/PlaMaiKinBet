@@ -33,6 +33,7 @@ public class FishingMiniGame : MonoBehaviour
     private float sweetSpotCenter = 50f;
     private float targetSweetSpotCenter = 50f;
     private float changeTargetTimer = 0f;
+    private FishingRod activeRod;
 
     private float SweetSpotMin => sweetSpotCenter - (sweetSpotWidth / 2f);
     private float SweetSpotMax => sweetSpotCenter + (sweetSpotWidth / 2f);
@@ -44,9 +45,10 @@ public class FishingMiniGame : MonoBehaviour
         if (miniGamePanel != null) miniGamePanel.SetActive(false);
     }
 
-    public void StartMiniGame(FishController fish)
+    public void StartMiniGame(FishController fish, FishingRod rod)
     {
         hookedFish = fish;
+        activeRod = rod;
         currentTension = 50f;
         catchProgress = 0f;
 
@@ -153,11 +155,24 @@ public class FishingMiniGame : MonoBehaviour
 
         if (isWin)
         {
-            // โลจิกเมื่อชนะ
+            // ชนะ Minigame -> สั่งให้เบ็ดดึงปลาเข้าหาตัว
+            if (activeRod != null)
+            {
+                activeRod.CatchSuccess(hookedFish);
+            }
         }
         else
         {
-            // โลจิกเมื่อแพ้
+            // แพ้ Minigame -> สายขาด หรือ ปลาหลุด
+            if (activeRod != null)
+            {
+                activeRod.CatchFail();
+            }
+
+            if (hookedFish != null)
+            {
+                hookedFish.Escape(); // สั่งให้ปลาว่ายหนีไป
+            }
         }
     }
 }
