@@ -29,6 +29,8 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        if (player == null || !agent.isOnNavMesh) return;
+
         playerInsight = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 

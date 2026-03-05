@@ -315,7 +315,7 @@ Transform:
   m_GameObject: {fileID: 359183683}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.156616, y: -10.249752, z: -103.34503}
+  m_LocalPosition: {x: 7.156616, y: -17.249752, z: 1.6549683}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -895,9 +895,6 @@ PrefabInstance:
       addedObject: {fileID: 973713216}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 684d7282c2d9f864d88d2ff73115a38e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 973713217}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 684d7282c2d9f864d88d2ff73115a38e, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 973713219}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 684d7282c2d9f864d88d2ff73115a38e, type: 3}
       insertIndex: -1
@@ -905,6 +902,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 684d7282c2d9f864d88d2ff73115a38e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 973713221}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 684d7282c2d9f864d88d2ff73115a38e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 973713223}
   m_SourcePrefab: {fileID: 100100000, guid: 684d7282c2d9f864d88d2ff73115a38e, type: 3}
 --- !u!1 &973713214 stripped
 GameObject:
@@ -934,30 +934,6 @@ CapsuleCollider:
   m_Height: 3.5980225
   m_Direction: 1
   m_Center: {x: -0.022445679, y: 1.7009888, z: 0.104213715}
---- !u!114 &973713217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 973713214}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac0a5142cb239a64392667d656366c12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  agent: {fileID: 0}
-  player: {fileID: 0}
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 0
-  whatIsPlayer:
-    serializedVersion: 2
-    m_Bits: 0
-  walkPointRange: 10
-  sightRange: 15
-  attackRange: 2
-  currentState: 0
 --- !u!114 &973713219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -965,7 +941,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 973713214}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4977347e75222af4aba5843f1a4756db, type: 3}
   m_Name: 
@@ -1020,6 +996,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &973713223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 973713214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac0a5142cb239a64392667d656366c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  agent: {fileID: 973713220}
+  player: {fileID: 1938031256}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 128
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 256
+  walkPointRange: 10
+  sightRange: 15
+  attackRange: 2
+  currentState: 0
 --- !u!1001 &1022783837
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1291,7 +1291,7 @@ Transform:
   m_GameObject: {fileID: 1212145011}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 27.156616, y: -6.249752, z: -19.345032}
+  m_LocalPosition: {x: 27.156616, y: -18.249752, z: -19.345032}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1423,7 +1423,7 @@ GameObject:
   - component: {fileID: 1431524849}
   - component: {fileID: 1431524848}
   - component: {fileID: 1431524850}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2054,6 +2054,10 @@ PrefabInstance:
     - target: {fileID: 2769507199256119399, guid: d01e46ed3905b6e4d96a6458d14fc726, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2769507199256119399, guid: d01e46ed3905b6e4d96a6458d14fc726, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2769507199256119399, guid: d01e46ed3905b6e4d96a6458d14fc726, type: 3}
       propertyPath: m_TagString
