@@ -8,18 +8,19 @@ public class LightingManager : MonoBehaviour
     [SerializeField] private LightingPreset Preset;
     //Variables
     [SerializeField, Range(0, 24)] private float TimeOfDay;
+    [SerializeField] private float dayLengthInMinutes = 1f;
 
 
     private void Update()
     {
-        if (Preset == null)
-            return;
+        if (Preset == null) return;
 
         if (Application.isPlaying)
         {
-            //(Replace with a reference to the game time)
-            TimeOfDay += Time.deltaTime;
-            TimeOfDay %= 24; //Modulus to ensure always between 0-24
+            float timeMultiplier = 24f / (dayLengthInMinutes * 60f);
+            TimeOfDay += Time.deltaTime * timeMultiplier;
+
+            TimeOfDay %= 24;
             UpdateLighting(TimeOfDay / 24f);
         }
         else
