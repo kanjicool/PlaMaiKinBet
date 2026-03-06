@@ -71,35 +71,30 @@ public class PlayerInventory : MonoBehaviour
 
     private void UpdateHotbarAfterPurchase(ItemData item)
     {
-        if (item.itemPrefab == null)
-        {
-            Debug.LogWarning($"ไอเทม {item.itemName} ไม่มี 3D Model ให้เสก!");
-            return;
-        }
+        if (item.itemPrefab == null) return;
 
         for (int i = 0; i < itemSlots.Length; i++)
         {
             if (itemSlots[i] == null)
             {
+                // 1. เสกไอเทมจาก Prefab ที่อยู่ใน ScriptableObject
                 GameObject spawnedItem = Instantiate(item.itemPrefab, handTransform);
+
+                // 2. ฝังข้อมูล ItemData กลับเข้าไป (เพื่อให้ระบบขายดึงข้อมูลไปใช้ได้)
+                ItemHolder holder = spawnedItem.GetComponent<ItemHolder>();
+                if (holder == null) holder = spawnedItem.AddComponent<ItemHolder>();
+                holder.itemData = item;
 
                 spawnedItem.transform.localPosition = Vector3.zero;
                 spawnedItem.transform.localRotation = Quaternion.identity;
-
                 spawnedItem.SetActive(false);
 
                 itemSlots[i] = spawnedItem;
-                Debug.Log($"นำ {item.itemName} ใส่ใน Hotbar ช่องที่ {i + 1} แล้ว!");
 
-                if (currentItemIndex == -1)
-                {
-                    EquipItem(i);
-                }
-
+                if (currentItemIndex == -1) EquipItem(i);
                 return;
             }
         }
-        Debug.Log("Hotbar เต็มแล้ว! (ไม่มีช่องว่าง)");
     }
 
     // --- ส่วนที่ใช้สำหรับระบบขายของ ---
@@ -131,5 +126,77 @@ public class PlayerInventory : MonoBehaviour
         }
 
         Destroy(itemToSell);
+    }
+
+    public void AddFishToInventory(GameObject fishPrefab, FishData fishData)
+    {
+        if (fishPrefab == null) return;
+
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            // หาช่องว่างใน Hotbar
+            if (itemSlots[i] == null)
+            {
+                // 1. สร้างตัวปลาขึ้นมาในมือ (HandTransform)
+                GameObject spawnedFish = Instantiate(fishPrefab, handTransform);
+
+                // 2. ใส่ข้อมูล FishHolder เพื่อให้ BuyerManager เช็คราคาขายได้
+                FishHolder holder = spawnedFish.GetComponent<FishHolder>();
+                if (holder == null) holder = spawnedFish.AddComponent<FishHolder>();
+                holder.fishData = fishData;
+
+                // 3. ตั้งค่าตำแหน่งและปิดไว้ก่อน (จะโชว์เมื่อกดเลขช่องนั้นๆ)
+                spawnedFish.transform.localPosition = Vector3.zero;
+                spawnedFish.transform.localRotation = Quaternion.identity;
+                spawnedFish.SetActive(false);
+
+                // 4. เก็บลงช่อง Slot
+                itemSlots[i] = spawnedFish;
+
+                Debug.Log($"ตกได้ {fishData.fishName} และเก็บเข้าช่อง {i + 1} แล้ว!");
+
+                // ถ้าตอนนี้ไม่ได้ถืออะไรอยู่ ให้ถือปลาตัวนี้เลย
+                if (currentItemIndex == -1) EquipItem(i);
+
+                return;
+            }
+        }
+        Debug.Log("กระเป๋าเต็ม! ไม่มีที่เก็บปลา");
+    }
+
+    public void AddCaughtFishToHotbar(ItemData fishItem)
+    {
+        if (fishItem == null || fishItem.itemPrefab == null) return;
+
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            if (itemSlots[i] == null) // หาช่องว่างใน Hotbar
+            {
+                // 1. เสกปลาออกมาในมือ (HandTransform)
+                GameObject spawnedFish = Instantiate(fishItem.itemPrefab, handTransform);
+
+                // 2. ฝังข้อมูล ItemData (เพื่อให้พ่อค้าเช็คราคาขายได้)
+                ItemHolder holder = spawnedFish.GetComponent<ItemHolder>();
+                if (holder == null) holder = spawnedFish.AddComponent<ItemHolder>();
+                holder.itemData = fishItem;
+
+                // 3. ตั้งค่าตำแหน่งปลาในมือ
+                spawnedFish.transform.localPosition = Vector3.zero;
+                spawnedFish.transform.localRotation = Quaternion.identity;
+                spawnedFish.SetActive(false); // ปิดไว้ก่อนจนกว่าจะเลือกใช้ช่องนี้
+
+                // 4. เก็บลงในลิสต์ Slot และ List ข้อมูลหลัก
+                itemSlots[i] = spawnedFish;
+                myItems.Add(fishItem);
+
+                Debug.Log($"ตกได้ {fishItem.itemName} เก็บเข้าช่องที่ {i}");
+
+                // ถ้าตอนนี้ไม่ได้ถืออะไรอยู่ ให้ถือปลาตัวนี้ทันที
+                if (currentItemIndex == -1) EquipItem(i);
+
+                return;
+            }
+        }
+        Debug.Log("กระเป๋าเต็ม! ปลาหลุดมือไปแล้ว");
     }
 }

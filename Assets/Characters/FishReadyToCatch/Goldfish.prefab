@@ -87,9 +87,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f545dceafed8d1a409655fce27f7bd85, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2954729683507945641}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f545dceafed8d1a409655fce27f7bd85, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1047385846958248221}
   m_SourcePrefab: {fileID: 100100000, guid: f545dceafed8d1a409655fce27f7bd85, type: 3}
 --- !u!1 &8373583083066088231 stripped
 GameObject:
@@ -208,16 +205,3 @@ MonoBehaviour:
   turnSpeed: 3
   minWaitTime: 1
   maxWaitTime: 4
---- !u!114 &1047385846958248221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8373583083066088231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e30b7cf5d84ed14f963a6e504a04669, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishHolder
-  fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}

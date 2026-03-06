@@ -165,11 +165,13 @@ public class FishingRod : MonoBehaviour
                 return;
             }
 
-            inventory.myItems.Add(fish.myData.fishItemData);
+            //inventory.myItems.Add(fish.myData.fishItemData);
+            inventory.AddCaughtFishToHotbar(fish.myData.fishItemData);
             Debug.Log($"+++ เก็บ {fish.myData.fishName} เข้ากระเป๋าสำเร็จ! ตอนนี้มีของทั้งหมด {inventory.myItems.Count} ชิ้น +++");
 
             // TODO: เรียก GameManager เพื่อเพิ่ม EXP/อัปเดตเควส
             // GameManager.Instance.AddExp(10);
+            Destroy(fish.gameObject);
         });
     }
 
