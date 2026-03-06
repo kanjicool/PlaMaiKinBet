@@ -14,6 +14,9 @@ namespace Bitgem.VFX.StylisedWater
 
         public WaterVolumeHelper WaterVolumeHelper = null;
 
+        [Header("Float Settings")]
+        public float heightOffset = 0.5f;
+
         #endregion
 
         #region MonoBehaviour events
@@ -26,7 +29,18 @@ namespace Bitgem.VFX.StylisedWater
                 return;
             }
 
-            transform.position = new Vector3(transform.position.x, instance.GetHeight(transform.position) ?? transform.position.y, transform.position.z);
+            float targetHeight = transform.position.y; 
+
+            try
+            {
+                targetHeight = instance.GetHeight(transform.position) ?? transform.position.y;
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
+
+            transform.position = new Vector3(transform.position.x, targetHeight + heightOffset, transform.position.z);
         }
 
         #endregion

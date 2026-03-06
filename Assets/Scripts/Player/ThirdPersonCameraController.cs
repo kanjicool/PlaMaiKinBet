@@ -38,6 +38,8 @@ public class ThirdPersonCameraController : MonoBehaviour
     private float currentZoom;
     public bool IsAiming { get; private set; }
 
+    private Transform target;
+
     private void Awake()
     {
         cam = GetComponent<CinemachineCamera>();
@@ -139,5 +141,15 @@ public class ThirdPersonCameraController : MonoBehaviour
         }
         currentZoom = Mathf.Lerp(currentZoom, targetZoom, Time.deltaTime * zoomLerpSpeed);
         orbital.Radius = currentZoom;
+    }
+
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+
+        if (cam != null)
+        {
+            cam.Target.TrackingTarget = target;
+        }
     }
 }

@@ -251,7 +251,7 @@ public class PlayerController : MonoBehaviour
     private void CheckGrounded()
     {
         isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, groundCheckDistance, groundLayer);
-        animator.SetBool("isGrounded", isGrounded);
+        //animator.SetBool("isGrounded", isGrounded);
     }
 
     // ===================== GROUND COLLISION =====================
