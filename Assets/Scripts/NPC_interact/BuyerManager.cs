@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class BuyerManager : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class BuyerManager : MonoBehaviour
 
     public PlayerInventory player;
 
-    private Text dialogueText;
+    private TextMeshProUGUI dialogueText;
     private GameObject sellButton;
     private GameObject checkPriceButton;
 
@@ -22,7 +23,7 @@ public class BuyerManager : MonoBehaviour
         if (dialogueUI != null)
         {
             Transform titleTransform = dialogueUI.transform.Find("title");
-            if (titleTransform != null) dialogueText = titleTransform.GetComponent<Text>();
+            if (titleTransform != null) dialogueText = titleTransform.GetComponent<TextMeshProUGUI>();
 
             Transform sellTransform = dialogueUI.transform.Find("sell");
             if (sellTransform != null) sellButton = sellTransform.gameObject;
