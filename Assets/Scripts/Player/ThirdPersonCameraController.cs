@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,8 +10,9 @@ public class ThirdPersonCameraController : MonoBehaviour
     [SerializeField] private Transform cameraTarget;
 
     [Header("Offset Settings")]
-    [SerializeField] private Vector3 normalOffset = new Vector3(0, 1.5f, 0); // ���˹觻���
-    [SerializeField] private Vector3 aimOffset = new Vector3(1f, 1.5f, 0);   // ���˹觵͹��� (����ͧ���)
+    [SerializeField] private Vector3 normalOffset = new Vector3(0, 1.5f, 0); // ตำแหน่งปกติ
+    [SerializeField] private Vector3 aimOffset = new Vector3(1f, 1.5f, 0);   // ตำแหน่งตอนเล็ง (เยื้องขวา)
+    [SerializeField] private Vector3 driveOffset = Vector3.zero;
     [SerializeField] private float offsetLerpSpeed = 10f;
 
     [Header("Zoom Settings")]
@@ -37,6 +38,7 @@ public class ThirdPersonCameraController : MonoBehaviour
     private float targetZoom;
     private float currentZoom;
     public bool IsAiming { get; private set; }
+    public bool IsDriving { get; private set; }
 
     private Transform target;
 
@@ -97,6 +99,11 @@ public class ThirdPersonCameraController : MonoBehaviour
             IsAiming = !IsAiming;
             if (crosshairUI != null) crosshairUI.SetActive(IsAiming);
         }
+
+        if (crosshairUI != null)
+        {
+            crosshairUI.SetActive(IsAiming && !IsDriving);
+        }
     }
 
     void HandleCameraRotationAndCursor()
@@ -126,6 +133,16 @@ public class ThirdPersonCameraController : MonoBehaviour
         if (cameraTarget == null) return;
 
         Vector3 targetLocalPos = IsAiming ? aimOffset : normalOffset;
+        
+        if (IsDriving)
+        {
+            targetLocalPos = driveOffset;
+        }
+        else
+        {
+            targetLocalPos = IsAiming ? aimOffset : normalOffset;
+        }
+
         cameraTarget.localPosition = Vector3.Lerp(cameraTarget.localPosition, targetLocalPos, Time.deltaTime * offsetLerpSpeed);
     }
 
@@ -143,13 +160,19 @@ public class ThirdPersonCameraController : MonoBehaviour
         orbital.Radius = currentZoom;
     }
 
-    public void SetTarget(Transform newTarget)
+    public void SetDrivingMode(bool drivingState, Transform newTarget)
     {
-        target = newTarget;
+        IsDriving = drivingState;
 
+        target = newTarget;
         if (cam != null)
         {
             cam.Target.TrackingTarget = target;
+        }
+
+        if (crosshairUI != null)
+        {
+            crosshairUI.SetActive(IsAiming && !IsDriving);
         }
     }
 }

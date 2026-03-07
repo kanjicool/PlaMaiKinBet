@@ -34,9 +34,28 @@ public class FishingRod : MonoBehaviour
 
         inputActions = new InputSystem_Actions();
 
-        inputActions.Player.Fire.started += ctx => StartCasting();
-        inputActions.Player.Fire.canceled += ctx => ReleaseCast();
+        inputActions.Player.Fire.started += OnFireStarted;
+        inputActions.Player.Fire.canceled += OnFireCanceled;
     }
+
+    private void OnFireStarted(InputAction.CallbackContext context)
+    {
+        StartCasting();
+    }
+
+    private void OnFireCanceled(InputAction.CallbackContext context)
+    {
+        ReleaseCast();
+    }
+
+    private void OnDestroy()
+    {
+        inputActions.Player.Fire.started -= OnFireStarted;
+        inputActions.Player.Fire.canceled -= OnFireCanceled;
+
+        inputActions.Dispose();
+    }
+
 
     private void OnEnable()
     {

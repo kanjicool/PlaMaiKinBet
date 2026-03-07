@@ -5,9 +5,14 @@ using Bitgem.VFX.StylisedWater;
 public class BoatBuoyancy : MonoBehaviour
 {
     [Header("Buoyancy Settings")]
-    public Transform[] floatPoints; // สร้าง GameObject เปล่า 4 ตัววางไว้ที่มุมเรือทั้ง 4 ด้านแล้วลากมาใส่
-    public float buoyancyForce = 15f; // แรงลอยตัว
-    public float waterLinearDamping = 2f; // แรงต้านน้ำ (Unity 6 ใช้ linearDamping แทน drag)
+    public Transform[] floatPoints;
+    public float buoyancyForce = 15f;
+
+    // เพิ่มตัวแปรนี้เข้ามาเพื่อให้คุณปรับความสูง-ต่ำของการลอยน้ำได้อิสระ
+    [Tooltip("ปรับค่าบวกเพื่อเรือลอยสูงขึ้น ปรับลบเพื่อเรือจมลง")]
+    public float surfaceOffset = 0.5f;
+
+    public float waterLinearDamping = 2f;
     public float waterAngularDamping = 2f;
 
     private Rigidbody rb;
@@ -31,31 +36,32 @@ public class BoatBuoyancy : MonoBehaviour
         foreach (Transform point in floatPoints)
         {
             float? waterHeight = null;
-
-            // ใช้ try-catch ดักไว้เผื่อระบบน้ำยัง initialize ไม่เสร็จ
             try
             {
                 waterHeight = waterHelper.GetHeight(point.position);
             }
             catch (System.Exception)
             {
-                // ถ้าระบบน้ำยังไม่พร้อม ให้ข้ามจุดนี้ไปก่อน
                 continue;
             }
 
-            // ถ้าจุดนี้อยู่ต่ำกว่าระดับน้ำ
-            if (waterHeight.HasValue && point.position.y < waterHeight.Value)
+            if (waterHeight.HasValue)
             {
-                // คำนวณความลึก ยิ่งลึกยิ่งแรงผลักมาก
-                float depth = waterHeight.Value - point.position.y;
+                // เอาความสูงน้ำ มาบวกกับ Offset ของเรา
+                float adjustedWaterHeight = waterHeight.Value + surfaceOffset;
 
-                // ออกแรงดันขึ้นที่จุดนั้นๆ
-                rb.AddForceAtPosition(Vector3.up * buoyancyForce * depth, point.position, ForceMode.Force);
-                pointsUnderwater++;
+                // ถ้าจุดนี้อยู่ต่ำกว่าระดับน้ำที่ปรับปรุงแล้ว
+                if (point.position.y < adjustedWaterHeight)
+                {
+                    // ยิ่งจมลึก แรงดันยิ่งมาก
+                    float depth = adjustedWaterHeight - point.position.y;
+
+                    rb.AddForceAtPosition(Vector3.up * buoyancyForce * depth, point.position, ForceMode.Force);
+                    pointsUnderwater++;
+                }
             }
         }
 
-        // ถ้ามีส่วนใดส่วนหนึ่งสัมผัสน้ำ ให้เพิ่มแรงต้านน้ำ
         if (pointsUnderwater > 0)
         {
             rb.linearDamping = waterLinearDamping;

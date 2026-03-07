@@ -10,12 +10,10 @@ public class BoatController : MonoBehaviour
     public float turnSpeed = 15f;
 
     [Header("State")]
-    public bool isPlayerDriving = false; // เปิด/ปิดเมื่อผู้เล่นขึ้นเรือ
+    public bool isPlayerDriving = false;
 
     private Rigidbody rb;
     private Vector2 moveInput;
-
-    // หากคุณแยก Action Map สำหรับเรือ ให้ดึง InputSystem_Actions มาใช้คล้าย PlayerController
     private InputSystem_Actions inputActions;
 
     private void Awake()
@@ -35,7 +33,6 @@ public class BoatController : MonoBehaviour
             return;
         }
 
-        // อ่านค่า Input (W/S = moveInput.y, A/D = moveInput.x)
         moveInput = inputActions.Player.Move.ReadValue<Vector2>();
     }
 
@@ -43,15 +40,18 @@ public class BoatController : MonoBehaviour
     {
         if (!isPlayerDriving) return;
 
+        Vector3 boatForward = transform.forward; // หัวเรือชี้ +X
+        boatForward.y = 0;
+        boatForward.Normalize();
+
         // --- เดินหน้าและถอยหลัง ---
         if (Mathf.Abs(moveInput.y) > 0.1f)
         {
-            // ดันไปข้างหน้าตามทิศของเรือ
-            Vector3 force = transform.forward * moveInput.y * acceleration;
+            Vector3 force = boatForward * moveInput.y * acceleration;
             rb.AddForce(force, ForceMode.Force);
         }
 
-        // ล็อกความเร็วไม่ให้เกิน maxSpeed
+        // --- ล็อกความเร็ว ---
         Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         if (horizontalVelocity.magnitude > maxSpeed)
         {
@@ -59,12 +59,12 @@ public class BoatController : MonoBehaviour
             rb.linearVelocity = new Vector3(horizontalVelocity.x, rb.linearVelocity.y, horizontalVelocity.z);
         }
 
-        // --- การเลี้ยว ---
+        // --- เลี้ยวเรือ ---
         if (Mathf.Abs(moveInput.x) > 0.1f)
         {
-            // ทำให้เลี้ยวได้เป็นธรรมชาติมากขึ้น (ถ้าถอยหลัง พวงมาลัยจะสลับทิศเหมือนรถ)
             float turnDirection = moveInput.y < 0 ? -1f : 1f;
             rb.AddTorque(Vector3.up * moveInput.x * turnSpeed * turnDirection, ForceMode.Force);
         }
     }
+
 }
