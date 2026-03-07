@@ -122,7 +122,7 @@ public class BuyerManager : MonoBehaviour
         itemName = "";
         int price = 0;
 
-        ItemHolder itemHolder = item.GetComponent<ItemHolder>();
+        ItemHolder itemHolder = item.GetComponent<ItemHolder>();    
         FishHolder fishHolder = item.GetComponent<FishHolder>();
 
         if (itemHolder != null && itemHolder.itemData != null)
