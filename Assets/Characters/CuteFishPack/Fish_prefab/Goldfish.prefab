@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f545dceafed8d1a409655fce27f7bd85, type: 3}
       propertyPath: m_Name
-      value: Goldfish (3)
+      value: Goldfish
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -70,14 +70,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f545dceafed8d1a409655fce27f7bd85, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1311998904739128259}
+      addedObject: {fileID: -1138393244215708921}
   m_SourcePrefab: {fileID: 100100000, guid: f545dceafed8d1a409655fce27f7bd85, type: 3}
 --- !u!1 &7044006101367532407 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f545dceafed8d1a409655fce27f7bd85, type: 3}
   m_PrefabInstance: {fileID: 7854348031364109862}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1311998904739128259
+--- !u!114 &-1138393244215708921
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7044006101367532407}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90424f0be809e854c8ac7515b6572a0e, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e30b7cf5d84ed14f963a6e504a04669, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemHolder
-  itemData: {fileID: 11400000, guid: 776cd6095eb56144f9c6ba704a73aca1, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::FishHolder
+  fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}

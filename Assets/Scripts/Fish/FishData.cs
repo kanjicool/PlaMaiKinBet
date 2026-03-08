@@ -6,6 +6,7 @@ public class FishData : ScriptableObject
     [Header("Basic Info")]
     public string fishName;
     public GameObject fishPrefab;
+    public Sprite fishIcon;
     public int price;
 
     public ItemData fishItemData;

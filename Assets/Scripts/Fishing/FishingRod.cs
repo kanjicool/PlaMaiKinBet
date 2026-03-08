@@ -1,4 +1,4 @@
-using UnityEngine;
+๏ปฟusing UnityEngine;
 using UnityEngine.InputSystem;
 
 
@@ -9,9 +9,9 @@ public class FishingRod : MonoBehaviour
     public Transform rodTip;
     public GameObject bobberPrefab;
 
-    [Header("Casting Settings (ระบบชาร์จพลัง)")]
-    public float maxCastForce = 25f;  // แรงปาสูงสุด
-    public float chargeSpeed = 20f;   // ความเร็วในการชาร์จเกจ
+    [Header("Casting Settings (รรยบยบยชร’รรฌยจยพร…ร‘ยง)")]
+    public float maxCastForce = 25f;  // รกรยงยปร’รรยงรรยด
+    public float chargeSpeed = 20f;   // ยครร’รร รรงรรฃยนยกร’รยชร’รรฌยจร ยกยจ
     public float upwardForce = 5f;
 
     private LineRenderer lineRenderer;
@@ -102,7 +102,7 @@ public class FishingRod : MonoBehaviour
             }
 
             UIManager.Instance.UpdateCastBar(currentCharge, maxCastForce);
-            //Debug.Log($"กำลังชาร์จพลัง... {currentCharge:F1}");
+            //Debug.Log($"ยกร“ร…ร‘ยงยชร’รรฌยจยพร…ร‘ยง... {currentCharge:F1}");
         }
     }
 
@@ -148,47 +148,47 @@ public class FishingRod : MonoBehaviour
             bobberRb.AddForce(forceDirection, ForceMode.Impulse);
         }
 
-        //Debug.Log($"ปาเหยื่อออกไปด้วยแรง: {currentCharge:F1}");
-        currentCharge = 0f; // รีเซ็ตค่าพลัง
+        //Debug.Log($"ยปร’ร รรร—รจรรรยกรคยปยดรฉรรรกรยง: {currentCharge:F1}");
+        currentCharge = 0f; // รร•ร ยซรงยตยครจร’ยพร…ร‘ยง
     }
     public void CatchSuccess(FishController fish)
     {
         if (currentBobber != null)
         {
-            Destroy(currentBobber); // ลบทุ่นทิ้ง
+            Destroy(currentBobber); // ร…ยบยทรรจยนยทร”รฉยง
         }
 
         currentHookedFish = fish;
-        lineRenderer.enabled = true; // เปิดเส้นเอ็นไว้ดึงปลา
+        lineRenderer.enabled = true; // ร ยปร”ยดร รรฉยนร รรงยนรครรฉยดร–ยงยปร…ร’
 
         Transform pullTarget = transform.parent != null ? transform.parent : transform;
 
         fish.StartReeling(pullTarget, () => {
 
-            // --- สิ่งที่จะเกิดขึ้นเมื่อปลามาถึงตัว ---
+            // --- รร”รจยงยทร•รจยจรร ยกร”ยดยขร–รฉยนร รร—รจรยปร…ร’รร’ยถร–ยงยตร‘ร ---
             lineRenderer.enabled = false;
             currentHookedFish = null;
 
-            // ดึง Script Inventory ของผู้เล่นมาเพื่อเก็บปลา
+            // ยดร–ยง Script Inventory ยขรยงยผรรฉร ร…รจยนรร’ร ยพร—รจรร ยกรงยบยปร…ร’
             PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
 
             if (inventory == null)
             {
-                Debug.LogError("บั๊ก: หา PlayerInventory ไม่เจอ! ตรวจสอบว่าตัวผู้เล่นมีสคริปต์นี้อยู่ไหม");
+                Debug.LogError("ยบร‘รชยก: รร’ PlayerInventory รครรจร ยจร! ยตรรยจรรยบรรจร’ยตร‘รยผรรฉร ร…รจยนรร•รยครร”ยปยตรฌยนร•รฉรรรรจรครร");
                 return;
             }
 
             if (fish.myData.fishItemData == null)
             {
-                Debug.LogError($"บั๊ก: ปลากำลังจะเข้ากระเป๋าแล้ว แต่คุณลืมใส่ ItemData ให้กับ {fish.myData.fishName} ในหน้า Inspector!");
+                Debug.LogError($"ยบร‘รชยก: ยปร…ร’ยกร“ร…ร‘ยงยจรร ยขรฉร’ยกรรร ยปรซร’รกร…รฉร รกยตรจยครยณร…ร—รรฃรรจ ItemData รฃรรฉยกร‘ยบ {fish.myData.fishName} รฃยนรยนรฉร’ Inspector!");
                 return;
             }
 
             //inventory.myItems.Add(fish.myData.fishItemData);
             inventory.AddCaughtFishToHotbar(fish.myData.fishItemData);
-            Debug.Log($"+++ เก็บ {fish.myData.fishName} เข้ากระเป๋าสำเร็จ! ตอนนี้มีของทั้งหมด {inventory.myItems.Count} ชิ้น +++");
+            Debug.Log($"+++ ร ยกรงยบ {fish.myData.fishName} ร ยขรฉร’ยกรรร ยปรซร’รร“ร รรงยจ! ยตรยนยนร•รฉรร•ยขรยงยทร‘รฉยงรรยด {inventory.myItems.Count} ยชร”รฉยน +++");
 
-            // TODO: เรียก GameManager เพื่อเพิ่ม EXP/อัปเดตเควส
+            // TODO: ร รร•รยก GameManager ร ยพร—รจรร ยพร”รจร EXP/รร‘ยปร ยดยตร ยครร
             // GameManager.Instance.AddExp(10);
             Destroy(fish.gameObject);
         });
@@ -198,11 +198,11 @@ public class FishingRod : MonoBehaviour
     {
         if (currentBobber != null)
         {
-            Destroy(currentBobber); // ทำลายทุ่นทิ้ง
+            Destroy(currentBobber); // ยทร“ร…ร’รยทรรจยนยทร”รฉยง
         }
 
-        lineRenderer.enabled = false; // ปิดสายเอ็น
+        lineRenderer.enabled = false; // ยปร”ยดรร’รร รรงยน
         currentHookedFish = null;
-        Debug.Log("เก็บสายเบ็ด... เตรียมตัวตกใหม่");
+        Debug.Log("ร ยกรงยบรร’รร ยบรงยด... ร ยตรร•รรยตร‘รยตยกรฃรรรจ");
     }
 }
