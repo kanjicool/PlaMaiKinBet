@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     public float swimStopDepth = 0.3f;  // ระดับความตื้นที่จะเปลี่ยนกลับเป็นท่ายืน/เดิน (ต้องน้อยกว่า surfaceOffset)
 
     private bool isInWater;
+    private int waterOverlapCount = 0;
     private float waterSurfaceY;
     private float originalDrag;
     private bool isSwimming;
@@ -276,7 +277,8 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Water"))
         {
-            isInWater = true; // ระบุว่าตัวละครสัมผัสน้ำแล้ว
+            waterOverlapCount++;
+            isInWater = true; 
             waterSurfaceY = other.bounds.max.y;
 
             if (effectManager != null)
@@ -290,15 +292,23 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Water"))
         {
-            isInWater = false; // ออกจากแหล่งน้ำแล้ว
+            waterOverlapCount--;
 
-            if (isSwimming)
+            if (waterOverlapCount <= 0)
             {
-                StopSwimming();
+                waterOverlapCount = 0;
+                isInWater = false;
+
+                if (isSwimming)
+                {
+                    StopSwimming();
+                }
+
+                if (effectManager != null)
+                    effectManager.SetWaterState(false);
             }
 
-            if (effectManager != null)
-                effectManager.SetWaterState(false);
+
         }
     }
 
