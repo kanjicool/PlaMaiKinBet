@@ -7,11 +7,13 @@ public class GameLoopManager : MonoBehaviour
 
     [Header("References")]
     public Transform player;
-    public GameObject islandPrefab;
+
+    public GameObject[] islandPrefabs;
     public CompassDirection compass;
 
     [Header("Spawn Settings")]
-    public float spawnDistance = 500f;
+    public float minSpawnDistance = 400f;
+    public float maxSpawnDistance = 800f;
 
     [Header("Wave State")]
     public GameObject currentIsland;
@@ -26,16 +28,28 @@ public class GameLoopManager : MonoBehaviour
     {
         if (targetIsland != null) return; 
 
+        if (islandPrefabs == null || islandPrefabs.Length == 0)
+        {
+            return;
+        }
+
+        int randomIslandIndex = Random.Range(0, islandPrefabs.Length);
+        GameObject selectedIslandPrefab = islandPrefabs[randomIslandIndex];
+
+        float currentSpawnDistance = Random.Range(minSpawnDistance, maxSpawnDistance);
+
         float randomAngle = Random.Range(-45f, 45f);
         Vector3 spawnDirection = Quaternion.Euler(0, randomAngle, 0) * player.forward;
-        Vector3 spawnPos = player.position + (spawnDirection.normalized * spawnDistance);
+        
+        
+        Vector3 spawnPos = player.position + (spawnDirection.normalized * currentSpawnDistance);
         spawnPos.y = 0;
 
-        targetIsland = Instantiate(islandPrefab, spawnPos, Quaternion.identity);
+        targetIsland = Instantiate(selectedIslandPrefab, spawnPos, Quaternion.identity);
 
         if (compass != null) compass.SetTarget(targetIsland.transform);
 
-        Debug.Log("เกาะใหม่เกิดแล้วที่ระยะ " + spawnDistance + " หน่วย! ขับเรือไปเลย");
+        Debug.Log($"สุ่มได้เกาะแบบที่ {randomIslandIndex}! เกิดแล้วที่ระยะ {currentSpawnDistance:F0} หน่วย!");
     }
 
     void Update()
@@ -62,6 +76,12 @@ public class GameLoopManager : MonoBehaviour
 
         player.position += offset;
 
+        ThirdPersonCameraController camController = FindFirstObjectByType<ThirdPersonCameraController>();
+        if (camController != null)
+        {
+            camController.OnTargetWarped(offset);
+        }
+
         currentIsland = newIsland;
         targetIsland = null;
 
@@ -69,4 +89,6 @@ public class GameLoopManager : MonoBehaviour
 
         Debug.Log("วาร์ปโลกกลับศูนย์กลางสำเร็จ! เริ่ม Wave ถัดไป");
     }
+
+
 }

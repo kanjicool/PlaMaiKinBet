@@ -175,4 +175,15 @@ public class ThirdPersonCameraController : MonoBehaviour
             crosshairUI.SetActive(IsAiming && !IsDriving);
         }
     }
+
+    // ==========================================
+    // FLOATING ORIGIN
+    // ==========================================
+    public void OnTargetWarped(Vector3 positionDelta)
+    {
+        if (cam != null && cam.Target.TrackingTarget != null)
+        {
+            cam.OnTargetObjectWarped(cam.Target.TrackingTarget, positionDelta);
+        }
+    }
 }
