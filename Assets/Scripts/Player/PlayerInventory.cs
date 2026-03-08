@@ -199,4 +199,75 @@ public class PlayerInventory : MonoBehaviour
         }
         Debug.Log("กระเป๋าเต็ม! ปลาหลุดมือไปแล้ว");
     }
+    // --- เพิ่มฟังก์ชันนี้เข้าไปใน PlayerInventory.cs ---
+    public int SellAllFish()
+    {
+        int totalEarnings = 0;
+        int fishCount = 0;
+
+        // สร้าง List ไว้เก็บไอเทมที่จะลบออกจาก myItems เพื่อป้องกัน Error ตอนวนลูป
+        List<ItemData> itemsToRemove = new List<ItemData>();
+
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            if (itemSlots[i] != null)
+            {
+                int itemPrice = 0;
+                bool isSellable = false;
+
+                // 1. ลองเช็กว่าเป็น FishHolder (เผื่อในอนาคตคุณใช้ Fish Data)
+                FishHolder fishHolder = itemSlots[i].GetComponent<FishHolder>();
+                if (fishHolder != null && fishHolder.fishData != null)
+                {
+                    itemPrice = fishHolder.fishData.price;
+                    isSellable = true;
+                }
+                // 2. ถ้าไม่ใช่ ลองเช็กว่าเป็น ItemHolder (สำหรับ Goldfish ในรูปปัจจุบัน)
+                else
+                {
+                    ItemHolder itemHolder = itemSlots[i].GetComponent<ItemHolder>();
+
+                    // ต้องมีข้อมูล ItemData และชื่อต้องไม่มีคำว่า "Rod" เพื่อป้องกันการขายเบ็ดตกปลา
+                    if (itemHolder != null && itemHolder.itemData != null && !itemHolder.itemData.name.Contains("Rod"))
+                    {
+                        itemPrice = itemHolder.itemData.price;
+                        itemsToRemove.Add(itemHolder.itemData); // จดไว้เพื่อไปลบออกจาก List myItems หลัก
+                        isSellable = true;
+                    }
+                }
+
+                // ถ้าไอเทมช่องนี้เข้าเงื่อนไขว่าขายได้
+                if (isSellable)
+                {
+                    totalEarnings += itemPrice;
+                    fishCount++;
+
+                    // ทำลายออบเจกต์ทิ้งและล้างช่อง Slot
+                    Destroy(itemSlots[i]);
+                    itemSlots[i] = null;
+
+                    // เคลียร์สถานะการถือ หากบังเอิญช่องนั้นเป็นช่องที่เลือกอยู่
+                    if (currentItemIndex == i)
+                    {
+                        currentItemIndex = -1;
+                    }
+                }
+            }
+        }
+
+        // อัปเดตลบของออกจาก List myItems ในกระเป๋า
+        foreach (var item in itemsToRemove)
+        {
+            myItems.Remove(item);
+        }
+
+        // เพิ่มเงินถ้ายอดรวมมากกว่า 0
+        if (totalEarnings > 0)
+        {
+            money += totalEarnings;
+            Debug.Log($"ขายปลาไปทั้งหมด {fishCount} ตัว ได้เงินมา {totalEarnings} เหรียญ ตอนนี้มีเงินทั้งหมด: {money}");
+        }
+
+        return totalEarnings;
+    }
 }

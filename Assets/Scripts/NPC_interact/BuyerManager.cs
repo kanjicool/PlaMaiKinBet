@@ -67,11 +67,11 @@ public class BuyerManager : MonoBehaviour
         GameObject heldItem = player.GetHeldItem();
 
         // 1. ถ้าไม่ได้ถือของอะไรเลย
-        if (heldItem == null)
-        {
-            if (dialogueText != null) dialogueText.text = "You are not holding anything. Please equip an item first.";
-            return;
-        }
+        //if (heldItem == null)
+        //{
+        //    if (dialogueText != null) dialogueText.text = "You are not holding anything. Please equip an item first.";
+        //    return;
+        //}
 
         // 2. ส่งของในมือไปเช็กราคา
         int currentItemPrice = GetItemPrice(heldItem, out string itemName);
@@ -94,17 +94,27 @@ public class BuyerManager : MonoBehaviour
 
         GameObject heldItem = player.GetHeldItem();
 
-        // 1. ถ้ากดปุ่มขาย แต่ไม่ได้ถือของ
+        // 1. ถ้าไม่ได้ถือของอะไรเลย -> ให้ขายปลา (FishData) ทั้งหมดในกระเป๋า
         if (heldItem == null)
         {
-            if (dialogueText != null) dialogueText.text = "You can't sell nothing! Equip something first.";
-            return;
+            int totalFishEarnings = player.SellAllFish();
+
+            if (totalFishEarnings > 0)
+            {
+                if (dialogueText != null)
+                    dialogueText.text = $"Wow! I bought all your fish for {totalFishEarnings} coins. Anything else?";
+            }
+            else
+            {
+                if (dialogueText != null)
+                    dialogueText.text = "You are not holding anything, and you don't have any fish to sell.";
+            }
+            return; // จบการทำงานตรงนี้เลย ไม่ต้องทำบรรทัดล่างต่อ
         }
 
-        // 2. ดึงข้อมูลราคา ณ ตอนที่กดปุ่มขาย
+        // 2. ถ้าถือของอยู่ -> ให้ขายเฉพาะของที่ถือบนมือเท่านั้น
         int currentItemPrice = GetItemPrice(heldItem, out string itemName);
 
-        // 3. ถ้าราคามากกว่า 0 ถึงจะขายได้
         if (currentItemPrice > 0)
         {
             player.SellItem(heldItem, currentItemPrice);
