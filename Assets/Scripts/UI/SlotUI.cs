@@ -9,6 +9,7 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
     [Header("Slot Info")]
     public SlotType slotType;
     public int slotIndex;
+    public Image itemIcon;
 
     [Header("Lock System")]
     public bool isLocked = false;
@@ -44,10 +45,10 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
     // --- 2. เริ่มลาก (ส่วนนี้เหมือนเดิม) ---
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (isLocked || inventory == null) return; // ล็อกอยู่ห้ามย้าย!
+        if (isLocked || inventory == null) return;
 
-        Image myIcon = transform.Find("icon")?.GetComponent<Image>();
-        if (myIcon == null || myIcon.sprite == null || myIcon.color.a == 0) return;
+        // 🌟 เปลี่ยนมาใช้ itemIcon ตรงๆ แทนการ Find
+        if (itemIcon == null || itemIcon.sprite == null || itemIcon.color.a == 0) return;
 
         slotBeingDragged = this;
 
@@ -56,11 +57,11 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
         ghostIcon.transform.SetAsLastSibling();
 
         Image ghostImage = ghostIcon.AddComponent<Image>();
-        ghostImage.sprite = myIcon.sprite;
-        ghostImage.raycastTarget = false; 
+        ghostImage.sprite = itemIcon.sprite; // 🌟 ใช้ itemIcon
+        ghostImage.raycastTarget = false;
 
         RectTransform ghostRect = ghostIcon.GetComponent<RectTransform>();
-        ghostRect.sizeDelta = myIcon.rectTransform.sizeDelta;
+        ghostRect.sizeDelta = itemIcon.rectTransform.sizeDelta;
         ghostRect.position = eventData.position;
     }
 

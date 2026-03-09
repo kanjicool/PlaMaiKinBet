@@ -48,16 +48,14 @@ public class PlayerInventory : MonoBehaviour
         {
             if (hotbarIcons[i] != null)
             {
-                // ถอยไปหาตัวแม่ (slot)
                 GameObject slotObj = hotbarIcons[i].transform.parent.gameObject;
-
                 SlotUI slotUI = slotObj.GetComponent<SlotUI>();
                 if (slotUI == null) slotUI = slotObj.AddComponent<SlotUI>();
 
                 slotUI.slotType = SlotUI.SlotType.Hotbar;
                 slotUI.slotIndex = i;
+                slotUI.itemIcon = hotbarIcons[i]; // 🌟 ผูก Image ไอเทมเข้ากับ Slot อัตโนมัติ
 
-                // ค้นหาลูกที่ชื่อ LockIcon
                 Transform lockIcon = slotObj.transform.Find("LockIcon");
                 if (lockIcon != null) slotUI.lockImage = lockIcon.GetComponent<Image>();
             }
@@ -68,16 +66,14 @@ public class PlayerInventory : MonoBehaviour
         {
             if (inventoryIcons[i] != null)
             {
-                // ถอยไปหาตัวแม่ (slot)
                 GameObject slotObj = inventoryIcons[i].transform.parent.gameObject;
-
                 SlotUI slotUI = slotObj.GetComponent<SlotUI>();
                 if (slotUI == null) slotUI = slotObj.AddComponent<SlotUI>();
 
                 slotUI.slotType = SlotUI.SlotType.Inventory;
                 slotUI.slotIndex = i;
+                slotUI.itemIcon = inventoryIcons[i]; // 🌟 ผูก Image ไอเทมเข้ากับ Slot อัตโนมัติ
 
-                // ค้นหาลูกที่ชื่อ LockIcon
                 Transform lockIcon = slotObj.transform.Find("LockIcon");
                 if (lockIcon != null) slotUI.lockImage = lockIcon.GetComponent<Image>();
             }
