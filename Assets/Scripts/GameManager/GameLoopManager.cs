@@ -19,6 +19,8 @@ public class GameLoopManager : MonoBehaviour
     public GameObject currentIsland;
     private GameObject targetIsland;
 
+    private int lastIslandIndex = -1;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -34,6 +36,16 @@ public class GameLoopManager : MonoBehaviour
         }
 
         int randomIslandIndex = Random.Range(0, islandPrefabs.Length);
+
+        if (islandPrefabs.Length > 1 && randomIslandIndex == lastIslandIndex)
+        {
+            if (Random.value < 0.8f)
+            {
+                randomIslandIndex = (randomIslandIndex + Random.Range(1, islandPrefabs.Length)) % islandPrefabs.Length;
+            }
+        }
+        
+        lastIslandIndex = randomIslandIndex;
         GameObject selectedIslandPrefab = islandPrefabs[randomIslandIndex];
 
         float currentSpawnDistance = Random.Range(minSpawnDistance, maxSpawnDistance);
