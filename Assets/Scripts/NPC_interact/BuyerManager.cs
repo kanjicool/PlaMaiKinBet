@@ -94,25 +94,30 @@ public class BuyerManager : MonoBehaviour
 
         GameObject heldItem = player.GetHeldItem();
 
-        // 1. ถ้าไม่ได้ถือของอะไรเลย -> ให้ขายปลา (FishData) ทั้งหมดในกระเป๋า
+        // 1. ถ้ามือว่าง -> สั่งขายปลาทั้งหมด (ระบบจะข้ามตัวที่ล็อกให้อัตโนมัติแล้ว)
         if (heldItem == null)
         {
             int totalFishEarnings = player.SellAllFish();
 
             if (totalFishEarnings > 0)
             {
-                if (dialogueText != null)
-                    dialogueText.text = $"Wow! I bought all your fish for {totalFishEarnings} coins. Anything else?";
+                if (dialogueText != null) dialogueText.text = $"Wow! I bought all your unlocked fish for {totalFishEarnings} coins.";
             }
             else
             {
-                if (dialogueText != null)
-                    dialogueText.text = "You are not holding anything, and you don't have any fish to sell.";
+                if (dialogueText != null) dialogueText.text = "You don't have any unlocked fish to sell.";
             }
-            return; // จบการทำงานตรงนี้เลย ไม่ต้องทำบรรทัดล่างต่อ
+            return;
         }
 
-        // 2. ถ้าถือของอยู่ -> ให้ขายเฉพาะของที่ถือบนมือเท่านั้น
+        // 🌟 2. ถ้าถือของอยู่ -> เช็คก่อนว่าของในมือโดนล็อกไว้ไหม?
+        if (player.IsHeldItemLocked())
+        {
+            if (dialogueText != null) dialogueText.text = "Hey! You locked this item. Unlock it first if you want to sell it.";
+            return; // ไล่กลับไปปลดล็อกก่อน ไม่ให้ขาย!
+        }
+
+        // 3. ถ้าไม่ได้ล็อก -> ขายได้ปกติ
         int currentItemPrice = GetItemPrice(heldItem, out string itemName);
 
         if (currentItemPrice > 0)
@@ -122,7 +127,6 @@ public class BuyerManager : MonoBehaviour
         }
         else
         {
-            // ถ้าถือของอยู่ แต่เป็นของที่ขายไม่ได้ (ราคา 0 หรือไม่มีข้อมูล)
             if (dialogueText != null) dialogueText.text = "I don't buy that kind of stuff.";
         }
     }
