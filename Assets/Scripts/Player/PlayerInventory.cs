@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI; // เพิ่ม Library สำหรับจัดการ UI (Image)
+using UnityEngine.UI;
+
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -14,9 +15,10 @@ public class PlayerInventory : MonoBehaviour
     public GameObject[] itemSlots = new GameObject[6];
 
     [Header("UI System")]
-    public GameObject inventoryMenu;    // ลาก InventoryMenu มาใส่ (เพื่อให้เปิด/ปิดได้)
-    public Image[] hotbarIcons;        // ลาก Image 6 อันใน Hotbar Panel มาใส่
-    public Image[] inventoryIcons;     // ลาก Image 28 อันใน GridItem มาใส่
+    public GameObject inventoryMenu;
+    public Image[] hotbarIcons;
+    public Image[] inventoryIcons;
+    public RectTransform selectionHighlight;
 
     private InputSystem_Actions inputActions;
     private int currentItemIndex = -1;
@@ -36,14 +38,12 @@ public class PlayerInventory : MonoBehaviour
 
     private void Start()
     {
-        // ซ่อนหน้าต่างกระเป๋าตอนเริ่มเกม และอัปเดต UI ให้โชว์เบ็ดตกปลาใน Hotbar
         if (inventoryMenu != null) inventoryMenu.SetActive(false);
         UpdateInventoryUI();
     }
 
     private void Update()
     {
-        // กด B เพื่อเปิด-ปิดกระเป๋า
         if (Keyboard.current.bKey.wasPressedThisFrame)
         {
             ToggleInventory();
@@ -61,89 +61,91 @@ public class PlayerInventory : MonoBehaviour
         if (isInventoryOpen)
         {
             UpdateInventoryUI();
-            Cursor.lockState = CursorLockMode.None; // โชว์เมาส์
+            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked; // ซ่อนเมาส์กลับเข้าเกม
+            Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
     }
 
-    // ฟังก์ชันสำหรับรีเฟรชรูปภาพในช่อง UI ทั้งหมด
     public void UpdateInventoryUI()
     {
-        // 1. อัปเดต Hotbar (6 ช่องข้างล่าง)
+        // 1. อัปเดต Hotbar Icons
         for (int i = 0; i < hotbarIcons.Length; i++)
         {
             if (i < itemSlots.Length && itemSlots[i] != null)
             {
                 ItemHolder itemHolder = itemSlots[i].GetComponent<ItemHolder>();
-                FishHolder fishHolder = itemSlots[i].GetComponent<FishHolder>();
-
-                // ถ้าเป็นไอเทมปกติ
                 if (itemHolder != null && itemHolder.itemData != null)
                 {
                     hotbarIcons[i].sprite = itemHolder.itemData.icon;
+                    hotbarIcons[i].color = Color.white; // มั่นใจว่าสีปกติ
                     hotbarIcons[i].enabled = true;
-                }
-                // ถ้าเป็นปลา 🌟 (เพิ่มตรงนี้เข้ามา)
-                else if (fishHolder != null && fishHolder.fishData != null)
-                {
-                    hotbarIcons[i].sprite = fishHolder.fishData.fishIcon; // ใช้รูปจาก FishData
-                    hotbarIcons[i].enabled = true;
-                }
-                else
-                {
-                    hotbarIcons[i].enabled = false;
                 }
             }
             else
             {
-                hotbarIcons[i].enabled = false;
+                // แทนที่จะสั่ง enabled = false ซึ่งจะทำให้ตำแหน่งเพี้ยนหรือหายไป
+                // ให้ใช้การปรับสีให้โปร่งใสแทน (Alpha = 0) เพื่อให้ Object ยัง Active อยู่
+                hotbarIcons[i].sprite = null;
+                hotbarIcons[i].color = new Color(0, 0, 0, 0);
+                hotbarIcons[i].enabled = true; // เปิดไว้เพื่อให้เอา position ได้
             }
         }
 
-        // 2. อัปเดตช่องกระเป๋า (28 ช่อง)
-        for (int i = 0; i < inventoryIcons.Length; i++)
+        // ... (ส่วนอัปเดต Inventory Icons คงเดิม) ...
+
+        // 3. อัปเดตตำแหน่ง Highlight
+        if (selectionHighlight != null)
         {
-            if (i < myItems.Count)
+            if (currentItemIndex >= 0 && currentItemIndex < hotbarIcons.Length)
             {
-                inventoryIcons[i].sprite = myItems[i].icon;
-                inventoryIcons[i].enabled = true;
+                selectionHighlight.gameObject.SetActive(true);
+
+                // แนะนำ: ให้ย้ายไปเกาะที่ตำแหน่งของ "Slot" (Parent ของ Icon) 
+                // เพราะตำแหน่งจะนิ่งกว่าและตรงกลางเป๊ะกว่าครับ
+                selectionHighlight.position = hotbarIcons[currentItemIndex].transform.parent.position;
             }
             else
             {
-                inventoryIcons[i].enabled = false;
+                selectionHighlight.gameObject.SetActive(false);
             }
         }
     }
 
     private void EquipItem(int index)
     {
-        if (index >= itemSlots.Length || itemSlots[index] == null) return;
+        if (index >= itemSlots.Length) return;
 
+        // ปิดของชิ้นเก่าก่อน (ถ้ามี)
+        if (currentItemIndex != -1 && currentItemIndex < itemSlots.Length && itemSlots[currentItemIndex] != null)
+        {
+            itemSlots[currentItemIndex].SetActive(false);
+        }
+
+        // ถ้ากดช่องเดิมที่ใส่อยู่ ให้ถือว่า "เก็บ" (Un-equip)
         if (currentItemIndex == index)
         {
-            itemSlots[index].SetActive(false);
             currentItemIndex = -1;
         }
         else
         {
-            if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
-            {
-                itemSlots[currentItemIndex].SetActive(false);
-            }
-            itemSlots[index].SetActive(true);
+            // เลือกช่องใหม่ (ยอมให้เลือกช่องว่างได้)
             currentItemIndex = index;
+            if (itemSlots[currentItemIndex] != null)
+            {
+                itemSlots[currentItemIndex].SetActive(true);
+            }
         }
-        UpdateInventoryUI(); // อัปเดต UI เมื่อสลับของ
+
+        UpdateInventoryUI();
     }
 
     public bool BuyItem(ItemData item)
     {
-        // เช็คว่ามีเงินพอ และ กระเป๋ายังไม่เต็ม (28 ช่อง)
         if (money >= item.price && myItems.Count < inventoryIcons.Length)
         {
             money -= item.price;
@@ -151,7 +153,7 @@ public class PlayerInventory : MonoBehaviour
             Debug.Log($"ซื้อ {item.itemName} สำเร็จ! เงินเหลือ: {money}");
 
             UpdateHotbarAfterPurchase(item);
-            UpdateInventoryUI(); // อัปเดต UI
+            UpdateInventoryUI();
             return true;
         }
         else
@@ -214,51 +216,23 @@ public class PlayerInventory : MonoBehaviour
         }
 
         Destroy(itemToSell);
-        UpdateInventoryUI(); // อัปเดต UI
+        UpdateInventoryUI();
     }
 
-    public void AddFishToInventory(GameObject fishPrefab, FishData fishData)
-    {
-        if (fishPrefab == null) return;
-
-        for (int i = 0; i < itemSlots.Length; i++)
-        {
-            if (itemSlots[i] == null)
-            {
-                GameObject spawnedFish = Instantiate(fishPrefab, handTransform);
-
-                FishHolder holder = spawnedFish.GetComponent<FishHolder>();
-                if (holder == null) holder = spawnedFish.AddComponent<FishHolder>();
-                holder.fishData = fishData;
-
-                spawnedFish.transform.localPosition = Vector3.zero;
-                spawnedFish.transform.localRotation = Quaternion.identity;
-                spawnedFish.SetActive(false);
-
-                itemSlots[i] = spawnedFish;
-
-                Debug.Log($"ตกได้ {fishData.fishName} และเก็บเข้าช่อง {i + 1} แล้ว!");
-
-                if (currentItemIndex == -1) EquipItem(i);
-                UpdateInventoryUI(); // อัปเดต UI
-                return;
-            }
-        }
-        Debug.Log("กระเป๋าเต็ม! ไม่มีที่เก็บปลา");
-    }
+    // ลบฟังก์ชัน AddFishToInventory ทิ้งไปเลยครับ เพราะตกปลาเราใช้ AddCaughtFishToHotbar อยู่แล้ว จะได้ไม่รก
 
     public void AddCaughtFishToHotbar(ItemData fishItem)
     {
-        if (fishItem == null || fishItem.itemPrefab == null) return;
+        if (fishItem == null) return;
 
+        // ลองหาช่องว่างใน Hotbar ก่อน
+        bool addedToHotbar = false;
         for (int i = 0; i < itemSlots.Length; i++)
         {
             if (itemSlots[i] == null)
             {
                 GameObject spawnedFish = Instantiate(fishItem.itemPrefab, handTransform);
-
-                ItemHolder holder = spawnedFish.GetComponent<ItemHolder>();
-                if (holder == null) holder = spawnedFish.AddComponent<ItemHolder>();
+                ItemHolder holder = spawnedFish.GetComponent<ItemHolder>() ?? spawnedFish.AddComponent<ItemHolder>();
                 holder.itemData = fishItem;
 
                 spawnedFish.transform.localPosition = Vector3.zero;
@@ -268,14 +242,27 @@ public class PlayerInventory : MonoBehaviour
                 itemSlots[i] = spawnedFish;
                 myItems.Add(fishItem);
 
-                Debug.Log($"ตกได้ {fishItem.itemName} เก็บเข้าช่องที่ {i}");
-
-                if (currentItemIndex == -1) EquipItem(i);
-                UpdateInventoryUI(); // อัปเดต UI
-                return;
+                Debug.Log($"ตกได้ {fishItem.itemName} เก็บเข้า Hotbar ช่อง {i}");
+                addedToHotbar = true;
+                break;
             }
         }
-        Debug.Log("กระเป๋าเต็ม! ปลาหลุดมือไปแล้ว");
+
+        // ถ้า Hotbar เต็ม แต่ช่อง Inventory (myItems) ยังไม่เต็ม
+        if (!addedToHotbar)
+        {
+            if (myItems.Count < inventoryIcons.Length)
+            {
+                myItems.Add(fishItem);
+                Debug.Log($"Hotbar เต็ม! เก็บ {fishItem.itemName} เข้า Inventory แทน");
+            }
+            else
+            {
+                Debug.Log("กระเป๋าเต็มสนิท! ปลาหลุดมือไปแล้ว");
+            }
+        }
+
+        UpdateInventoryUI();
     }
 
     public int SellAllFish()
@@ -288,34 +275,20 @@ public class PlayerInventory : MonoBehaviour
         {
             if (itemSlots[i] != null)
             {
-                int itemPrice = 0;
-                bool isSellable = false;
-
+                ItemHolder itemHolder = itemSlots[i].GetComponent<ItemHolder>();
                 FishHolder fishHolder = itemSlots[i].GetComponent<FishHolder>();
-                // 1. ถ้าไอเทมใช้ระบบ FishHolder ให้ถือว่าเป็นปลาและขายได้เลย
-                if (fishHolder != null && fishHolder.fishData != null)
-                {
-                    itemPrice = fishHolder.fishData.price;
-                    isSellable = true;
-                }
-                else
-                {
-                    ItemHolder itemHolder = itemSlots[i].GetComponent<ItemHolder>();
-                    // 2. ถ้าไอเทมใช้ระบบ ItemData ให้เช็คว่า itemtype เป็น "fish" เท่านั้นถึงจะขายได้
-                    // ใช้ .ToLower() เพื่อป้องกันบัคกรณีพิมพ์พิมพ์เล็กพิมพ์ใหญ่สลับกัน (เช่น "Fish", "FISH")
-                    if (itemHolder != null && itemHolder.itemData != null && !string.IsNullOrEmpty(itemHolder.itemData.itemtype) && itemHolder.itemData.itemtype.ToLower() == "fish")
-                    {
-                        itemPrice = itemHolder.itemData.price;
-                        itemsToRemove.Add(itemHolder.itemData);
-                        isSellable = true;
-                    }
-                }
 
-                // ถ้าตรวจผ่านเงื่อนไขว่าเป็นปลา (isSellable = true) ให้ขายทิ้ง
-                if (isSellable)
+                // 🌟 ทริคใหม่: ไม่ต้องพึ่งคำว่า "fish" ใน itemtype แล้ว!
+                // ถ้าของชิ้นนี้มีทั้ง ItemHolder และ FishHolder (เพราะ Prefab ปลามันติด FishHolder มาด้วย)
+                // ก็ฟันธงได้เลยว่ามันคือ "ปลา" แน่นอน
+                if (itemHolder != null && itemHolder.itemData != null && fishHolder != null)
                 {
+                    int itemPrice = itemHolder.itemData.price; // ดึงราคาจาก ItemData ที่เดียวพอ
+
                     totalEarnings += itemPrice;
                     fishCount++;
+                    itemsToRemove.Add(itemHolder.itemData);
+
                     Destroy(itemSlots[i]);
                     itemSlots[i] = null;
 
@@ -327,20 +300,18 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        // เอาปลาที่ขายไปแล้วออกจาก List กระเป๋าหลัก
         foreach (var item in itemsToRemove)
         {
             myItems.Remove(item);
         }
 
-        // เพิ่มเงินและสรุปผล
         if (totalEarnings > 0)
         {
             money += totalEarnings;
             Debug.Log($"ขายปลาไปทั้งหมด {fishCount} ตัว ได้เงินมา {totalEarnings} เหรียญ ตอนนี้มีเงินทั้งหมด: {money}");
         }
 
-        UpdateInventoryUI(); // รีเฟรชหน้าจอหลังจากขายเสร็จ
+        UpdateInventoryUI();
         return totalEarnings;
     }
 }
