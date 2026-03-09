@@ -53,6 +53,24 @@ public class PlayerController : MonoBehaviour
     [Header("ScreenEffectManager")]
     public ScreenEffectManager effectManager;
 
+    [Header("Climbing System")]
+    public float climbSpeed = 3f;
+    public float climbCheckDistance = 0.6f;
+    public LayerMask climbableLayer;
+
+    public Vector3 climbRayOffset = new Vector3(0, 1f, 0);
+
+    [Header("Climbing Visual Correction")]
+    public Transform visualModel; // ลาก GameObject ที่เป็นตัวโมเดล (Mesh) มาใส่
+    public Vector3 visualRotationOffset = new Vector3(0, 180f, 0); // ชดเชยองศาหันหน้า
+    public Vector3 visualPositionOffset = new Vector3(0, 0, 0);    // ชดเชยตำแหน่งเยื้องศูนย์
+
+    private Quaternion originalVisualLocalRot;
+    private Vector3 originalVisualLocalPos;
+
+    private bool isClimbing;
+    private RaycastHit climbHit;
+
     private InputSystem_Actions inputActions;
     private Rigidbody rb;
     private Vector2 moveInput;
@@ -86,6 +104,13 @@ public class PlayerController : MonoBehaviour
             staminaSlider.maxValue = maxStamina;
             staminaSlider.value = currentStamina;
         }
+
+        if (visualModel != null)
+        {
+            originalVisualLocalRot = visualModel.localRotation;
+            originalVisualLocalPos = visualModel.localPosition;
+        }
+
     }
 
     private void OnEnable() => inputActions.Player.Enable();
@@ -108,6 +133,7 @@ public class PlayerController : MonoBehaviour
     {
         CheckGrounded();
         CheckWaterDepth(); // เรียกใช้เช็กความลึกของน้ำตลอดเวลา
+        CheckClimbing();
 
         if (isSwimming)
         {
@@ -115,7 +141,14 @@ public class PlayerController : MonoBehaviour
             currentSurfaceOffset = Mathf.Lerp(currentSurfaceOffset, targetOffset, Time.fixedDeltaTime * 5f);
         }
 
-        HandleMovement();
+        if (isClimbing)
+        {
+            HandleClimbMovement();
+        }
+        else
+        {
+            HandleMovement();
+        }
 
         if (isGrounded && isJumping && rb.linearVelocity.y <= 0.1f)
         {
@@ -127,20 +160,30 @@ public class PlayerController : MonoBehaviour
     private void HandleStamina()
     {
         if (currentStamina <= 0f)
+        {
             isExhausted = true;
+            if (isClimbing) StopClimbing();
+        }
         else if (currentStamina >= staminaRecoveryThreshold)
+        {
             isExhausted = false;
+        }
 
-        isSprinting = isSprintingInput && moveInput.magnitude > 0.1f && !isSwimming && !isExhausted;
+        isSprinting = isSprintingInput && moveInput.magnitude > 0.1f && !isSwimming && !isClimbing && !isExhausted;
 
-        if (isSprinting)
+        bool isMovingOnWall = isClimbing && moveInput.magnitude > 0.1f;
+
+        if (isSprinting || isMovingOnWall)
         {
             currentStamina -= staminaDrainRate * Time.deltaTime;
-            currentMoveSpeed = sprintSpeed;
+            currentMoveSpeed = isClimbing ? climbSpeed : sprintSpeed;
         }
         else
         {
-            currentStamina += staminaRegenRate * Time.deltaTime;
+            if (!isClimbing)
+            {
+                currentStamina += staminaRegenRate * Time.deltaTime;
+            }
             currentMoveSpeed = isSwimming ? swimSpeed : walkSpeed;
         }
 
@@ -232,7 +275,7 @@ public class PlayerController : MonoBehaviour
     // ===================== JUMP =====================
     private void Jump()
     {
-        if (isSwimming) return;
+        if (isSwimming || isClimbing) return;
 
         if (Time.time < lastJumpTime + jumpCooldown) return;
 
@@ -319,12 +362,10 @@ public class PlayerController : MonoBehaviour
         {
             float currentDepth = waterSurfaceY - transform.position.y;
 
-            // ถ้าน้ำลึกถึงจุดที่กำหนด และยังไม่ได้ว่ายน้ำ -> ให้เริ่มว่ายน้ำ
-            if (currentDepth >= swimStartDepth && !isSwimming)
+            if (currentDepth >= swimStartDepth && !isSwimming && !isClimbing)
             {
                 StartSwimming();
             }
-            // ถ้าน้ำตื้นกว่าจุดเลิกว่าย และตัวละครกำลังว่ายน้ำอยู่ -> ให้หยุดว่ายน้ำ
             else if (currentDepth < swimStopDepth && isSwimming)
             {
                 StopSwimming();
@@ -344,5 +385,83 @@ public class PlayerController : MonoBehaviour
         isSwimming = false;
         rb.linearDamping = originalDrag;
         animator.SetBool("swim", false);
+    }
+
+    private void CheckClimbing()
+    {
+        if (isExhausted)
+        {
+            if (isClimbing) StopClimbing();
+            return;
+        }
+
+        Vector3 rayOrigin = transform.position + climbRayOffset;
+        bool hitWall = Physics.Raycast(rayOrigin, transform.forward, out climbHit, climbCheckDistance, climbableLayer);
+
+        if (hitWall && moveInput.y > 0.1f)
+        {
+            if (!isClimbing) StartClimbing();
+        }
+        else if (!hitWall || (isClimbing && isGrounded && moveInput.y < -0.1f))
+        {
+            if (isClimbing) StopClimbing();
+        }
+    }
+
+    private void StartClimbing()
+    {
+        if (isSwimming)
+        {
+            StopSwimming();
+        }
+
+        isClimbing = true;
+        rb.useGravity = false;
+        rb.linearVelocity = Vector3.zero;
+
+        transform.rotation = Quaternion.LookRotation(-climbHit.normal);
+
+        if (visualModel != null)
+        {
+            visualModel.localRotation = originalVisualLocalRot * Quaternion.Euler(visualRotationOffset);
+            visualModel.localPosition = originalVisualLocalPos + visualPositionOffset;
+        }
+
+        //animator.SetBool("climb", true);
+    }
+
+    private void StopClimbing()
+    {
+        isClimbing = false;
+        rb.useGravity = true;
+        //animator.SetBool("climb", false);
+
+        if (visualModel != null)
+        {
+            visualModel.localRotation = originalVisualLocalRot;
+            visualModel.localPosition = originalVisualLocalPos;
+        }
+    }
+
+    private void HandleClimbMovement()
+    {
+        Vector3 climbDirection = (transform.up * moveInput.y + transform.right * moveInput.x).normalized;
+
+        rb.linearVelocity = climbDirection * climbSpeed;
+
+        isMoving = climbDirection.magnitude >= 0.1f;
+        //animator.SetBool("climbMove", isMoving); 
+    }
+
+    // ===================== DEBUG GIZMOS =====================
+    private void OnDrawGizmos()
+    {
+        Vector3 rayOrigin = transform.position + climbRayOffset;
+
+        Gizmos.color = Application.isPlaying && isClimbing ? Color.green : Color.red;
+        Gizmos.DrawRay(rayOrigin, transform.forward * climbCheckDistance);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(rayOrigin + transform.forward * climbCheckDistance, 0.05f);
     }
 }
