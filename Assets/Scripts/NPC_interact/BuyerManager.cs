@@ -67,11 +67,11 @@ public class BuyerManager : MonoBehaviour
         GameObject heldItem = player.GetHeldItem();
 
         // 1. ถ้าไม่ได้ถือของอะไรเลย
-        //if (heldItem == null)
-        //{
-        //    if (dialogueText != null) dialogueText.text = "You are not holding anything. Please equip an item first.";
-        //    return;
-        //}
+        if (heldItem == null)
+        {
+            if (dialogueText != null) dialogueText.text = "You are not holding anything. Please equip an item first.";
+            return;
+        }
 
         // 2. ส่งของในมือไปเช็กราคา
         int currentItemPrice = GetItemPrice(heldItem, out string itemName);
