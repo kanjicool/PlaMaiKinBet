@@ -5,6 +5,22 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Health & Combat System")]
+    public float maxHealth = 100f;
+    private float currentHealth;
+    public Transform spawnPoint;
+
+    public Slider healthSlider;
+
+    public float attackDamage = 20f;
+    public float attackRange = 0.8f;
+    public Transform attackPoint;
+
+    public string enemyTag = "Enemy";
+
+    public float attackCooldown = 0.5f;
+    private float nextAttackTime = 0f;
+
     [Header("Movement Settings")]
     public float walkSpeed = 5f;
     public float sprintSpeed = 10f;
@@ -94,8 +110,11 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.Sprint.performed += ctx => isSprintingInput = true;
         inputActions.Player.Sprint.canceled += ctx => isSprintingInput = false;
 
+        inputActions.Player.Attack.performed += context => Punch();
+
         originalDrag = rb.linearDamping;
         currentStamina = maxStamina;
+        currentHealth = maxHealth;
         currentMoveSpeed = walkSpeed;
         currentSurfaceOffset = surfaceOffset;
 
@@ -109,6 +128,12 @@ public class PlayerController : MonoBehaviour
         {
             originalVisualLocalRot = visualModel.localRotation;
             originalVisualLocalPos = visualModel.localPosition;
+        }
+
+        if (healthSlider != null)
+        {
+            healthSlider.maxValue = maxHealth;
+            healthSlider.value = currentHealth;
         }
 
     }
@@ -153,6 +178,71 @@ public class PlayerController : MonoBehaviour
         if (isGrounded && isJumping && rb.linearVelocity.y <= 0.1f)
         {
             isJumping = false;
+        }
+    }
+
+    // ===================== Combat =====================
+    private void Punch()
+    {
+        Debug.Log("1. กดปุ่มโจมตีแล้ว!");
+
+        if (isSwimming || isClimbing || isExhausted || Time.time < nextAttackTime)
+        {
+            Debug.Log("2. โจมตีไม่ได้ (ติดว่ายน้ำ/ปีนเขา/เหนื่อย/หรือติดคูลดาวน์)");
+            return;
+        }
+
+        nextAttackTime = Time.time + attackCooldown;
+        Debug.Log("3. ผ่านเงื่อนไข เตรียมปล่อยหมัด!");
+        //animator.SetTrigger("punch");
+
+        if (attackPoint != null)
+        {
+            Collider[] hitObjects = Physics.OverlapSphere(attackPoint.position, attackRange);
+            Debug.Log("4. เจอวัตถุในรัศมีจำนวน: " + hitObjects.Length + " ชิ้น");
+
+            foreach (Collider hitObject in hitObjects)
+            {
+                if (hitObject.CompareTag(enemyTag))
+                {
+                    Debug.Log("5. เจอศัตรูแล้ว! ส่งดาเมจ");
+                    DummyEnemy dummy = hitObject.GetComponent<DummyEnemy>();
+                    if (dummy != null)
+                    {
+                        dummy.TakeDamage(attackDamage);
+                    }
+                }
+            }
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        Debug.Log("Player Health: " + currentHealth);
+
+        if (healthSlider != null) healthSlider.value = currentHealth;
+
+        if (currentHealth <= 0)
+        {
+            DieAndRespawn();
+        }
+    }
+
+    private void DieAndRespawn()
+    {
+        Debug.Log("Player Died! Respawning...");
+
+        currentHealth = maxHealth;
+        currentStamina = maxStamina;
+        rb.linearVelocity = Vector3.zero;
+
+        if (healthSlider != null) healthSlider.value = currentHealth;
+
+        if (spawnPoint != null)
+        {
+            transform.position = spawnPoint.position;
+            transform.rotation = spawnPoint.rotation;
         }
     }
 
@@ -463,5 +553,11 @@ public class PlayerController : MonoBehaviour
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(rayOrigin + transform.forward * climbCheckDistance, 0.05f);
+
+        if (attackPoint != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        }
     }
 }
