@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -18,8 +20,15 @@ public class PlayerController : MonoBehaviour
 
     public string enemyTag = "Enemy";
 
-    public float attackCooldown = 0.5f;
+    [Header("Combo System")]
+    public float attackCooldown = 0.4f; // หน่วงเวลาระหว่างหมัด (ป้องกันการกดรัวเกินไป)
+    public float comboResetTime = 1.2f; // ถ้าไม่กดภายในเวลานี้ คอมโบจะรีเซ็ต
+
+    public float attackLockDuration = 0.35f;
+
     private float nextAttackTime = 0f;
+    private float lastAttackTime = 0f;
+    private int currentComboStep = 0; // ท่าปัจจุบัน (1, 2, 3, 4)
 
     [Header("Movement Settings")]
     public float walkSpeed = 5f;
@@ -100,6 +109,8 @@ public class PlayerController : MonoBehaviour
     private ThirdPersonCameraController cameraCtrl;
     private float currentMoveSpeed;
 
+    public PlayerInventory inventory;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -109,8 +120,6 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.Jump.performed += context => Jump();
         inputActions.Player.Sprint.performed += ctx => isSprintingInput = true;
         inputActions.Player.Sprint.canceled += ctx => isSprintingInput = false;
-
-        inputActions.Player.Attack.performed += context => Punch();
 
         originalDrag = rb.linearDamping;
         currentStamina = maxStamina;
@@ -144,12 +153,22 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         cameraCtrl = FindFirstObjectByType<ThirdPersonCameraController>();
+
+        if (inventory == null)
+        {
+            inventory = FindFirstObjectByType<PlayerInventory>();
+        }
     }
 
     private void Update()
     {
         moveInput = inputActions.Player.Move.ReadValue<Vector2>();
         lookInput = inputActions.Player.Look.ReadValue<Vector2>();
+
+        if (inputActions.Player.Attack.WasPressedThisFrame())
+        {
+            Punch();
+        }
 
         HandleStamina();
     }
@@ -184,32 +203,65 @@ public class PlayerController : MonoBehaviour
     // ===================== Combat =====================
     private void Punch()
     {
-        Debug.Log("1. กดปุ่มโจมตีแล้ว!");
 
-        if (isSwimming || isClimbing || isExhausted || Time.time < nextAttackTime)
+        if (inventory != null)
         {
-            Debug.Log("2. โจมตีไม่ได้ (ติดว่ายน้ำ/ปีนเขา/เหนื่อย/หรือติดคูลดาวน์)");
+            if (inventory.isInventoryOpen)
+            {
+                return;
+            }
+
+            if (inventory.GetHeldItem() != null)
+            {
+                Debug.Log("ถือของอยู่ ต่อยไม่ได้นะ!"); // ใส่ Log ไว้เช็ก
+                return;
+            }
+        }
+
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
             return;
         }
 
+
+        if (isSwimming || isClimbing || isExhausted) return;
+
+        if (Time.time < nextAttackTime) return;
+
+        if (Time.time - lastAttackTime > comboResetTime)
+        {
+            currentComboStep = 0;
+        }
+        
+        currentComboStep++;
+
+        if (currentComboStep > 4)
+        {
+            currentComboStep = 1;
+        }
+
+        lastAttackTime = Time.time;
         nextAttackTime = Time.time + attackCooldown;
-        Debug.Log("3. ผ่านเงื่อนไข เตรียมปล่อยหมัด!");
-        //animator.SetTrigger("punch");
+
+        animator.SetTrigger("punch" + currentComboStep);
+
+        Debug.Log("Combo Step: " + currentComboStep);
 
         if (attackPoint != null)
         {
             Collider[] hitObjects = Physics.OverlapSphere(attackPoint.position, attackRange);
-            Debug.Log("4. เจอวัตถุในรัศมีจำนวน: " + hitObjects.Length + " ชิ้น");
 
             foreach (Collider hitObject in hitObjects)
             {
                 if (hitObject.CompareTag(enemyTag))
                 {
-                    Debug.Log("5. เจอศัตรูแล้ว! ส่งดาเมจ");
                     DummyEnemy dummy = hitObject.GetComponent<DummyEnemy>();
                     if (dummy != null)
                     {
-                        dummy.TakeDamage(attackDamage);
+                        // คุณสามารถประยุกต์ให้ท่าที่ 4 ตีแรงขึ้นได้ที่นี่
+                        float finalDamage = (currentComboStep == 4) ? attackDamage * 2f : attackDamage;
+                        dummy.TakeDamage(finalDamage);
                     }
                 }
             }
@@ -288,6 +340,16 @@ public class PlayerController : MonoBehaviour
     // ===================== MOVEMENT =====================
     private void HandleMovement()
     {
+        bool isAttacking = Time.time < lastAttackTime + attackLockDuration;
+
+        if (isAttacking)
+        {
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            animator.SetBool("run", false); // ปิดแอนิเมชันวิ่ง
+            return; 
+        }
+
+
         Vector3 cameraForward = Camera.main.transform.forward;
         Vector3 cameraRight = Camera.main.transform.right;
 

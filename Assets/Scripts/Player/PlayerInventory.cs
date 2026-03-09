@@ -24,7 +24,7 @@ public class PlayerInventory : MonoBehaviour
 
     private InputSystem_Actions inputActions;
     private int currentItemIndex = -1;
-    private bool isInventoryOpen = false;
+    public bool isInventoryOpen = false;
 
     private void Awake()
     {
@@ -475,5 +475,67 @@ public class PlayerInventory : MonoBehaviour
             return slotUI != null && slotUI.isLocked;
         }
         return false;
+    }
+
+    public bool HasItem(ItemData itemToCheck)
+    {
+        if (itemToCheck == null) return false;
+
+        // หาใน Hotbar ก่อน
+        foreach (GameObject slotObj in itemSlots)
+        {
+            if (slotObj != null)
+            {
+                ItemHolder holder = slotObj.GetComponent<ItemHolder>();
+                if (holder != null && holder.itemData == itemToCheck) return true;
+            }
+        }
+
+        // หาใน Inventory
+        foreach (GameObject itemObj in myItems)
+        {
+            if (itemObj != null)
+            {
+                ItemHolder holder = itemObj.GetComponent<ItemHolder>();
+                if (holder != null && holder.itemData == itemToCheck) return true;
+            }
+        }
+        return false;
+    }
+
+    public void ConsumeItem(ItemData itemToConsume)
+    {
+        // ลบจาก Hotbar
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            if (itemSlots[i] != null)
+            {
+                ItemHolder holder = itemSlots[i].GetComponent<ItemHolder>();
+                if (holder != null && holder.itemData == itemToConsume)
+                {
+                    Destroy(itemSlots[i]);
+                    itemSlots[i] = null;
+                    if (currentItemIndex == i) currentItemIndex = -1;
+                    UpdateInventoryUI();
+                    return; // ลบแค่ตัวเดียวพอ
+                }
+            }
+        }
+
+        // ลบจาก Inventory
+        for (int i = 0; i < myItems.Count; i++)
+        {
+            if (myItems[i] != null)
+            {
+                ItemHolder holder = myItems[i].GetComponent<ItemHolder>();
+                if (holder != null && holder.itemData == itemToConsume)
+                {
+                    Destroy(myItems[i]);
+                    myItems[i] = null;
+                    UpdateInventoryUI();
+                    return; // ลบแค่ตัวเดียวพอ
+                }
+            }
+        }
     }
 }

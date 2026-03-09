@@ -1,20 +1,30 @@
 using UnityEngine;
 
+public enum IslandType { QuestIsland, HubIsland }
+
 public class IslandTrigger : MonoBehaviour
 {
+    public IslandType islandType = IslandType.QuestIsland;
     private bool hasTriggered = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (hasTriggered) return;
+        if (hasTriggered && islandType == IslandType.QuestIsland) return; // Quest เกาะทริกเกอร์ครั้งเดียว
 
         if (other.CompareTag("Player"))
         {
-            hasTriggered = true;
-
             if (GameLoopManager.Instance != null)
             {
-                GameLoopManager.Instance.OnReachNewIsland(this.gameObject);
+                if (islandType == IslandType.QuestIsland)
+                {
+                    hasTriggered = true;
+                    GameLoopManager.Instance.OnReachQuestIsland();
+                }
+                else if (islandType == IslandType.HubIsland)
+                {
+                    // ถ้าถึงเกาะ Hub ให้ลองส่งอาหารบอส
+                    GameLoopManager.Instance.FeedBoss();
+                }
             }
         }
     }
