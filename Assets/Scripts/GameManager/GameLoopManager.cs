@@ -38,18 +38,22 @@ public class GameLoopManager : MonoBehaviour
 
         float currentSpawnDistance = Random.Range(minSpawnDistance, maxSpawnDistance);
 
-        float randomAngle = Random.Range(-45f, 45f);
-        Vector3 spawnDirection = Quaternion.Euler(0, randomAngle, 0) * player.forward;
-        
-        
-        Vector3 spawnPos = player.position + (spawnDirection.normalized * currentSpawnDistance);
+        float randomAngle = Random.Range(0f, 360f);
+        Vector3 spawnDirection = Quaternion.Euler(0, randomAngle, 0) * Vector3.forward;
+
+        Vector3 basePosition = currentIsland != null ? currentIsland.transform.position : Vector3.zero;
+
+        Vector3 spawnPos = basePosition + (spawnDirection.normalized * currentSpawnDistance);
         spawnPos.y = 0;
+
+        //Quaternion randomRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
+        //targetIsland = Instantiate(selectedIslandPrefab, spawnPos, randomRotation);
 
         targetIsland = Instantiate(selectedIslandPrefab, spawnPos, Quaternion.identity);
 
         if (compass != null) compass.SetTarget(targetIsland.transform);
 
-        Debug.Log($"สุ่มได้เกาะแบบที่ {randomIslandIndex}! เกิดแล้วที่ระยะ {currentSpawnDistance:F0} หน่วย!");
+        Debug.Log($"สุ่มได้เกาะที่ {randomIslandIndex}! เกิดที่ระยะ {currentSpawnDistance:F0} หน่วย ทิศทาง {randomAngle:F0} องศา!");
     }
 
     void Update()
