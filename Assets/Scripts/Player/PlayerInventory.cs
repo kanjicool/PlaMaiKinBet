@@ -4,12 +4,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using TMPro;
 
-
 public class PlayerInventory : MonoBehaviour
 {
     [Header("Shop & Money")]
     public int money = 500;
-    public List<ItemData> myItems = new List<ItemData>();
+    // 🌟 เปลี่ยนจาก ItemData มาเก็บ GameObject ตัวเป็นๆ เพื่อให้สคริปต์ไอเทมไม่หาย
+    public List<GameObject> myItems = new List<GameObject>();
 
     [Header("Hotbar Slots")]
     public Transform handTransform;
@@ -37,7 +37,6 @@ public class PlayerInventory : MonoBehaviour
         inputActions.Player.Slot5.performed += ctx => EquipItem(4);
         inputActions.Player.Slot6.performed += ctx => EquipItem(5);
 
-        // ++ เรียกใช้ระบบติดตั้ง Slot อัตโนมัติ ++
         AutoSetupSlotUI();
     }
 
@@ -54,7 +53,7 @@ public class PlayerInventory : MonoBehaviour
 
                 slotUI.slotType = SlotUI.SlotType.Hotbar;
                 slotUI.slotIndex = i;
-                slotUI.itemIcon = hotbarIcons[i]; // 🌟 ผูก Image ไอเทมเข้ากับ Slot อัตโนมัติ
+                slotUI.itemIcon = hotbarIcons[i]; // 🌟 ผูกตัวแปรไอคอน
 
                 Transform lockIcon = slotObj.transform.Find("LockIcon");
                 if (lockIcon != null) slotUI.lockImage = lockIcon.GetComponent<Image>();
@@ -72,7 +71,7 @@ public class PlayerInventory : MonoBehaviour
 
                 slotUI.slotType = SlotUI.SlotType.Inventory;
                 slotUI.slotIndex = i;
-                slotUI.itemIcon = inventoryIcons[i]; // 🌟 ผูก Image ไอเทมเข้ากับ Slot อัตโนมัติ
+                slotUI.itemIcon = inventoryIcons[i]; // 🌟 ผูกตัวแปรไอคอน
 
                 Transform lockIcon = slotObj.transform.Find("LockIcon");
                 if (lockIcon != null) slotUI.lockImage = lockIcon.GetComponent<Image>();
@@ -82,6 +81,12 @@ public class PlayerInventory : MonoBehaviour
 
     private void Start()
     {
+        // 🌟 จองพื้นที่ให้ช่องกระเป๋าเท่ากับจำนวน UI เป๊ะๆ (เริ่มต้นจะเป็น null ทั้งหมด)
+        if (myItems.Count != inventoryIcons.Length)
+        {
+            myItems = new List<GameObject>(new GameObject[inventoryIcons.Length]);
+        }
+
         if (inventoryMenu != null) inventoryMenu.SetActive(false);
         UpdateInventoryUI();
     }
@@ -117,10 +122,8 @@ public class PlayerInventory : MonoBehaviour
 
     public void UpdateInventoryUI()
     {
-        if (goldText != null)
-        {
-            goldText.text = "Gold : " + money;
-        }
+        if (goldText != null) goldText.text = "Gold : " + money;
+
         // 1. อัปเดต Hotbar Icons
         for (int i = 0; i < hotbarIcons.Length; i++)
         {
@@ -130,31 +133,35 @@ public class PlayerInventory : MonoBehaviour
                 if (itemHolder != null && itemHolder.itemData != null)
                 {
                     hotbarIcons[i].sprite = itemHolder.itemData.icon;
-                    hotbarIcons[i].color = Color.white; // มั่นใจว่าสีปกติ
+                    hotbarIcons[i].color = Color.white;
                     hotbarIcons[i].enabled = true;
                 }
             }
             else
             {
-                // แทนที่จะสั่ง enabled = false ให้ใช้การปรับสีให้โปร่งใสแทน (Alpha = 0)
                 hotbarIcons[i].sprite = null;
-                hotbarIcons[i].color = new Color(0, 0, 0, 0);
+                hotbarIcons[i].color = new Color(0, 0, 0, 0); // โปร่งใส
                 hotbarIcons[i].enabled = true;
             }
         }
 
-        // 2. อัปเดต Inventory Icons (ส่วนนี้ที่หายไป เอากลับมาแล้วครับ!)
+        // 2. อัปเดต Inventory Icons
         for (int i = 0; i < inventoryIcons.Length; i++)
         {
-            if (i < myItems.Count)
+            if (i < myItems.Count && myItems[i] != null)
             {
-                inventoryIcons[i].sprite = myItems[i].icon;
-                inventoryIcons[i].color = Color.white; // ทำให้สีสว่างเต็ม 100% จะได้เห็นรูป
-                inventoryIcons[i].enabled = true;
+                ItemHolder holder = myItems[i].GetComponent<ItemHolder>();
+                if (holder != null && holder.itemData != null)
+                {
+                    inventoryIcons[i].sprite = holder.itemData.icon;
+                    inventoryIcons[i].color = Color.white;
+                    inventoryIcons[i].enabled = true;
+                }
             }
             else
             {
                 inventoryIcons[i].sprite = null;
+                inventoryIcons[i].color = new Color(0, 0, 0, 0); // ซ่อนรูปถ้าช่องว่าง
                 inventoryIcons[i].enabled = true;
             }
         }
@@ -178,20 +185,17 @@ public class PlayerInventory : MonoBehaviour
     {
         if (index >= itemSlots.Length) return;
 
-        // ปิดของชิ้นเก่าก่อน (ถ้ามี)
         if (currentItemIndex != -1 && currentItemIndex < itemSlots.Length && itemSlots[currentItemIndex] != null)
         {
             itemSlots[currentItemIndex].SetActive(false);
         }
 
-        // ถ้ากดช่องเดิมที่ใส่อยู่ ให้ถือว่า "เก็บ" (Un-equip)
         if (currentItemIndex == index)
         {
             currentItemIndex = -1;
         }
         else
         {
-            // เลือกช่องใหม่ (ยอมให้เลือกช่องว่างได้)
             currentItemIndex = index;
             if (itemSlots[currentItemIndex] != null)
             {
@@ -204,26 +208,33 @@ public class PlayerInventory : MonoBehaviour
 
     public bool BuyItem(ItemData item)
     {
-        // 1. เช็คว่ามีช่องว่างตรงไหนบ้าง
         bool hasHotbarSpace = false;
         for (int i = 0; i < itemSlots.Length; i++)
-        {
             if (itemSlots[i] == null) { hasHotbarSpace = true; break; }
-        }
-        bool hasInventorySpace = myItems.Count < inventoryIcons.Length;
 
-        // 2. ถ้าเงินพอ และมีที่ว่าง
-        if (money >= item.price && (hasHotbarSpace || hasInventorySpace))
+        int emptyInventoryIndex = -1;
+        for (int i = 0; i < myItems.Count; i++)
         {
-            money -= item.price; // หักเงิน
+            if (myItems[i] == null) { emptyInventoryIndex = i; break; }
+        }
+
+        if (money >= item.price && (hasHotbarSpace || emptyInventoryIndex != -1))
+        {
+            money -= item.price;
 
             if (hasHotbarSpace)
             {
-                UpdateHotbarAfterPurchase(item); // ใส่บนมือ (ไม่ต้องใส่ใน myItems แล้ว)
+                UpdateHotbarAfterPurchase(item);
             }
             else
             {
-                myItems.Add(item); // มือเต็ม เอาเข้ากระเป๋า
+                // 🌟 เสกไอเทมขึ้นมาเลย แล้วซ่อนไว้ลงกระเป๋า
+                GameObject spawnedItem = Instantiate(item.itemPrefab, handTransform);
+                ItemHolder holder = spawnedItem.GetComponent<ItemHolder>() ?? spawnedItem.AddComponent<ItemHolder>();
+                holder.itemData = item;
+                spawnedItem.SetActive(false);
+
+                myItems[emptyInventoryIndex] = spawnedItem;
             }
 
             Debug.Log($"ซื้อ {item.itemName} สำเร็จ! เงินเหลือ: {money}");
@@ -246,9 +257,7 @@ public class PlayerInventory : MonoBehaviour
             if (itemSlots[i] == null)
             {
                 GameObject spawnedItem = Instantiate(item.itemPrefab, handTransform);
-
-                ItemHolder holder = spawnedItem.GetComponent<ItemHolder>();
-                if (holder == null) holder = spawnedItem.AddComponent<ItemHolder>();
+                ItemHolder holder = spawnedItem.GetComponent<ItemHolder>() ?? spawnedItem.AddComponent<ItemHolder>();
                 holder.itemData = item;
 
                 spawnedItem.transform.localPosition = Vector3.zero;
@@ -258,7 +267,7 @@ public class PlayerInventory : MonoBehaviour
                 itemSlots[i] = spawnedItem;
 
                 if (currentItemIndex == -1) EquipItem(i);
-                return; // จบการทำงานทันทีที่หาช่องเจอ
+                return;
             }
         }
     }
@@ -275,18 +284,29 @@ public class PlayerInventory : MonoBehaviour
     public void SellItem(GameObject itemToSell, int price)
     {
         money += price;
-        Debug.Log($"ขายของสำเร็จ! ได้เงินมา {price} เหรียญ ตอนนี้มีเงินทั้งหมด: {money}");
+        Debug.Log($"ขายของสำเร็จ! ได้เงินมา {price} เหรียญ");
 
-        if (currentItemIndex != -1)
+        if (currentItemIndex != -1 && itemSlots[currentItemIndex] == itemToSell)
         {
             itemSlots[currentItemIndex] = null;
             currentItemIndex = -1;
         }
-
-        ItemHolder holder = itemToSell.GetComponent<ItemHolder>();
-        if (holder != null && myItems.Contains(holder.itemData))
+        else // เช็คช่องอื่นใน Hotbar เผื่อไม่ได้ถืออยู่
         {
-            myItems.Remove(holder.itemData);
+            for (int i = 0; i < itemSlots.Length; i++)
+            {
+                if (itemSlots[i] == itemToSell) itemSlots[i] = null;
+            }
+        }
+
+        // หาให้เจอว่าไอเทมนี้อยู่ช่องไหนในกระเป๋า แล้วเคลียร์เป็น null
+        for (int i = 0; i < myItems.Count; i++)
+        {
+            if (myItems[i] == itemToSell)
+            {
+                myItems[i] = null;
+                break;
+            }
         }
 
         Destroy(itemToSell);
@@ -311,27 +331,35 @@ public class PlayerInventory : MonoBehaviour
                 spawnedFish.SetActive(false);
 
                 itemSlots[i] = spawnedFish;
-
                 Debug.Log($"ตกได้ {fishItem.itemName} เก็บเข้า Hotbar ช่อง {i}");
                 addedToHotbar = true;
                 break;
             }
         }
 
-        // ถ้า Hotbar เต็ม ค่อยเก็บเข้า Inventory
         if (!addedToHotbar)
         {
-            if (myItems.Count < inventoryIcons.Length)
+            int emptyInventoryIndex = -1;
+            for (int i = 0; i < myItems.Count; i++)
             {
-                myItems.Add(fishItem);
-                Debug.Log($"Hotbar เต็ม! เก็บ {fishItem.itemName} เข้า Inventory แทน");
+                if (myItems[i] == null) { emptyInventoryIndex = i; break; }
+            }
+
+            if (emptyInventoryIndex != -1)
+            {
+                GameObject spawnedFish = Instantiate(fishItem.itemPrefab, handTransform);
+                ItemHolder holder = spawnedFish.GetComponent<ItemHolder>() ?? spawnedFish.AddComponent<ItemHolder>();
+                holder.itemData = fishItem;
+                spawnedFish.SetActive(false);
+
+                myItems[emptyInventoryIndex] = spawnedFish;
+                Debug.Log($"Hotbar เต็ม! เก็บ {fishItem.itemName} เข้า Inventory ช่องที่ {emptyInventoryIndex}");
             }
             else
             {
                 Debug.Log("กระเป๋าเต็มสนิท! ปลาหลุดมือไปแล้ว");
             }
         }
-
         UpdateInventoryUI();
     }
 
@@ -345,9 +373,8 @@ public class PlayerInventory : MonoBehaviour
         {
             if (itemSlots[i] != null)
             {
-                // 🌟 เช็คก่อนว่าช่องนี้ล็อกอยู่ไหม
                 SlotUI slotUI = hotbarIcons[i].transform.parent.GetComponent<SlotUI>();
-                if (slotUI != null && slotUI.isLocked) continue; // ล็อกอยู่ให้ข้ามไปเลย!
+                if (slotUI != null && slotUI.isLocked) continue;
 
                 FishHolder fishHolder = itemSlots[i].GetComponent<FishHolder>();
                 if (fishHolder != null)
@@ -361,38 +388,23 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        // 2. Inventory (ใช้วิธีสร้างรายการใหม่ เพื่อไม่ให้กุญแจรวนเวลาของเลื่อน)
-        List<ItemData> keptItems = new List<ItemData>();
-        List<bool> keptLocks = new List<bool>();
-
+        // 2. Inventory
         for (int i = 0; i < myItems.Count; i++)
         {
+            if (myItems[i] == null) continue;
+
             SlotUI slotUI = inventoryIcons[i].transform.parent.GetComponent<SlotUI>();
             bool isLocked = slotUI != null && slotUI.isLocked;
-            bool isFish = myItems[i].itemPrefab != null && myItems[i].itemPrefab.GetComponent<FishHolder>() != null;
+            bool isFish = myItems[i].GetComponent<FishHolder>() != null;
 
-            if (isFish && !isLocked) // ถ้าเป็นปลา และ ไม่ได้ล็อก = ขาย!
+            if (isFish && !isLocked)
             {
-                totalEarnings += myItems[i].price;
+                ItemHolder holder = myItems[i].GetComponent<ItemHolder>();
+                totalEarnings += holder.itemData.price;
                 fishCount++;
-            }
-            else // ถ้าไม่ใช่ปลา หรือ โดนล็อกไว้ = เก็บไว้ในกระเป๋าต่อ!
-            {
-                keptItems.Add(myItems[i]);
-                keptLocks.Add(isLocked);
-            }
-        }
 
-        myItems = keptItems; // อัปเดตกระเป๋าให้เหลือแค่ของที่ไม่ได้ขาย
-
-        // 🌟 อัปเดตกุญแจในกระเป๋าใหม่ทั้งหมดให้ตรงกับของที่ร่นขึ้นมา
-        for (int i = 0; i < inventoryIcons.Length; i++)
-        {
-            SlotUI slotUI = inventoryIcons[i].transform.parent.GetComponent<SlotUI>();
-            if (slotUI != null)
-            {
-                slotUI.isLocked = (i < keptLocks.Count) ? keptLocks[i] : false;
-                if (slotUI.lockImage != null) slotUI.lockImage.enabled = slotUI.isLocked;
+                Destroy(myItems[i]); // 🌟 ลบทิ้งเมื่อได้เงิน
+                myItems[i] = null; // คืนที่ว่างให้กระเป๋า
             }
         }
 
@@ -401,16 +413,16 @@ public class PlayerInventory : MonoBehaviour
         return totalEarnings;
     }
 
+    // 🌟 3 ฟังก์ชันด้านล่างคือหัวใจสำคัญในการสลับ GameObject ข้ามไปมา
     public void SwapItems(SlotUI fromSlot, SlotUI toSlot)
     {
-        ItemData fromData = GetItemDataFromSlot(fromSlot);
-        ItemData toData = GetItemDataFromSlot(toSlot);
+        GameObject fromObj = GetGameObjectFromSlot(fromSlot);
+        GameObject toObj = GetGameObjectFromSlot(toSlot);
 
-        // สลับข้อมูลไอเทม
-        SetItemDataToSlot(fromSlot, toData);
-        SetItemDataToSlot(toSlot, fromData);
+        SetGameObjectToSlot(fromSlot, toObj);
+        SetGameObjectToSlot(toSlot, fromObj);
 
-        // 🌟 สลับสถานะแม่กุญแจให้ตามไอเทมไปด้วย!
+        // สลับสถานะแม่กุญแจ
         bool tempLock = fromSlot.isLocked;
         fromSlot.isLocked = toSlot.isLocked;
         if (fromSlot.lockImage != null) fromSlot.lockImage.enabled = fromSlot.isLocked;
@@ -421,56 +433,36 @@ public class PlayerInventory : MonoBehaviour
         UpdateInventoryUI();
     }
 
-    private ItemData GetItemDataFromSlot(SlotUI slot)
+    private GameObject GetGameObjectFromSlot(SlotUI slot)
     {
         if (slot.slotType == SlotUI.SlotType.Hotbar)
-        {
-            if (itemSlots[slot.slotIndex] != null)
-                return itemSlots[slot.slotIndex].GetComponent<ItemHolder>()?.itemData;
-        }
+            return itemSlots[slot.slotIndex];
         else if (slot.slotType == SlotUI.SlotType.Inventory)
-        {
-            if (slot.slotIndex < myItems.Count)
-                return myItems[slot.slotIndex];
-        }
+            return slot.slotIndex < myItems.Count ? myItems[slot.slotIndex] : null;
         return null;
     }
 
-    private void SetItemDataToSlot(SlotUI slot, ItemData item)
+    private void SetGameObjectToSlot(SlotUI slot, GameObject itemObj)
     {
         if (slot.slotType == SlotUI.SlotType.Hotbar)
         {
-            // ทำลายของเก่าที่อยู่ในมือ
-            if (itemSlots[slot.slotIndex] != null)
+            itemSlots[slot.slotIndex] = itemObj;
+            if (itemObj != null)
             {
-                Destroy(itemSlots[slot.slotIndex]);
-                itemSlots[slot.slotIndex] = null;
-            }
-
-            // ถ้ามีของใหม่ให้เสกขึ้นมาใส่มือ
-            if (item != null && item.itemPrefab != null)
-            {
-                GameObject spawned = Instantiate(item.itemPrefab, handTransform);
-                ItemHolder holder = spawned.GetComponent<ItemHolder>() ?? spawned.AddComponent<ItemHolder>();
-                holder.itemData = item;
-                spawned.transform.localPosition = Vector3.zero;
-                spawned.transform.localRotation = Quaternion.identity;
-
-                spawned.SetActive(currentItemIndex == slot.slotIndex); // เปิดแสดงผลถ้าถือช่องนี้อยู่
-                itemSlots[slot.slotIndex] = spawned;
+                itemObj.transform.SetParent(handTransform); // เอาไปถือในมือ
+                itemObj.SetActive(currentItemIndex == slot.slotIndex); // โชว์ถ้าถือช่องนั้นอยู่
             }
         }
         else if (slot.slotType == SlotUI.SlotType.Inventory)
         {
-            // เนื่องจากกระเป๋าเป็นแบบ List (เรียงติดกันเสมอ) 
             if (slot.slotIndex < myItems.Count)
             {
-                if (item != null) myItems[slot.slotIndex] = item; // แทนที่ตำแหน่งเดิม
-                else myItems.RemoveAt(slot.slotIndex); // ดึงออก
-            }
-            else if (item != null)
-            {
-                myItems.Add(item); // ถ้าลากไปวางช่องว่างท้ายๆ ให้เอาไปต่อแถว
+                myItems[slot.slotIndex] = itemObj;
+                if (itemObj != null)
+                {
+                    itemObj.transform.SetParent(handTransform);
+                    itemObj.SetActive(false); // ซ่อนทันทีเมื่อลงกระเป๋า
+                }
             }
         }
     }
