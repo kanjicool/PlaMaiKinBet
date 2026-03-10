@@ -1843,18 +1843,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 335287187}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0.7499981}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 20.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1734385689}
   - {fileID: 1104466226}
-  m_Father: {fileID: 1348150642}
+  m_Father: {fileID: 2131672850}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -18.550016, y: 19.449997}
+  m_AnchoredPosition: {x: 0.8, y: -0.7200031}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &335287189
@@ -2091,7 +2091,7 @@ GameObject:
   - component: {fileID: 436591666}
   - component: {fileID: 436591667}
   m_Layer: 0
-  m_Name: Boss_TriggerZone
+  m_Name: BossTriggerZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2105,12 +2105,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 436591664}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 19.15, z: 0}
-  m_LocalScale: {x: 50.000042, y: 50, z: 50.000042}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.0200005, z: -1.9000018}
+  m_LocalScale: {x: 50.000065, y: 50, z: 50.000065}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1348150642}
+  m_Father: {fileID: 2131672850}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &436591666
 SphereCollider:
@@ -3662,11 +3662,12 @@ MonoBehaviour:
   currentWave: 1
   currentQuestIsland: {fileID: 0}
   bossState: 0
-  timeScale: 0.1
+  timeScale: 1
   daysSinceFed: 0
   hungryThreshold: 2
   angryThreshold: 4
   rampageThreshold: 5
+  bossRobot: {fileID: 2131672851}
 --- !u!1 &865505474
 GameObject:
   m_ObjectHideFlags: 0
@@ -5200,40 +5201,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1335816784}
   m_CullTransparentMesh: 1
---- !u!1 &1348150641
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1348150642}
-  m_Layer: 0
-  m_Name: Drone_Guard
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1348150642
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1348150641}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.5, y: -5.17, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 436591665}
-  - {fileID: 335287188}
-  - {fileID: 1591039921}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1377163437 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2977202984474641276, guid: 0a05efc30679af24086fdc1d295ed751, type: 3}
@@ -6680,7 +6647,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1348150642}
+    m_TransformParent: {fileID: 2131672850}
     m_Modifications:
     - target: {fileID: -6057140222963153312, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
       propertyPath: m_Controller
@@ -6688,7 +6655,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 02906b7cc8ef6c24d9a3c52847f754db, type: 2}
     - target: {fileID: -4216859302048453862, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
       propertyPath: m_LocalScale.x
-      value: 50.00004
+      value: 50.00006
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
       propertyPath: m_LocalScale.y
@@ -6696,7 +6663,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
       propertyPath: m_LocalScale.z
-      value: 50.00004
+      value: 50.00006
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6704,7 +6671,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -60
+      value: -80
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6712,7 +6679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
       propertyPath: m_LocalRotation.x
@@ -6720,7 +6687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.7071068
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5090c1d92c3e3034a85460b495fcf820, type: 3}
       propertyPath: m_LocalRotation.z
@@ -8625,6 +8592,78 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2131672849
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2131672850}
+  - component: {fileID: 2131672851}
+  - component: {fileID: 2131672852}
+  m_Layer: 0
+  m_Name: Drone_Guard
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2131672850
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131672849}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 34.4, y: 16.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 436591665}
+  - {fileID: 335287188}
+  - {fileID: 1591039921}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &2131672851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131672849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1be54d4cac1d04429dc1122e77a0d7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossRobotController
+  chaseSpeed: 30
+  returnSpeed: 40
+  hoverHeight: 2
+--- !u!135 &2131672852
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131672849}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 18
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &846807318862753110
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8999,7 +9038,7 @@ SceneRoots:
   - {fileID: 1953754737}
   - {fileID: 156998825}
   - {fileID: 1552787097}
-  - {fileID: 1348150642}
+  - {fileID: 2131672850}
   - {fileID: 3192789557039033115}
   - {fileID: 230586242}
   - {fileID: 697368242}
