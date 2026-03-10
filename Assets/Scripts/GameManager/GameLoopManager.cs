@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using TMPro; // 🌟 อย่าลืม using TMPro สำหรับ UI Text
+using TMPro;
 
 public enum BossState { SLEEPING, HUNGRY, ANGRY, RAMPAGING }
 
@@ -31,6 +31,9 @@ public class GameLoopManager : MonoBehaviour
     public float hungryThreshold = 2f;
     public float angryThreshold = 4f;
     public float rampageThreshold = 5f;
+
+    [Header("Boss References")]
+    public BossRobotController bossRobot;
 
     private void Awake()
     {
@@ -76,18 +79,28 @@ public class GameLoopManager : MonoBehaviour
                 UpdateBossUI($"<color=red>ANGRY!</color>\n {currentQuestFish?.fishName} {currentQuestAmount}");
                 break;
             case BossState.RAMPAGING:
-                UpdateBossUI("<color=red>ROOOAARRRR!</color>");
+                UpdateBossUI("<color=red>ERROR! TARGET LOCKED!</color>");
+
+                if (bossRobot != null && player != null)
+                {
+                    bossRobot.StartRampage(player);
+                }
+
                 break;
         }
     }
 
-    // 🌟 อัปเดตข้อความบน Canvas บอส
     public void UpdateBossUI(string message)
     {
         if (bossQuestText != null)
         {
             bossQuestText.text = message;
         }
+    }
+
+    public void ResetBossState()
+    {
+        ChangeBossState(BossState.SLEEPING);
     }
 
     public void TryFeedBoss()
@@ -97,14 +110,12 @@ public class GameLoopManager : MonoBehaviour
         PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
         if (inventory == null) return;
 
-        // 🌟 เช็กจำนวนปลาว่ามีกี่ตัว
         int currentAmount = inventory.GetItemCount(currentQuestFish.fishItemData);
 
         if (currentAmount >= currentQuestAmount)
         {
             Debug.Log($"ให้อาหารบอสสำเร็จ!");
 
-            // 🌟 ลบปลาตามจำนวนที่กำหนด
             inventory.ConsumeItems(currentQuestFish.fishItemData, currentQuestAmount);
 
             ChangeBossState(BossState.SLEEPING);
@@ -117,11 +128,11 @@ public class GameLoopManager : MonoBehaviour
         else
         {
             Debug.Log($"ของไม่พอ! ตอนนี้มี {currentAmount}/{currentQuestAmount} ตัว");
-            // อัปเดตข้อความให้ผู้เล่นรู้ว่าขาดอีกกี่ตัว
             UpdateBossUI($"ยังไม่พอ!\nต้องการ: {currentQuestFish.fishName}\nขาดอีก: {currentQuestAmount - currentAmount} ตัว");
         }
     }
     #endregion
+
 
     #region Wave & Radial Spawning
     public void StartNextWave()
@@ -140,7 +151,7 @@ public class GameLoopManager : MonoBehaviour
 
         if (availableFishOnIsland.Count == 0) return;
 
-        // 🌟 บอสสุ่มชนิดปลา และ สุ่มจำนวน (เช่น Wave ท้ายๆ อาจจะขอ 2-4 ตัว)
+        // บอสสุ่มชนิดปลา และ สุ่มจำนวน (เช่น Wave ท้ายๆ อาจจะขอ 2-4 ตัว)
         currentQuestFish = availableFishOnIsland[Random.Range(0, availableFishOnIsland.Count)];
 
         // คำนวณความยาก: ยิ่ง Wave ลึก ยิ่งขอจำนวนเยอะขึ้น (ปรับได้ตามชอบ)
