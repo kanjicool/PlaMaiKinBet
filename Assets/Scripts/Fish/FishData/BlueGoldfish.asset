@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68ced3a65ff0a734786b7c660190593e, type: 3}
-  m_Name: GoldFish
+  m_Name: BlueGoldfish
   m_EditorClassIdentifier: Assembly-CSharp::FishData
-  fishName: GoldFish
-  fishPrefab: {fileID: 8373583083066088231, guid: c43bbd439271c2548947a76bd51e631c, type: 3}
-  fishIcon: {fileID: 21300000, guid: 1f75465734b247348860bb79bbecf1e3, type: 3}
-  price: 10
-  fishItemData: {fileID: 11400000, guid: 58f8a9872554b6c4f91f4091abd74e1d, type: 2}
-  escapePower: 5
-  stamina: 100
+  fishName: BlueGoldfish
+  fishPrefab: {fileID: 2350483985964844299, guid: 7abec14cf53c9684489ff0fb1819cf46, type: 3}
+  fishIcon: {fileID: -1091866949, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
+  fishItemData: {fileID: 11400000, guid: 39b68219951509b4ab8892de155f1adf, type: 2}
+  escapePower: 2
+  stamina: 55
   biteDelay: 2
-  detectionRadius: 5
-  fleeRaius: 3
+  detectionRadius: 8
+  fleeRaius: 5
   fleeSpeedMultiplier: 2

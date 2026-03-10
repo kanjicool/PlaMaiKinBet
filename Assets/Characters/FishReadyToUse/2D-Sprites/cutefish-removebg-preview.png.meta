@@ -1,0 +1,1077 @@
+fileFormatVersion: 2
+guid: 7e5c7aa6062eb024eb2a2e6466bfdf56
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_0
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 307
+        width: 49
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04a17e3258d5fc740afd3dcc5fa73459
+      internalID: -1408934952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_1
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 302
+        width: 47
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a7b6a3ecd9bac8429f5688165e5ac7f
+      internalID: -1823581889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_2
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 270
+        width: 51
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81f226d6ad5837046a161ec5373341de
+      internalID: -839077793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_3
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 217
+        width: 54
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 347cf71bd93401440a5e183cc4c8838f
+      internalID: 419531046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_4
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 263
+        width: 42
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87ed5e0600f328b4495856957a5aa193
+      internalID: -43522533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_5
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 209
+        width: 42
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecf7596eae86f464195c49993736fc53
+      internalID: -2127418198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_6
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 205
+        width: 43
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a68bad296081ef47869fbc041c7342e
+      internalID: 1974638226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_7
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 160
+        width: 47
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c2f0467576f296488453f434708eaf7
+      internalID: 1045198984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_8
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 202
+        width: 38
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 637a08e9b82e5be40b413680b1e998d9
+      internalID: -1019050986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_9
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 189
+        width: 47
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ec92e6a982acda4785505addef43443
+      internalID: 81753538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_10
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 146
+        width: 42
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d35f147fb6fcc34da996d5ccf54e56e
+      internalID: 1544517654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_11
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 141
+        width: 42
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc665e4098e83c041b6e2e29775962b0
+      internalID: 2028054039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_12
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 134
+        width: 48
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e40b2af9d6849c74e8392b908cc6a7fb
+      internalID: -468613163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_13
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 138
+        width: 51
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbd9d0a04493e9247a20bb92edd67e1e
+      internalID: 2048460710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_14
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 298
+        width: 38
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dde0ff30051c757468ca4878f6d1f1e7
+      internalID: 986198104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_15
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 286
+        width: 46
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eaf54df82ef786a40b180430079b1689
+      internalID: 1675567220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_16
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 282
+        width: 37
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f67e18bf781c67048b4de16974fecfe2
+      internalID: -315708741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_17
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 275
+        width: 43
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4831b3526da6fef49ae00ed30906ff81
+      internalID: 82336295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_18
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 266
+        width: 45
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f718efacf4b8914b9b71bb4943996b0
+      internalID: 687338920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_19
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 263
+        width: 36
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49a3fa083314e6a47939adc5e5b802e4
+      internalID: -623690766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_20
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 260
+        width: 43
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfeaa1bdc12aeb649988a8d001b1fa73
+      internalID: 1890882646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_21
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 255
+        width: 40
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 476dfa3011b85a54da62b175fd13892c
+      internalID: 180669555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_22
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 246
+        width: 52
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5228213ed2a86564cb08e88baa8ee864
+      internalID: -2140426678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_23
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 223
+        width: 54
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9413be8e31a3274d8c85132bd74cf97
+      internalID: -1896190673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_24
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 202
+        width: 59
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a811a27bbe005f44d9dcd92bed706ba7
+      internalID: -1523607306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_25
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 182
+        width: 55
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b98bc8ad45522a147bc1c1279946759e
+      internalID: 900992961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_26
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 157
+        width: 51
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bca3a46aab02cab4784b6b0843a2811d
+      internalID: 826979402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_27
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 134
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbbbfadb4970a394bae9858f9057a9da
+      internalID: -1659026669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_28
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 254
+        width: 36
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1b0da30b3658b240b6c726f80c639b8
+      internalID: 1633873175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_29
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 245
+        width: 42
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e6c454d03fe66248852f452cb2964eb
+      internalID: 341520748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_30
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 240
+        width: 36
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a779cc7e31aae7e469786b8297241113
+      internalID: 1525277062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_31
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 231
+        width: 37
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9d6f5d0881e38946afaeaf6fb7589dc
+      internalID: -1367989920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_32
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 225
+        width: 47
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cea5a850bb978b41995a06ba8959bb8
+      internalID: 1415917917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_33
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 218
+        width: 37
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acf11c307f0d09d41a36d8d6ca81e938
+      internalID: -1764897924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_34
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 212
+        width: 40
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e7824cf3b886e04c80374c1024c1004
+      internalID: -718462412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_35
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 216
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e4b0aa8f57f38046bdc2e48cde78211
+      internalID: 156147430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_36
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 164
+        width: 40
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 501162f6aa1d93c48b7f1d2db76423bb
+      internalID: -307792496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_37
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 170
+        width: 50
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d22ae6d1be946144962383e072ea490
+      internalID: 1638270651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_38
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 176
+        width: 37
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d3bd1e604c116c4fb5f569a11f4d566
+      internalID: 858713655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_39
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 183
+        width: 43
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2661536623b14d142b8218b25c7cdf60
+      internalID: 374998295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cutefish-removebg-preview_40
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 184
+        width: 38
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4076c20f6341a7348895b29cdaff8a35
+      internalID: 585757895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 4cb46b3983a0fde4d8b71679bfa5b23f
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceOnImport
+        value: False
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      cutefish-removebg-preview_0: -1408934952
+      cutefish-removebg-preview_1: -1823581889
+      cutefish-removebg-preview_10: 1544517654
+      cutefish-removebg-preview_11: 2028054039
+      cutefish-removebg-preview_12: -468613163
+      cutefish-removebg-preview_13: 2048460710
+      cutefish-removebg-preview_14: 986198104
+      cutefish-removebg-preview_15: 1675567220
+      cutefish-removebg-preview_16: -315708741
+      cutefish-removebg-preview_17: 82336295
+      cutefish-removebg-preview_18: 687338920
+      cutefish-removebg-preview_19: -623690766
+      cutefish-removebg-preview_2: -839077793
+      cutefish-removebg-preview_20: 1890882646
+      cutefish-removebg-preview_21: 180669555
+      cutefish-removebg-preview_22: -2140426678
+      cutefish-removebg-preview_23: -1896190673
+      cutefish-removebg-preview_24: -1523607306
+      cutefish-removebg-preview_25: 900992961
+      cutefish-removebg-preview_26: 826979402
+      cutefish-removebg-preview_27: -1659026669
+      cutefish-removebg-preview_28: 1633873175
+      cutefish-removebg-preview_29: 341520748
+      cutefish-removebg-preview_3: 419531046
+      cutefish-removebg-preview_30: 1525277062
+      cutefish-removebg-preview_31: -1367989920
+      cutefish-removebg-preview_32: 1415917917
+      cutefish-removebg-preview_33: -1764897924
+      cutefish-removebg-preview_34: -718462412
+      cutefish-removebg-preview_35: 156147430
+      cutefish-removebg-preview_36: -307792496
+      cutefish-removebg-preview_37: 1638270651
+      cutefish-removebg-preview_38: 858713655
+      cutefish-removebg-preview_39: 374998295
+      cutefish-removebg-preview_4: -43522533
+      cutefish-removebg-preview_40: 585757895
+      cutefish-removebg-preview_5: -2127418198
+      cutefish-removebg-preview_6: 1974638226
+      cutefish-removebg-preview_7: 1045198984
+      cutefish-removebg-preview_8: -1019050986
+      cutefish-removebg-preview_9: 81753538
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

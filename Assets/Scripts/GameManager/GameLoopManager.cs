@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro; // üåü ‡∏≠‡∏¢‡πà‡∏≤‡∏•‡∏∑‡∏° using TMPro ‡∏™‡∏≥‡∏´‡∏£‡∏±‡∏ö UI Text
 
 public enum BossState { SLEEPING, HUNGRY, ANGRY, RAMPAGING }
 
@@ -10,27 +10,27 @@ public class GameLoopManager : MonoBehaviour
 
     [Header("References")]
     public Transform player;
-    public Transform hubIsland; 
+    public Transform hubIsland;
     public GameObject[] islandPrefabs;
     public CompassDirection compass;
 
-    [Header("Quest System")]
-    public FishData[] allAvailableFish; // „ Ë FishData ∑—ÈßÀ¡¥∑’Ë¡’„π‡°¡∑’Ëπ’Ë
-    public FishData currentQuestFish;   // ª≈“∑’Ë∫Õ Õ¬“°°‘π„π Wave π’È
+    [Header("Quest System & UI")]
+    public FishData currentQuestFish;
+    public int currentQuestAmount = 1; // ‡∏à‡∏≥‡∏ô‡∏ß‡∏ô‡∏õ‡∏•‡∏≤‡∏ó‡∏µ‡πà‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£
+    public TextMeshProUGUI bossQuestText; // ‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏° Canvas ‡∏•‡∏≠‡∏¢‡∏´‡∏ô‡πâ‡∏≤‡∏ö‡∏≠‡∏™
 
     [Header("Wave & Progression")]
     public int currentWave = 1;
     public GameObject currentQuestIsland;
-    public bool hasFishForBoss = false;
     private int lastIslandIndex = -1;
 
     [Header("Boss State Machine")]
     public BossState bossState = BossState.SLEEPING;
-    public float timeScale = 1f; // 1 «‘π“∑’®√‘ß = 1 «—π„π‡°¡ (ª√—∫‰¥È)
+    public float timeScale = 1f;
     public float daysSinceFed = 0f;
-    public float hungryThreshold = 2f; // «—π∑’Ë‡√‘Ë¡À‘«
-    public float angryThreshold = 4f;  // «—π∑’Ë‡√‘Ë¡‚°√∏
-    public float rampageThreshold = 5f; // «—π∑’ËÕÕ°Õ“≈–«“¥ (1 «—π®√‘ßÀ≈—ß‚°√∏)
+    public float hungryThreshold = 2f;
+    public float angryThreshold = 4f;
+    public float rampageThreshold = 5f;
 
     private void Awake()
     {
@@ -39,37 +39,25 @@ public class GameLoopManager : MonoBehaviour
 
     private void Start()
     {
-        // ‡√‘Ë¡‡°¡¡“„ÀÈ™’È‡¢Á¡∑‘»‰ª∑’Ë»Ÿπ¬Ï°≈“ß°ËÕπ (À√◊Õ‡√‘Ë¡ Wave 1 ‡≈¬°Á‰¥È)
         StartNextWave();
     }
 
     void Update()
     {
         UpdateBossStateMachine();
-        HandleDebugInputs();
     }
 
     #region Boss State Machine
     private void UpdateBossStateMachine()
     {
-        // ‡æ‘Ë¡‡«≈“ (®”≈Õß‡ªÁπ«—π)
         daysSinceFed += Time.deltaTime * timeScale;
 
-        // ‡™Á§ State À‘«
         if (bossState == BossState.SLEEPING && daysSinceFed >= hungryThreshold)
-        {
             ChangeBossState(BossState.HUNGRY);
-        }
-        // ‡™Á§ State ‚°√∏
         else if (bossState == BossState.HUNGRY && daysSinceFed >= angryThreshold)
-        {
             ChangeBossState(BossState.ANGRY);
-        }
-        // ‡™Á§ State Õ“≈–«“¥
         else if (bossState == BossState.ANGRY && daysSinceFed >= rampageThreshold)
-        {
             ChangeBossState(BossState.RAMPAGING);
-        }
     }
 
     private void ChangeBossState(BossState newState)
@@ -78,19 +66,27 @@ public class GameLoopManager : MonoBehaviour
         switch (newState)
         {
             case BossState.SLEEPING:
-                Debug.Log("Boss: Zzz... (√’‡´Áµ‡«≈“)");
                 daysSinceFed = 0f;
+                UpdateBossUI("Zzz...");
                 break;
             case BossState.HUNGRY:
-                Debug.Log("Boss: ‡√‘Ë¡À‘«·≈È«! (· ¥ß Warning UI / ‡ª≈’Ë¬π‡æ≈ß)");
+                UpdateBossUI($"HUNGRY! >>> {currentQuestFish?.fishName} : {currentQuestAmount}");
                 break;
             case BossState.ANGRY:
-                Debug.Log("Boss: ‚°√∏¡“°! (‡°“– —Ëπ / πÈ”‡ª≈’Ë¬π‡ªÁπ ’·¥ß)");
+                UpdateBossUI($"<color=red>ANGRY!</color>\n {currentQuestFish?.fishName} {currentQuestAmount}");
                 break;
             case BossState.RAMPAGING:
-                Debug.Log("Boss: RAMPAGING! Leviathan ÕÕ°≈Ë“ºŸÈ‡≈Ëπ!");
-                // TODO: ‚§È¥‡ ° Leviathan ‰≈Ë≈Ë“ºŸÈ‡≈Ëπ
+                UpdateBossUI("<color=red>ROOOAARRRR!</color>");
                 break;
+        }
+    }
+
+    // üåü ‡∏≠‡∏±‡∏õ‡πÄ‡∏î‡∏ï‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°‡∏ö‡∏ô Canvas ‡∏ö‡∏≠‡∏™
+    public void UpdateBossUI(string message)
+    {
+        if (bossQuestText != null)
+        {
+            bossQuestText.text = message;
         }
     }
 
@@ -101,51 +97,37 @@ public class GameLoopManager : MonoBehaviour
         PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
         if (inventory == null) return;
 
-        // ‡™Á°«Ë“ºŸÈ‡≈Ëπ¡’ª≈“ ItemData µ√ß°—∫∑’Ë‡§« µÏµÈÕß°“√‰À¡
-        if (inventory.HasItem(currentQuestFish.fishItemData))
-        {
-            Debug.Log($"„ÀÈÕ“À“√∫Õ ¥È«¬ {currentQuestFish.fishName}  ”‡√Á®! ºË“π Wave {currentWave}!");
+        // üåü ‡πÄ‡∏ä‡πá‡∏Å‡∏à‡∏≥‡∏ô‡∏ß‡∏ô‡∏õ‡∏•‡∏≤‡∏ß‡πà‡∏≤‡∏°‡∏µ‡∏Å‡∏µ‡πà‡∏ï‡∏±‡∏ß
+        int currentAmount = inventory.GetItemCount(currentQuestFish.fishItemData);
 
-            // ≈∫ª≈“ÕÕ°®“°°√–‡ªÎ“
-            inventory.ConsumeItem(currentQuestFish.fishItemData);
+        if (currentAmount >= currentQuestAmount)
+        {
+            Debug.Log($"‡πÉ‡∏´‡πâ‡∏≠‡∏≤‡∏´‡∏≤‡∏£‡∏ö‡∏≠‡∏™‡∏™‡∏≥‡πÄ‡∏£‡πá‡∏à!");
+
+            // üåü ‡∏•‡∏ö‡∏õ‡∏•‡∏≤‡∏ï‡∏≤‡∏°‡∏à‡∏≥‡∏ô‡∏ß‡∏ô‡∏ó‡∏µ‡πà‡∏Å‡∏≥‡∏´‡∏ô‡∏î
+            inventory.ConsumeItems(currentQuestFish.fishItemData, currentQuestAmount);
 
             ChangeBossState(BossState.SLEEPING);
 
             if (currentQuestIsland != null) Destroy(currentQuestIsland);
 
             currentWave++;
-            StartNextWave();
+            Invoke("StartNextWave", 3f); // ‡∏´‡∏ô‡πà‡∏ß‡∏á‡πÄ‡∏ß‡∏•‡∏≤ 3 ‡∏ß‡∏¥‡∏ô‡∏≤‡∏ó‡∏µ‡∏Å‡πà‡∏≠‡∏ô‡πÄ‡∏£‡∏¥‡πà‡∏° Wave ‡πÉ‡∏´‡∏°‡πà ‡πÉ‡∏´‡πâ‡∏ú‡∏π‡πâ‡πÄ‡∏•‡πà‡∏ô‡πÑ‡∏î‡πâ‡∏û‡∏±‡∏Å‡∏´‡∏≤‡∏¢‡πÉ‡∏à
         }
         else
         {
-            Debug.Log($"∫Õ ‰¡Ë°‘π! ∫Õ µÈÕß°“√: {currentQuestFish.fishName} ‰ªÀ“¡“„À¡Ë!");
+            Debug.Log($"‡∏Ç‡∏≠‡∏á‡πÑ‡∏°‡πà‡∏û‡∏≠! ‡∏ï‡∏≠‡∏ô‡∏ô‡∏µ‡πâ‡∏°‡∏µ {currentAmount}/{currentQuestAmount} ‡∏ï‡∏±‡∏ß");
+            // ‡∏≠‡∏±‡∏õ‡πÄ‡∏î‡∏ï‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°‡πÉ‡∏´‡πâ‡∏ú‡∏π‡πâ‡πÄ‡∏•‡πà‡∏ô‡∏£‡∏π‡πâ‡∏ß‡πà‡∏≤‡∏Ç‡∏≤‡∏î‡∏≠‡∏µ‡∏Å‡∏Å‡∏µ‡πà‡∏ï‡∏±‡∏ß
+            UpdateBossUI($"‡∏¢‡∏±‡∏á‡πÑ‡∏°‡πà‡∏û‡∏≠!\n‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£: {currentQuestFish.fishName}\n‡∏Ç‡∏≤‡∏î‡∏≠‡∏µ‡∏Å: {currentQuestAmount - currentAmount} ‡∏ï‡∏±‡∏ß");
         }
     }
-
-
-    public void FeedBoss()
-    {
-        if (!hasFishForBoss) return;
-
-        Debug.Log($"„ÀÈÕ“À“√∫Õ  ”‡√Á®„π Wave ∑’Ë {currentWave}! ∫Õ °≈—∫‰ªπÕπ·≈È«");
-        hasFishForBoss = false;
-        ChangeBossState(BossState.SLEEPING);
-
-        // ≈∫‡°“–‡§« µÏ‡°Ë“∑‘Èß (À√◊Õ®–‡°Á∫‰«È‡ªÁπª√–«—µ‘»“ µ√Ï°Á‰¥È)
-        if (currentQuestIsland != null) Destroy(currentQuestIsland);
-
-        currentWave++;
-        StartNextWave();
-    }
     #endregion
-
 
     #region Wave & Radial Spawning
     public void StartNextWave()
     {
         if (islandPrefabs == null || islandPrefabs.Length == 0) return;
 
-        // 1.  ÿË¡‡≈◊Õ° Prefab ‡°“– (¬—ß‰¡Ë‡ °®√‘ß)
         int randomIslandIndex = Random.Range(0, islandPrefabs.Length);
         if (islandPrefabs.Length > 1 && randomIslandIndex == lastIslandIndex)
             randomIslandIndex = (randomIslandIndex + Random.Range(1, islandPrefabs.Length)) % islandPrefabs.Length;
@@ -153,23 +135,24 @@ public class GameLoopManager : MonoBehaviour
 
         GameObject selectedIslandPrefab = islandPrefabs[randomIslandIndex];
 
-        // 2. ∂“¡ Prefab ‡°“–π’È«Ë“ ¡’ª≈“Õ–‰√Õ“»—¬Õ¬ŸË∫È“ß?
         IslandFishSpawner spawnerPrefab = selectedIslandPrefab.GetComponent<IslandFishSpawner>();
-        List<FishData> availableFishOnIsland = spawnerPrefab.GetAvailableFishOnIsland();
+        System.Collections.Generic.List<FishData> availableFishOnIsland = spawnerPrefab.GetAvailableFishOnIsland();
 
-        if (availableFishOnIsland.Count == 0)
-        {
-            Debug.LogError($"‡°“– {selectedIslandPrefab.name} ‰¡Ë¡’¢ÈÕ¡Ÿ≈ FishData ‡≈¬! ‰ªµ—Èß§Ë“∑’Ë FishSpawnPoint °ËÕπ§√—∫");
-            return; // À¬ÿ¥∑”ß“π ªÈÕß°—π∫—°
-        }
+        if (availableFishOnIsland.Count == 0) return;
 
-        // 3. ∫Õ ‡≈◊Õ°ª≈“‡§« µÏ ®“°≈‘ µÏª≈“∑’Ë¡’∫π‡°“–π—ÈπÊ ‡∑Ë“π—Èπ!
+        // üåü ‡∏ö‡∏≠‡∏™‡∏™‡∏∏‡πà‡∏°‡∏ä‡∏ô‡∏¥‡∏î‡∏õ‡∏•‡∏≤ ‡πÅ‡∏•‡∏∞ ‡∏™‡∏∏‡πà‡∏°‡∏à‡∏≥‡∏ô‡∏ß‡∏ô (‡πÄ‡∏ä‡πà‡∏ô Wave ‡∏ó‡πâ‡∏≤‡∏¢‡πÜ ‡∏≠‡∏≤‡∏à‡∏à‡∏∞‡∏Ç‡∏≠ 2-4 ‡∏ï‡∏±‡∏ß)
         currentQuestFish = availableFishOnIsland[Random.Range(0, availableFishOnIsland.Count)];
 
-        Debug.Log($"--- ‡√‘Ë¡ Wave {currentWave} ---");
-        Debug.Log($"[‡§« µÏ] ∫Õ µÈÕß°“√°‘π: {currentQuestFish.fishName}!");
+        // ‡∏Ñ‡∏≥‡∏ô‡∏ß‡∏ì‡∏Ñ‡∏ß‡∏≤‡∏°‡∏¢‡∏≤‡∏Å: ‡∏¢‡∏¥‡πà‡∏á Wave ‡∏•‡∏∂‡∏Å ‡∏¢‡∏¥‡πà‡∏á‡∏Ç‡∏≠‡∏à‡∏≥‡∏ô‡∏ß‡∏ô‡πÄ‡∏¢‡∏≠‡∏∞‡∏Ç‡∏∂‡πâ‡∏ô (‡∏õ‡∏£‡∏±‡∏ö‡πÑ‡∏î‡πâ‡∏ï‡∏≤‡∏°‡∏ä‡∏≠‡∏ö)
+        int minFish = 1 + (currentWave / 3);
+        int maxFish = 3 + (currentWave / 2);
+        currentQuestAmount = Random.Range(minFish, maxFish);
 
-        // 4. §”π«≥√–¬–∑“ß
+        // ‡∏£‡∏µ‡πÄ‡∏ã‡πá‡∏ï‡∏™‡∏ñ‡∏≤‡∏ô‡∏∞‡∏ö‡∏≠‡∏™ ‡πÅ‡∏•‡∏∞‡∏≠‡∏±‡∏õ‡πÄ‡∏î‡∏ï‡∏õ‡πâ‡∏≤‡∏¢‡πÄ‡∏Ñ‡∏ß‡∏™‡∏ï‡πå
+        bossState = BossState.SLEEPING;
+        daysSinceFed = 0f;
+        UpdateBossUI($"{currentQuestFish.fishName} : {currentQuestAmount}");
+
         float minDist = 400f, maxDist = 600f;
         if (currentWave >= 4 && currentWave <= 6) { minDist = 600f; maxDist = 900f; }
         else if (currentWave >= 7) { minDist = 900f; maxDist = 1200f; }
@@ -180,52 +163,15 @@ public class GameLoopManager : MonoBehaviour
         Vector3 spawnPos = hubIsland.position + (spawnDirection.normalized * currentSpawnDistance);
         spawnPos.y = 0;
 
-        // 5.  √È“ß‡°“–¢Õß®√‘ß
         currentQuestIsland = Instantiate(selectedIslandPrefab, spawnPos, Quaternion.identity);
 
-        // 6.  —Ëß„ÀÈ‡°“–‡ °√–∫∫π‘‡«» (‡ °∑—Èßª≈“∑—Ë«‰ª ·≈–∫—ß§—∫‡ °ª≈“‡§« µÏ 3 µ—«)
         IslandFishSpawner spawnedIslandScript = currentQuestIsland.GetComponent<IslandFishSpawner>();
         if (spawnedIslandScript != null)
         {
-            spawnedIslandScript.SpawnEcosystem(currentQuestFish, 3);
+            spawnedIslandScript.SpawnEcosystem(currentQuestFish, currentQuestAmount + 2);
         }
 
-        // 7. ™’È‡¢Á¡∑‘»
         if (compass != null) compass.SetTarget(currentQuestIsland.transform);
     }
-
-    public void OnReachQuestIsland()
-    {
-        Debug.Log("∂÷ß‡°“–‡ªÈ“À¡“¬·≈È«! (®”≈Õß°“√∑”‡§« µÏ¥È«¬°“√°¥ªÿË¡ Enter)");
-        // √–∫∫√Õ„ÀÈºŸÈ‡≈Ëπ°¥µ°ª≈“ (∑”„π HandleDebugInputs)
-    }
-
-    public void CatchFishCompleted()
-    {
-        if (hasFishForBoss) return;
-
-        Debug.Log("µ°ª≈“ ”‡√Á®! ‰¥È¢Õß∑’Ë∫Õ µÈÕß°“√·≈È« √’∫°≈—∫ Hub!");
-        hasFishForBoss = true;
-
-        // ™’È‡¢Á¡∑‘»°≈—∫‰ª∑’Ë Hub Island
-        if (compass != null) compass.SetTarget(hubIsland);
-    }
     #endregion
-
-    private void HandleDebugInputs()
-    {
-        if (Keyboard.current == null) return;
-
-        // °¥ Enter ‡æ◊ËÕ®”≈Õß«Ë“ 'µ°ª≈“‡ √Á®·≈È«' („™ÈµÕπÕ¬ŸË∫π‡°“–‡ªÈ“À¡“¬)
-        if (Keyboard.current.enterKey.wasPressedThisFrame && currentQuestIsland != null)
-        {
-            CatchFishCompleted();
-        }
-
-        // °¥ P ‡æ◊ËÕ¢È“¡ Wave (∑¥ Õ∫)
-        if (Keyboard.current.pKey.wasPressedThisFrame)
-        {
-            FeedBoss(); // ®”≈Õß«Ë“„ÀÈÕ“À“√‡≈¬‡æ◊ËÕ§«“¡√«¥‡√Á«
-        }
-    }
 }

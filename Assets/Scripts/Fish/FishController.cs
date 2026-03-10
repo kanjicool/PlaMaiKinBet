@@ -1,13 +1,12 @@
-using UnityEngine;
-using Bitgem.VFX.StylisedWater;
+Ôªøusing UnityEngine;
 
 public class FishController : MonoBehaviour
 {
     [Header("Fish Information")]
     public FishData myData;
 
-    private enum FishState { Wander, Flee, ChaseBait, Hooked, Caught }
-    private FishState currentState = FishState.Wander;
+    public enum FishState { Wander, Flee, ChaseBait, HookedAndWait, CaughtReeling }
+    public FishState currentState = FishState.Wander;
 
     [Header("Movement Settings")]
     public float swimRadius = 5f;
@@ -16,7 +15,7 @@ public class FishController : MonoBehaviour
     public float waterSurfaceY = 0f;
     public float swimDepth = 1.5f;
 
-    [Header("Detection (Layer & Tags)")]
+    [Header("Detection")]
     public LayerMask scareLayer;
     public string baitTag = "Bait";
 
@@ -26,11 +25,15 @@ public class FishController : MonoBehaviour
 
     private Transform currentBait;
     private Animator anim;
-
     private Transform playerTarget;
     private System.Action onCatchComplete;
 
-    void Start ()
+    private Vector3 hookPosition;
+    private Vector3 struggleTarget;
+    private float struggleTimer = 0f;
+    private Rigidbody bobberRb;
+
+    void Start()
     {
         startPosition = transform.position;
         anim = GetComponent<Animator>();
@@ -40,7 +43,7 @@ public class FishController : MonoBehaviour
     private void Update()
     {
         if (myData == null) return;
-        
+
         switch (currentState)
         {
             case FishState.Wander:
@@ -50,11 +53,8 @@ public class FishController : MonoBehaviour
 
             case FishState.Flee:
                 HandleMovement(normalSpeed * myData.fleeSpeedMultiplier);
-
                 if (Vector3.Distance(transform.position, targetPosition) < 0.5f)
-                {
                     currentState = FishState.Wander;
-                }
                 break;
 
             case FishState.ChaseBait:
@@ -63,37 +63,61 @@ public class FishController : MonoBehaviour
                     targetPosition = currentBait.position;
                     HandleMovement(normalSpeed * 1.5f);
 
-                    if (Vector3.Distance(transform.position, currentBait.position) < 0.5)
-                    {
+                    if (Vector3.Distance(transform.position, currentBait.position) < 0.5f)
                         BiteBait();
-                    }
                 }
                 else
                 {
                     currentState = FishState.Wander;
                 }
                 break;
-            case FishState.Hooked:
+
+            case FishState.HookedAndWait:
+                HandleStruggling();
                 break;
 
-            case FishState.Caught:
-                if (playerTarget != null)
-                {
-                    Vector3 directionToPlayer = (playerTarget.position - transform.position).normalized;
-                    if (directionToPlayer != Vector3.zero)
-                    {
-                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(directionToPlayer), Time.deltaTime * 10f);
-                    }
-
-                    transform.position = Vector3.MoveTowards(transform.position, playerTarget.position, 15f * Time.deltaTime); // 15f §◊Õ§«“¡‡√Á«„π°“√¥÷ß
-
-                    if (Vector3.Distance(transform.position, playerTarget.position) < 1.0f)
-                    {
-                        onCatchComplete?.Invoke(); // ‡√’¬° Event «Ë“®—∫ª≈“‡ √Á®·≈È«
-                        Destroy(gameObject); // ∑”≈“¬‚¡‡¥≈ª≈“∑‘Èß
-                    }
-                }
+            case FishState.CaughtReeling:
+                HandleReelingIn();
                 break;
+        }
+    }
+
+    private void HandleMovement(float speed)
+    {
+        Vector3 currentPos2D = new Vector3(transform.position.x, 0, transform.position.z);
+        Vector3 targetPos2D = new Vector3(targetPosition.x, 0, targetPosition.z);
+
+        if (currentState == FishState.Wander && Vector3.Distance(currentPos2D, targetPos2D) < 0.5f)
+        {
+            if (anim != null) anim.SetInteger("SwimState", 0);
+            waitTimer -= Time.deltaTime;
+            if (waitTimer <= 0f) SetNewTargetPosition();
+        }
+        else
+        {
+            if (anim != null && currentState == FishState.Wander) anim.SetInteger("SwimState", 1);
+
+            Vector3 direction = (targetPosition - transform.position).normalized;
+            if (direction != Vector3.zero)
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * turnSpeed);
+
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+        }
+    }
+
+    private void HandleReelingIn()
+    {
+        if (playerTarget == null) return;
+
+        Vector3 directionToPlayer = (playerTarget.position - transform.position).normalized;
+        if (directionToPlayer != Vector3.zero)
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(directionToPlayer), Time.deltaTime * 10f);
+
+        transform.position = Vector3.MoveTowards(transform.position, playerTarget.position, 15f * Time.deltaTime);
+
+        if (Vector3.Distance(transform.position, playerTarget.position) < 1.0f)
+        {
+            onCatchComplete?.Invoke();
         }
     }
 
@@ -109,138 +133,61 @@ public class FishController : MonoBehaviour
         Collider[] nearbyBaits = Physics.OverlapSphere(transform.position, myData.detectionRadius);
         foreach (var col in nearbyBaits)
         {
-            if (col.CompareTag(baitTag))
+            if (col.CompareTag(baitTag) && col.TryGetComponent<Bobber>(out Bobber bobber) && bobber.isInWater)
             {
-                Bobber bobber = col.GetComponent<Bobber>();
-                if (bobber != null && bobber.isInWater)
-                {
-                    currentBait = col.transform;
-                    currentState = FishState.ChaseBait;
-                    Debug.Log($"{myData.fishName} ‡ÀÁπ‡À¬◊ËÕ·≈È«!");
-                    if (anim != null) anim.SetInteger("SwimState", 2);
-                    break;
-                }
+                currentBait = col.transform;
+                currentState = FishState.ChaseBait;
+                if (anim != null) anim.SetInteger("SwimState", 2);
+                break;
             }
         }
-    }
-
-    private void FleeFrom(Vector3 scaryPosition)
-    {
-        currentState = FishState.Flee;
-        Vector3 fleeDirection = (transform.position - scaryPosition).normalized;
-        Vector3 potentialTarget = transform.position + (fleeDirection * myData.fleeRaius * 1.5f);
-
-        targetPosition = EnsureUnderwater(potentialTarget);
-        if (anim != null) anim.SetInteger("SwimState", 2);
-    }
-
-    private Vector3 EnsureUnderwater(Vector3 pos)
-    {
-        if (pos.y > waterSurfaceY - swimDepth)
-        {
-            pos.y = waterSurfaceY - swimDepth;
-        }
-        
-        return pos;
     }
 
     private void BiteBait()
     {
-        currentState = FishState.Hooked;
-        Debug.Log($"{myData.fishName} ß—∫‡À¬◊ËÕ·≈È«!!");
+        currentState = FishState.HookedAndWait;
         if (anim != null) anim.SetTrigger("isHooked");
+
+        hookPosition = transform.position;
+        struggleTarget = hookPosition;
+        struggleTimer = 0f;
 
         if (currentBait != null && currentBait.TryGetComponent<Bobber>(out Bobber bobber))
         {
-            bobber.OnFishBite(this);
-        }
-    }
-
-    private void HandleMovement(float speed)
-    {
-        Vector3 currentPos2D = new Vector3(transform.position.x, 0, transform.position.z);
-        Vector3 targetPos2D = new Vector3(targetPosition.x, 0, targetPosition.z);
-        float distanceToTarget = Vector3.Distance(currentPos2D, targetPos2D);
-
-        if (currentState == FishState.Wander && distanceToTarget < 0.5f)
-        {
-            if (anim != null) anim.SetInteger("SwimState", 0);
-
-            waitTimer -= Time.deltaTime;
-            if (waitTimer <= 0f)
-            {
-                SetNewTargetPosition();
-            }
-        }
-        else
-        {
-            if (anim != null && currentState == FishState.Wander) anim.SetInteger("SwimState", 1);
-
-            Vector3 directionToTarget = (targetPosition - transform.position).normalized;
-            if (directionToTarget != Vector3.zero)
-            {
-                Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
-            }
-
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
-        }
-    }
-
-    public void Initialize(FishData data)
-    {
-        myData = data;
-        Debug.Log($"Fish {myData.fishName} is spawn!");
-    }
-
-    public void BiteHook()
-    {
-        currentState = FishState.Hooked;
-        Debug.Log($"Fish bit the hook! EscapePower = {myData.escapePower}");
-        if (anim != null)
-        {
-            anim.SetTrigger("isHooked");
-        }
-
-    }
-
-    public void Struggle()
-    {
-        if (currentState == FishState.Hooked)
-        {
-            Debug.Log("Struggle");
+            bobber.ReceiveFishBite(this);
+            bobberRb = currentBait.GetComponent<Rigidbody>();
         }
     }
 
     public void StartReeling(Transform target, System.Action onComplete)
     {
-        currentState = FishState.Caught;
+        currentState = FishState.CaughtReeling;
         playerTarget = target;
         onCatchComplete = onComplete;
 
-        Collider col = GetComponent<Collider>();
-        if (col != null) col.enabled = false;
-
+        if (TryGetComponent<Collider>(out Collider col)) col.enabled = false;
         if (anim != null) anim.SetInteger("SwimState", 1);
-        Debug.Log($"°”≈—ß¥÷ßª≈“ {myData.fishName} ‡¢È“À“µ—«!");
     }
 
     public void Escape()
     {
-        Debug.Log($"{myData.fishName} ¥‘ÈπÀ≈ÿ¥‰ª‰¥È!");
-
         currentState = FishState.Flee;
-
         Vector3 fleeDirection = (transform.position - Camera.main.transform.position).normalized;
+        targetPosition = EnsureUnderwater(transform.position + (fleeDirection * myData.fleeRaius * 3f));
 
-        Vector3 potentialTarget = transform.position + (fleeDirection * myData.fleeRaius * 3f);
-        targetPosition = EnsureUnderwater(potentialTarget);
-
-        if (anim != null) anim.SetInteger("SwimState", 2); // ‡≈ËπÕπ‘‡¡™—π«Ë“¬πÈ”‡√Á«
-
-        // µ—Èß„ÀÈª≈“§ËÕ¬Ê °≈—∫‰ª ŸË‚À¡¥ª°µ‘ (Wander) À≈—ß®“°Àπ’‰ª —°æ—°
+        if (anim != null) anim.SetInteger("SwimState", 2);
         Invoke(nameof(ResetToWander), 3f);
     }
+
+    private void FleeFrom(Vector3 scaryPosition)
+    {
+        currentState = FishState.Flee;
+        Vector3 fleeDir = (transform.position - scaryPosition).normalized;
+        targetPosition = EnsureUnderwater(transform.position + (fleeDir * myData.fleeRaius * 1.5f));
+        if (anim != null) anim.SetInteger("SwimState", 2);
+    }
+
+    public void Initialize(FishData data) { myData = data; }
 
     private void ResetToWander()
     {
@@ -250,16 +197,59 @@ public class FishController : MonoBehaviour
 
     private void SetNewTargetPosition()
     {
-        Vector2 randomCircle = Random.insideUnitCircle * swimRadius;
-        Vector3 randomPos = startPosition + new Vector3(randomCircle.x, 0f, randomCircle.y);
-
-        targetPosition = EnsureUnderwater(randomPos);
+        Vector2 rand = Random.insideUnitCircle * swimRadius;
+        targetPosition = EnsureUnderwater(startPosition + new Vector3(rand.x, 0f, rand.y));
         waitTimer = Random.Range(1f, 4f);
         if (anim != null) anim.SetInteger("SwimState", 1);
     }
 
+    private Vector3 EnsureUnderwater(Vector3 pos)
+    {
+        if (pos.y > waterSurfaceY - swimDepth) pos.y = waterSurfaceY - swimDepth;
+        return pos;
+    }
+
+    private void HandleStruggling()
+    {
+        struggleTimer -= Time.deltaTime;
+        if (struggleTimer <= 0f)
+        {
+            Vector2 rand = Random.insideUnitCircle * 1.5f;
+            float randomDepth = Random.Range(-0.5f, -2.5f);
+
+            struggleTarget = EnsureUnderwater(hookPosition + new Vector3(rand.x, randomDepth, rand.y));
+            struggleTimer = Random.Range(0.15f, 0.4f); 
+        }
+
+        Vector3 direction = (struggleTarget - transform.position).normalized;
+        if (direction != Vector3.zero)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * turnSpeed * 4f);
+        }
+
+        float struggleSpeed = normalSpeed * myData.fleeSpeedMultiplier * 1.5f;
+        transform.position = Vector3.MoveTowards(transform.position, struggleTarget, struggleSpeed * Time.deltaTime);
+
+        if (bobberRb != null)
+        {
+            Vector3 pullDirection = (transform.position - currentBait.position).normalized;
+
+            float pullForce = myData.escapePower * 3f;
+
+            bobberRb.AddForce(pullDirection * pullForce * Time.deltaTime, ForceMode.VelocityChange);
+        }
+    }
+
+
+    // ==========================================
+    // DEBUG GIZMOS (‡πÅ‡∏™‡∏î‡∏á‡πÄ‡∏™‡πâ‡∏ô‡πÑ‡∏Å‡∏î‡πå‡πÑ‡∏•‡∏ô‡πå‡πÉ‡∏ô‡∏´‡∏ô‡πâ‡∏≤ Scene)
+    // ==========================================
     private void OnDrawGizmosSelected()
     {
+        Vector3 centerPos = Application.isPlaying ? startPosition : transform.position;
+        Gizmos.color = new Color(0f, 1f, 0f, 0.3f);
+        Gizmos.DrawWireSphere(centerPos, swimRadius);
+
         if (myData != null)
         {
             Gizmos.color = Color.yellow;
@@ -269,7 +259,21 @@ public class FishController : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, myData.fleeRaius);
         }
 
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawSphere(targetPosition, 0.2f);
+        if (Application.isPlaying)
+        {
+            if (currentState == FishState.HookedAndWait)
+            {
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawWireSphere(hookPosition, 1.5f); // 1.5f ‡∏Ñ‡∏∑‡∏≠‡∏£‡∏∞‡∏¢‡∏∞‡∏î‡∏¥‡πâ‡∏ô‡∏ó‡∏µ‡πà‡πÄ‡∏£‡∏≤‡∏ï‡∏±‡πâ‡∏á‡πÑ‡∏ß‡πâ
+                Gizmos.DrawSphere(struggleTarget, 0.1f);
+                Gizmos.DrawLine(transform.position, struggleTarget);
+            }
+            else
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawSphere(targetPosition, 0.15f);
+                Gizmos.DrawLine(transform.position, targetPosition);
+            }
+        }
     }
 }

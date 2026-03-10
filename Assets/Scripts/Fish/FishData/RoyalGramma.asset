@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ced3a65ff0a734786b7c660190593e, type: 3}
+  m_Name: RoyalGramma
+  m_EditorClassIdentifier: Assembly-CSharp::FishData
+  fishName: RoyalGramma
+  fishPrefab: {fileID: 3570071971633359637, guid: b0e149589b18aca4092cbb3d2819fe79, type: 3}
+  fishIcon: {fileID: -1708911718, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
+  fishItemData: {fileID: 11400000, guid: f8b583fea730cd64488e537707748a0a, type: 2}
+  escapePower: 4
+  stamina: 80
+  biteDelay: 2
+  detectionRadius: 8
+  fleeRaius: 5
+  fleeSpeedMultiplier: 2

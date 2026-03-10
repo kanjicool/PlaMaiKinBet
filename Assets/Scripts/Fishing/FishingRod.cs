@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 [RequireComponent(typeof(LineRenderer))]
 public class FishingRod : MonoBehaviour
 {
@@ -9,13 +8,14 @@ public class FishingRod : MonoBehaviour
     public Transform rodTip;
     public GameObject bobberPrefab;
 
-    [Header("Casting Settings (ÃÐººªÒÃì¨¾ÅÑ§)")]
-    public float maxCastForce = 25f;  // áÃ§»ÒÊÙ§ÊØ´
-    public float chargeSpeed = 20f;   // ¤ÇÒÁàÃçÇã¹¡ÒÃªÒÃì¨à¡¨
+    [Header("Casting Settings")]
+    public float maxCastForce = 25f;
+    public float chargeSpeed = 20f;
     public float upwardForce = 5f;
 
     private LineRenderer lineRenderer;
-    private GameObject currentBobber;
+    private GameObject currentBobberObj;
+    private Bobber activeBobber;
     private InputSystem_Actions inputActions;
 
     private bool isCharging = false;
@@ -33,34 +33,14 @@ public class FishingRod : MonoBehaviour
         lineRenderer.enabled = false;
 
         inputActions = new InputSystem_Actions();
-
         inputActions.Player.Fire.started += OnFireStarted;
         inputActions.Player.Fire.canceled += OnFireCanceled;
     }
 
-    private void OnFireStarted(InputAction.CallbackContext context)
-    {
-        StartCasting();
-    }
-
-    private void OnFireCanceled(InputAction.CallbackContext context)
-    {
-        ReleaseCast();
-    }
-
-    private void OnDestroy()
-    {
-        inputActions.Player.Fire.started -= OnFireStarted;
-        inputActions.Player.Fire.canceled -= OnFireCanceled;
-
-        inputActions.Dispose();
-    }
-
-
     private void OnEnable()
     {
         inputActions.Enable();
-        if (currentBobber != null) lineRenderer.enabled = true;
+        if (currentBobberObj != null || currentHookedFish != null) lineRenderer.enabled = true;
     }
 
     private void OnDisable()
@@ -70,139 +50,150 @@ public class FishingRod : MonoBehaviour
         isCharging = false;
     }
 
+    private void OnDestroy() { inputActions.Dispose(); }
+
     private void Update()
     {
-        if (lineRenderer.enabled)
-        {
-            lineRenderer.SetPosition(0, rodTip.position);
-
-            if (currentBobber != null)
-            {
-                lineRenderer.SetPosition(1, currentBobber.transform.position);
-            }
-            else if (currentHookedFish != null)
-            {
-                lineRenderer.SetPosition(1, currentHookedFish.transform.position);
-            }
-        }
-
-        if (isCharging)
-        {
-            currentCharge += chargeSpeed * chargeDirection * Time.deltaTime;
-
-            if (currentCharge >= maxCastForce)
-            {
-                currentCharge = maxCastForce;
-                chargeDirection = -1;
-            }
-            else if (currentCharge <= 0)
-            {
-                currentCharge = 0;
-                chargeDirection = 1;
-            }
-
-            UIManager.Instance.UpdateCastBar(currentCharge, maxCastForce);
-            //Debug.Log($"¡ÓÅÑ§ªÒÃì¨¾ÅÑ§... {currentCharge:F1}");
-        }
+        UpdateLineRenderer();
+        HandleCharging();
     }
 
-    private void StartCasting()
+    private void UpdateLineRenderer()
+    {
+        if (!lineRenderer.enabled) return;
+
+        lineRenderer.SetPosition(0, rodTip.position);
+
+        if (currentBobberObj != null)
+            lineRenderer.SetPosition(1, currentBobberObj.transform.position);
+        else if (currentHookedFish != null)
+            lineRenderer.SetPosition(1, currentHookedFish.transform.position);
+    }
+
+    private void HandleCharging()
+    {
+        if (!isCharging) return;
+
+        currentCharge += chargeSpeed * chargeDirection * Time.deltaTime;
+        if (currentCharge >= maxCastForce)
+        {
+            currentCharge = maxCastForce;
+            chargeDirection = -1;
+        }
+        else if (currentCharge <= 0)
+        {
+            currentCharge = 0;
+            chargeDirection = 1;
+        }
+
+         UIManager.Instance.UpdateCastBar(currentCharge, maxCastForce);
+    }
+
+    private void OnFireStarted(InputAction.CallbackContext context)
     {
         if (!gameObject.activeInHierarchy) return;
 
-        if (currentBobber != null)
+        if (currentBobberObj != null || currentHookedFish != null)
         {
-            Destroy(currentBobber);
-            lineRenderer.enabled = false;
-            isCharging = false;
-            UIManager.Instance.HideCastBar();
+            CancelFishing();
         }
         else
         {
             isCharging = true;
             currentCharge = 0f;
             chargeDirection = 1;
-            UIManager.Instance.ShowCastBar();
+             UIManager.Instance.ShowCastBar();
         }
     }
 
-    private void ReleaseCast()
+    private void OnFireCanceled(InputAction.CallbackContext context)
     {
         if (!isCharging) return;
         isCharging = false;
-        UIManager.Instance.HideCastBar();
+         UIManager.Instance.HideCastBar();
 
-        currentBobber = Instantiate(bobberPrefab, rodTip.position, Quaternion.identity);
+        CastLine();
+    }
+
+    private void CastLine()
+    {
+        currentBobberObj = Instantiate(bobberPrefab, rodTip.position, Quaternion.identity);
+        activeBobber = currentBobberObj.GetComponent<Bobber>();
         lineRenderer.enabled = true;
 
-        Bobber bobberScript = currentBobber.GetComponent<Bobber>();
-        if (bobberScript != null)
+        if (activeBobber != null)
         {
-            bobberScript.myRod = this;
+            activeBobber.OnFishBitten += HandleFishBite;
         }
 
-        Rigidbody bobberRb = currentBobber.GetComponent<Rigidbody>();
-        if (bobberRb != null)
+        if (currentBobberObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
         {
-            Vector3 forceDirection = (Camera.main.transform.forward * currentCharge) + (Vector3.up * upwardForce);
-            bobberRb.AddForce(forceDirection, ForceMode.Impulse);
+            Vector3 forceDir = (Camera.main.transform.forward * currentCharge) + (Vector3.up * upwardForce);
+            rb.AddForce(forceDir, ForceMode.Impulse);
         }
-
-        //Debug.Log($"»ÒàËÂ×èÍÍÍ¡ä»´éÇÂáÃ§: {currentCharge:F1}");
-        currentCharge = 0f; // ÃÕà«çµ¤èÒ¾ÅÑ§
+        currentCharge = 0f;
     }
-    public void CatchSuccess(FishController fish)
+
+    private void HandleFishBite(FishController fish)
     {
-        if (currentBobber != null)
-        {
-            Destroy(currentBobber); // Åº·Øè¹·Ôé§
-        }
+        Debug.Log("2. คันเบ็ด (FishingRod) รับทราบจากทุ่น กำลังจะเปิดมินิเกม!");
 
         currentHookedFish = fish;
-        lineRenderer.enabled = true; // à»Ô´àÊé¹àÍç¹äÇé´Ö§»ÅÒ
+
+        FishingMiniGame.Instance.StartMiniGame(
+            fish.myData.escapePower,
+            OnMinigameWin,
+            OnMinigameLose
+        );
+    }
+
+    private void OnMinigameWin()
+    {
+        if (currentBobberObj != null) Destroy(currentBobberObj);
 
         Transform pullTarget = transform.parent != null ? transform.parent : transform;
 
-        fish.StartReeling(pullTarget, () => {
-
-            // --- ÊÔè§·Õè¨Ðà¡Ô´¢Öé¹àÁ×èÍ»ÅÒÁÒ¶Ö§µÑÇ ---
+        currentHookedFish.StartReeling(pullTarget, () => {
             lineRenderer.enabled = false;
-            currentHookedFish = null;
 
-            // ´Ö§ Script Inventory ¢Í§¼ÙéàÅè¹ÁÒà¾×èÍà¡çº»ÅÒ
             PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
-
-            if (inventory == null)
+            if (inventory != null && currentHookedFish.myData.fishItemData != null)
             {
-                Debug.LogError("ºÑê¡: ËÒ PlayerInventory äÁèà¨Í! µÃÇ¨ÊÍºÇèÒµÑÇ¼ÙéàÅè¹ÁÕÊ¤ÃÔ»µì¹ÕéÍÂÙèäËÁ");
-                return;
+                inventory.AddCaughtFishToHotbar(currentHookedFish.myData.fishItemData);
+                CheckQuestCompletion(currentHookedFish);
             }
 
-            if (fish.myData.fishItemData == null)
-            {
-                Debug.LogError($"ºÑê¡: »ÅÒ¡ÓÅÑ§¨Ðà¢éÒ¡ÃÐà»ëÒáÅéÇ áµè¤Ø³Å×ÁãÊè ItemData ãËé¡Ñº {fish.myData.fishName} ã¹Ë¹éÒ Inspector!");
-                return;
-            }
-
-            //inventory.myItems.Add(fish.myData.fishItemData);
-            inventory.AddCaughtFishToHotbar(fish.myData.fishItemData);
-            Debug.Log($"+++ à¡çº {fish.myData.fishName} à¢éÒ¡ÃÐà»ëÒÊÓàÃç¨! µÍ¹¹ÕéÁÕ¢Í§·Ñé§ËÁ´ {inventory.myItems.Count} ªÔé¹ +++");
-
-            // TODO: àÃÕÂ¡ GameManager à¾×èÍà¾ÔèÁ EXP/ÍÑ»à´µà¤ÇÊ
-            // GameManager.Instance.AddExp(10);
-            Destroy(fish.gameObject);
+            Destroy(currentHookedFish.gameObject);
+            currentHookedFish = null;
         });
     }
 
-    public void CatchFail()
+    private void OnMinigameLose()
     {
-        if (currentBobber != null)
+        CancelFishing();
+        if (currentHookedFish != null)
         {
-            Destroy(currentBobber); // ·ÓÅÒÂ·Øè¹·Ôé§
+            currentHookedFish.Escape();
+            currentHookedFish = null;
         }
+    }
 
-        lineRenderer.enabled = false; // »Ô´ÊÒÂàÍç¹
-        currentHookedFish = null;
-        Debug.Log("à¡çºÊÒÂàºç´... àµÃÕÂÁµÑÇµ¡ãËÁè");
+    private void CancelFishing()
+    {
+        if (currentBobberObj != null) Destroy(currentBobberObj);
+        lineRenderer.enabled = false;
+        isCharging = false;
+    }
+
+    private void CheckQuestCompletion(FishController fish)
+    {
+        if (GameLoopManager.Instance != null && GameLoopManager.Instance.currentQuestFish != null)
+        {
+            if (fish.myData.fishItemData == GameLoopManager.Instance.currentQuestFish.fishItemData)
+            {
+                if (GameLoopManager.Instance.compass != null)
+                    GameLoopManager.Instance.compass.SetTarget(GameLoopManager.Instance.hubIsland);
+            }
+        }
     }
 }

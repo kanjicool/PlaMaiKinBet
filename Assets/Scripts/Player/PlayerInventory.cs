@@ -477,37 +477,44 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
-    public bool HasItem(ItemData itemToCheck)
-    {
-        if (itemToCheck == null) return false;
+    // --- Boss quest system ---
 
-        // หาใน Hotbar ก่อน
+    public int GetItemCount(ItemData itemToCheck)
+    {
+        int count = 0;
+        if (itemToCheck == null) return count;
+
+        // นับใน Hotbar
         foreach (GameObject slotObj in itemSlots)
         {
             if (slotObj != null)
             {
                 ItemHolder holder = slotObj.GetComponent<ItemHolder>();
-                if (holder != null && holder.itemData == itemToCheck) return true;
+                if (holder != null && holder.itemData == itemToCheck) count++;
             }
         }
 
-        // หาใน Inventory
+        // นับใน Inventory
         foreach (GameObject itemObj in myItems)
         {
             if (itemObj != null)
             {
                 ItemHolder holder = itemObj.GetComponent<ItemHolder>();
-                if (holder != null && holder.itemData == itemToCheck) return true;
+                if (holder != null && holder.itemData == itemToCheck) count++;
             }
         }
-        return false;
+        return count;
     }
 
-    public void ConsumeItem(ItemData itemToConsume)
+    public void ConsumeItems(ItemData itemToConsume, int amountToConsume)
     {
-        // ลบจาก Hotbar
+        int removedCount = 0;
+
+        // ลบจาก Hotbar ก่อน
         for (int i = 0; i < itemSlots.Length; i++)
         {
+            if (removedCount >= amountToConsume) break; // ครบแล้วหยุด
+
             if (itemSlots[i] != null)
             {
                 ItemHolder holder = itemSlots[i].GetComponent<ItemHolder>();
@@ -516,15 +523,16 @@ public class PlayerInventory : MonoBehaviour
                     Destroy(itemSlots[i]);
                     itemSlots[i] = null;
                     if (currentItemIndex == i) currentItemIndex = -1;
-                    UpdateInventoryUI();
-                    return; // ลบแค่ตัวเดียวพอ
+                    removedCount++;
                 }
             }
         }
 
-        // ลบจาก Inventory
+        // ถ้าลบใน Hotbar ไม่พอ ให้มาลบใน Inventory ต่อ
         for (int i = 0; i < myItems.Count; i++)
         {
+            if (removedCount >= amountToConsume) break; // ครบแล้วหยุด
+
             if (myItems[i] != null)
             {
                 ItemHolder holder = myItems[i].GetComponent<ItemHolder>();
@@ -532,10 +540,11 @@ public class PlayerInventory : MonoBehaviour
                 {
                     Destroy(myItems[i]);
                     myItems[i] = null;
-                    UpdateInventoryUI();
-                    return; // ลบแค่ตัวเดียวพอ
+                    removedCount++;
                 }
             }
         }
+
+        UpdateInventoryUI();
     }
 }

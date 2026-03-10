@@ -44,7 +44,7 @@ public class FishWanderAI : MonoBehaviour
         {
             WaitAndThink();
         }
-        
+
     }
 
     public void AttractToBait(Transform bait)

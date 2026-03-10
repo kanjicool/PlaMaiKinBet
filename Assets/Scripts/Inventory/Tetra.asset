@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 727aee9ad26c6424f9b9db3057cf6887, type: 3}
+  m_Name: Tetra
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: Tetra
+  icon: {fileID: -1212013111, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
+  itemPrefab: {fileID: 8991282864701730590, guid: 1d56dee706b1dcd43b5cdbea56eee4b8, type: 3}
+  price: 12

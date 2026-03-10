@@ -213,7 +213,6 @@ public class PlayerController : MonoBehaviour
 
             if (inventory.GetHeldItem() != null)
             {
-                Debug.Log("ถือของอยู่ ต่อยไม่ได้นะ!"); // ใส่ Log ไว้เช็ก
                 return;
             }
         }

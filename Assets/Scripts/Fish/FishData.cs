@@ -7,7 +7,7 @@ public class FishData : ScriptableObject
     public string fishName;
     public GameObject fishPrefab;
     public Sprite fishIcon;
-    public int price;
+    //public int price;
 
     public ItemData fishItemData;
 
@@ -16,7 +16,7 @@ public class FishData : ScriptableObject
     public float stamina = 100f;
     public float biteDelay = 2f;
 
-    [Header("AI Settings")]
+    [Header("AI Settings")] 
     public float detectionRadius = 10f;
     public float fleeRaius = 5f;
     public float fleeSpeedMultiplier = 2.5f;

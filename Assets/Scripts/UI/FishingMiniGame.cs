@@ -1,7 +1,8 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using System.Xml.Serialization;
+using UnityEngine.UI;
 
 public class FishingMiniGame : MonoBehaviour
 {
@@ -28,15 +29,17 @@ public class FishingMiniGame : MonoBehaviour
     private float currentTension = 50f;
     private float catchProgress = 0f;
     private bool isPlaying = false;
-    private FishController hookedFish;
 
     private float sweetSpotCenter = 50f;
     private float targetSweetSpotCenter = 50f;
     private float changeTargetTimer = 0f;
-    private FishingRod activeRod;
 
     private float SweetSpotMin => sweetSpotCenter - (sweetSpotWidth / 2f);
     private float SweetSpotMax => sweetSpotCenter + (sweetSpotWidth / 2f);
+
+    private float currentEscapePower;
+    private Action onWinCallback;
+    private Action onLoseCallback;
 
 
     private void Awake()
@@ -45,19 +48,21 @@ public class FishingMiniGame : MonoBehaviour
         if (miniGamePanel != null) miniGamePanel.SetActive(false);
     }
 
-    public void StartMiniGame(FishController fish, FishingRod rod)
+    public void StartMiniGame(float escapePower, Action onWin, Action onLose)
     {
-        hookedFish = fish;
-        activeRod = rod;
+        currentEscapePower = escapePower;
+        onWinCallback = onWin;
+        onLoseCallback = onLose;
+
         currentTension = 50f;
         catchProgress = 0f;
-
         sweetSpotCenter = 50f;
         targetSweetSpotCenter = 50f;
         
         isPlaying = true;
-
         if (miniGamePanel != null) miniGamePanel.SetActive(true);
+
+        Debug.Log("3. ระบบมินิเกมเริ่มทำงาน กำลังเปิดหน้าต่าง UI!");
     }
 
     private void Update()
@@ -73,21 +78,15 @@ public class FishingMiniGame : MonoBehaviour
     private void HandleTension()
     {
         if (Mouse.current.rightButton.isPressed)
-        {
             currentTension += playerPullForce * Time.deltaTime;
-        }
         else
-        {
             currentTension -= tensionDropRate * Time.deltaTime;
-        }
 
-        float fishForce = hookedFish != null ? hookedFish.myData.escapePower * 2f : 10f;
-        currentTension -= fishForce * Time.deltaTime;
-
+        currentTension -= (currentEscapePower * 2f) * Time.deltaTime;
         currentTension = Mathf.Clamp(currentTension, 0f, 100f);
 
-        if (currentTension >= 100f) EndGame(false, "ดึงแรงเกินไป สายเบ็ดขาด!");
-        if (currentTension <= 0f) EndGame(false, "หย่อนเกินไป ปลาหลุดหนีไปได้!");
+        if (currentTension >= 100f) EndGame(false);
+        if (currentTension <= 0f) EndGame(false);
     }
 
     private void MoveSweetSpot()
@@ -96,12 +95,11 @@ public class FishingMiniGame : MonoBehaviour
         if (changeTargetTimer <= 0f || Mathf.Abs(sweetSpotCenter - targetSweetSpotCenter) < 1f)
         {
             float halfWidth = sweetSpotWidth / 2f;
-            targetSweetSpotCenter = Random.Range(halfWidth, 100f - halfWidth);
-
-            changeTargetTimer = Random.Range(0.5f, 2f);
+            targetSweetSpotCenter = UnityEngine.Random.Range(halfWidth, 100f - halfWidth);
+            changeTargetTimer = UnityEngine.Random.Range(0.5f, 2f);
         }
 
-        float moveSpeed = baseMoveSpeed + (hookedFish != null ? hookedFish.myData.escapePower : 0);
+        float moveSpeed = baseMoveSpeed + currentEscapePower;
         sweetSpotCenter = Mathf.MoveTowards(sweetSpotCenter, targetSweetSpotCenter, moveSpeed * Time.deltaTime);
     }
 
@@ -111,12 +109,7 @@ public class FishingMiniGame : MonoBehaviour
         if (currentTension >= SweetSpotMin && currentTension <= SweetSpotMax)
         {
             catchProgress += catchSpeed * Time.deltaTime;
-
-            if (catchProgress >= 100f)
-            {
-                string fishName = hookedFish != null ? hookedFish.myData.fishName : "ปลาปริศนา";
-                EndGame(true, $"ตกปลาสำเร็จ! ได้ {fishName} มาแล้ว!");
-            }
+            if (catchProgress >= 100f) EndGame(true);
         }
         else
         {
@@ -130,49 +123,22 @@ public class FishingMiniGame : MonoBehaviour
         if (tensionSlider != null) tensionSlider.value = currentTension;
         if (catchProgressBar != null) catchProgressBar.fillAmount = catchProgress / 100f;
 
-        // อัปเดตตำแหน่งและขนาดของโซนสีเขียวบน UI
         if (sweetSpotUI != null)
         {
-            // แปลงค่า 0-100 ให้เป็นแกน 0-1 สำหรับ Anchor
-            float minAnchor = SweetSpotMin / 100f;
-            float maxAnchor = SweetSpotMax / 100f;
-
-            // ปรับ Anchor X (สมมติว่าหลอดเป็นแนวนอน)
-            sweetSpotUI.anchorMin = new Vector2(minAnchor, sweetSpotUI.anchorMin.y);
-            sweetSpotUI.anchorMax = new Vector2(maxAnchor, sweetSpotUI.anchorMax.y);
-
-            // เคลียร์ค่า Offset เพื่อให้ภาพขยายเต็มพื้นที่ Anchor พอดี
+            sweetSpotUI.anchorMin = new Vector2(SweetSpotMin / 100f, sweetSpotUI.anchorMin.y);
+            sweetSpotUI.anchorMax = new Vector2(SweetSpotMax / 100f, sweetSpotUI.anchorMax.y);
             sweetSpotUI.offsetMin = new Vector2(0, sweetSpotUI.offsetMin.y);
             sweetSpotUI.offsetMax = new Vector2(0, sweetSpotUI.offsetMax.y);
         }
     }
 
-    private void EndGame(bool isWin, string message)
+    private void EndGame(bool isWin)
     {
         isPlaying = false;
         if (miniGamePanel != null) miniGamePanel.SetActive(false);
-        Debug.Log(message);
 
-        if (isWin)
-        {
-            // ชนะ Minigame -> สั่งให้เบ็ดดึงปลาเข้าหาตัว
-            if (activeRod != null)
-            {
-                activeRod.CatchSuccess(hookedFish);
-            }
-        }
-        else
-        {
-            // แพ้ Minigame -> สายขาด หรือ ปลาหลุด
-            if (activeRod != null)
-            {
-                activeRod.CatchFail();
-            }
+        if (isWin) onWinCallback?.Invoke();
+        else onLoseCallback?.Invoke();
 
-            if (hookedFish != null)
-            {
-                hookedFish.Escape(); // สั่งให้ปลาว่ายหนีไป
-            }
-        }
     }
 }

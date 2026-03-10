@@ -138,19 +138,13 @@ public class BuyerManager : MonoBehaviour
         int price = 0;
 
         ItemHolder itemHolder = item.GetComponent<ItemHolder>();    
-        FishHolder fishHolder = item.GetComponent<FishHolder>();
 
         if (itemHolder != null && itemHolder.itemData != null)
         {
             itemName = itemHolder.itemData.itemName;
             price = itemHolder.itemData.price;
         }
-        else if (fishHolder != null && fishHolder.fishData != null)
-        {
-            itemName = fishHolder.fishData.fishName;
-            price = fishHolder.fishData.price;
-        }
 
-        return price; // ส่งราคาคืนกลับไปให้คนเรียก
+        return price;
     }
 }

@@ -1,31 +1,22 @@
 using UnityEngine;
 
-public enum IslandType { QuestIsland, HubIsland }
-
 public class IslandTrigger : MonoBehaviour
 {
-    public IslandType islandType = IslandType.QuestIsland;
     private bool hasTriggered = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (hasTriggered && islandType == IslandType.QuestIsland) return; // Quest เกาะทริกเกอร์ครั้งเดียว
+        // ทำงานแค่ครั้งเดียวตอนขับเรือมาถึงเกาะเป้าหมาย
+        if (hasTriggered) return;
 
         if (other.CompareTag("Player"))
         {
-            if (GameLoopManager.Instance != null)
-            {
-                if (islandType == IslandType.QuestIsland)
-                {
-                    hasTriggered = true;
-                    GameLoopManager.Instance.OnReachQuestIsland();
-                }
-                else if (islandType == IslandType.HubIsland)
-                {
-                    // ถ้าถึงเกาะ Hub ให้ลองส่งอาหารบอส
-                    GameLoopManager.Instance.FeedBoss();
-                }
-            }
+            hasTriggered = true;
+
+            Debug.Log("ถึงเกาะเป้าหมายแล้ว! หาจุดตกปลาได้เลย");
+
+            // TODO: ในอนาคตคุณสามารถสั่งโชว์ UI บนหน้าจอตรงนี้ได้
+            // เช่น UIManager.Instance.ShowMessage("ถึงเกาะเป้าหมายแล้ว! เริ่มตกปลาได้เลย");
         }
     }
 }
