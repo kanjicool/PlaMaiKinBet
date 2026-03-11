@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d068f406d17f324f9a30cc24526e597, type: 3}
+  m_Name: Cactoro
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  maxHealth: 100
+  walkPointRange: 10
+  patrolSpeed: 2
+  chaseSpeed: 7
+  acceleration: 12
+  sightRange: 15
+  attackRange: 2
+  timeBetweenAttacks: 2
+  damage: 10
