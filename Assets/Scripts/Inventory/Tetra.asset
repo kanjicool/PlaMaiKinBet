@@ -16,3 +16,6 @@ MonoBehaviour:
   icon: {fileID: -1212013111, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
   itemPrefab: {fileID: 8991282864701730590, guid: 1d56dee706b1dcd43b5cdbea56eee4b8, type: 3}
   price: 12
+  holdAnimID: 2
+  holdPositionOffset: {x: 0, y: 0, z: 0}
+  holdRotationOffset: {x: 0, y: 0, z: 0}

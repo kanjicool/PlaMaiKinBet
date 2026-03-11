@@ -22,14 +22,13 @@ public class PlayerController : MonoBehaviour
     public string enemyTag = "Enemy";
 
     [Header("Combo System")]
-    public float attackCooldown = 0.4f; // หน่วงเวลาระหว่างหมัด (ป้องกันการกดรัวเกินไป)
-    public float comboResetTime = 1.2f; // ถ้าไม่กดภายในเวลานี้ คอมโบจะรีเซ็ต
-
+    public float attackCooldown = 0.4f; 
+    public float comboResetTime = 1.2f; 
     public float attackLockDuration = 0.35f;
 
     private float nextAttackTime = 0f;
     private float lastAttackTime = 0f;
-    private int currentComboStep = 0; // ท่าปัจจุบัน (1, 2, 3, 4)
+    private int currentComboStep = 0; 
 
     [Header("Movement Settings")]
     public float walkSpeed = 5f;
@@ -55,8 +54,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Water System")]
     public float waterDrag = 2f;
-    public float swimUpKey = 1f; // แรงว่ายขึ้น (Space)
-    public float swimDownKey = 1f; // แรงว่ายลง (Ctrl)
+    public float swimUpKey = 1f; 
+    public float swimDownKey = 1f; 
     public float surfaceOffset = 1f;
 
     public float swimStartDepth = 1.2f; // ระดับความลึกที่จะเปลี่ยนเป็นท่าว่ายน้ำ
@@ -203,18 +202,17 @@ public class PlayerController : MonoBehaviour
 
         if (inputActions.Player.Attack.WasPressedThisFrame())
         {
-            Punch();
+            PerformAttack();
         }
 
         HandleStamina();
-
         UpdateHoldAnimation();
     }
 
     private void FixedUpdate()
     {
         CheckGrounded();
-        CheckWaterDepth(); // เรียกใช้เช็กความลึกของน้ำตลอดเวลา
+        CheckWaterDepth(); 
         CheckClimbing();
 
         if (isSwimming)
@@ -302,28 +300,11 @@ public class PlayerController : MonoBehaviour
     }
 
     // ===================== Combat =====================
-    private void Punch()
+    private void PerformAttack()
     {
+        if (inventory != null && inventory.isInventoryOpen) return;
 
-        if (inventory != null)
-        {
-            if (inventory.isInventoryOpen)
-            {
-                return;
-            }
-
-            if (inventory.GetHeldItem() != null)
-            {
-                return;
-            }
-        }
-
-
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
-
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
         if (isSwimming || isClimbing || isExhausted) return;
 
@@ -333,20 +314,41 @@ public class PlayerController : MonoBehaviour
         {
             currentComboStep = 0;
         }
-        
+
         currentComboStep++;
 
-        if (currentComboStep > 4)
+        float finalDamage = attackDamage;
+
+        if (currentHoldType == 0)
         {
-            currentComboStep = 1;
+            // --- กรณี 1: มือเปล่า (หมัด) ---
+            if (currentComboStep > 4) currentComboStep = 1;
+            animator.SetTrigger("punch" + currentComboStep);
+
+            finalDamage = (currentComboStep == 4) ? attackDamage * 2f : attackDamage;
+            Debug.Log("Punch Combo: " + currentComboStep);
+        }
+        else if (currentHoldType == 3)
+        {
+            // --- กรณี 2: ถืออาวุธระยะประชิด (ดาบ/มีด) ---
+            if (currentComboStep > 3) currentComboStep = 1; // สมมติว่าดาบมี 3 คอมโบ (ปรับเลขได้)
+
+            //animator.SetTrigger("sword" + currentComboStep); // เรียก Trigger ท่าฟันดาบ
+
+            // ให้ดาบตีแรงกว่าหมัด 1.5 เท่า (ในอนาคตเราสามารถดึงดาเมจจาก ItemData มาใช้แทนได้)
+            finalDamage = attackDamage * 1.5f;
+            if (currentComboStep == 3) finalDamage *= 2f; // ท่าสุดท้ายแรงขึ้น 2 เท่า
+
+            Debug.Log("Sword Combo: " + currentComboStep);
+        }
+        else
+        {
+            // ถ้าถือปืน (Type 3, 4) หรือเบ็ดตกปลา (Type 2) ให้กดคลิกซ้ายแล้วไม่ทำอะไร (หรือแยกไปทำระบบยิง)
+            return;
         }
 
         lastAttackTime = Time.time;
         nextAttackTime = Time.time + attackCooldown;
-
-        animator.SetTrigger("punch" + currentComboStep);
-
-        Debug.Log("Combo Step: " + currentComboStep);
 
         if (attackPoint != null)
         {
@@ -359,8 +361,6 @@ public class PlayerController : MonoBehaviour
                     DummyEnemy dummy = hitObject.GetComponent<DummyEnemy>();
                     if (dummy != null)
                     {
-                        // คุณสามารถประยุกต์ให้ท่าที่ 4 ตีแรงขึ้นได้ที่นี่
-                        float finalDamage = (currentComboStep == 4) ? attackDamage * 2f : attackDamage;
                         dummy.TakeDamage(finalDamage);
                     }
                 }
