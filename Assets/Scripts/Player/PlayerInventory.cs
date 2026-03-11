@@ -199,6 +199,7 @@ public class PlayerInventory : MonoBehaviour
             currentItemIndex = index;
             if (itemSlots[currentItemIndex] != null)
             {
+                ApplyItemTransform(itemSlots[currentItemIndex]);
                 itemSlots[currentItemIndex].SetActive(true);
             }
         }
@@ -260,8 +261,11 @@ public class PlayerInventory : MonoBehaviour
                 ItemHolder holder = spawnedItem.GetComponent<ItemHolder>() ?? spawnedItem.AddComponent<ItemHolder>();
                 holder.itemData = item;
 
-                spawnedItem.transform.localPosition = Vector3.zero;
-                spawnedItem.transform.localRotation = Quaternion.identity;
+                spawnedItem.transform.SetParent(handTransform);
+
+                spawnedItem.transform.localPosition = item.holdPositionOffset;
+                spawnedItem.transform.localRotation = Quaternion.Euler(item.holdRotationOffset);
+                
                 spawnedItem.SetActive(false);
 
                 itemSlots[i] = spawnedItem;
@@ -450,6 +454,7 @@ public class PlayerInventory : MonoBehaviour
             if (itemObj != null)
             {
                 itemObj.transform.SetParent(handTransform); // เอาไปถือในมือ
+                ApplyItemTransform(itemObj);
                 itemObj.SetActive(currentItemIndex == slot.slotIndex); // โชว์ถ้าถือช่องนั้นอยู่
             }
         }
@@ -461,6 +466,7 @@ public class PlayerInventory : MonoBehaviour
                 if (itemObj != null)
                 {
                     itemObj.transform.SetParent(handTransform);
+                    ApplyItemTransform(itemObj);
                     itemObj.SetActive(false); // ซ่อนทันทีเมื่อลงกระเป๋า
                 }
             }
@@ -546,5 +552,106 @@ public class PlayerInventory : MonoBehaviour
         }
 
         UpdateInventoryUI();
+    }
+
+    public int GetCurrentHoldAnimID()
+    {
+        if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
+        {
+            ItemHolder holder = itemSlots[currentItemIndex].GetComponent<ItemHolder>();
+            if (holder != null && holder.itemData != null)
+            {
+                return holder.itemData.holdAnimID; // ส่งค่า ID ท่าถือกลับไป
+            }
+        }
+        return 0;
+    }
+
+    private void ApplyItemTransform(GameObject itemObj)
+    {
+        if (itemObj == null) return;
+
+        ItemHolder holder = itemObj.GetComponent<ItemHolder>();
+        if (holder != null && holder.itemData != null) 
+        {
+            itemObj.transform.localPosition = holder.itemData.holdPositionOffset;
+            itemObj.transform.localRotation = Quaternion.Euler(holder.itemData.holdRotationOffset);
+        }
+    }
+
+    public bool PickupGroundItem(GameObject groundItem)
+    {
+        ItemHolder holder = groundItem.GetComponent<ItemHolder>();
+        if (holder == null || holder.itemData == null) return false;
+
+        int hotbarIndex = -1;
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            if (itemSlots[i] == null) { hotbarIndex = i; break; }
+        }
+
+        int invIndex = -1;
+        if (hotbarIndex == -1)
+        {
+            for (int i = 0; i < myItems.Count; i++)
+            {
+                if (myItems[i] == null) { invIndex = i; break; }
+            }
+        }
+
+        if (hotbarIndex != -1 || invIndex != -1)
+        {
+            Rigidbody rb = groundItem.GetComponent<Rigidbody>();
+            if (rb != null) Destroy(rb);
+
+            Collider coll = groundItem.GetComponent<Collider>();
+            if (coll != null) coll.enabled = false;
+
+            groundItem.transform.SetParent(handTransform);
+            ApplyItemTransform(groundItem); 
+            groundItem.SetActive(false); 
+
+            if (hotbarIndex != -1)
+            {
+                itemSlots[hotbarIndex] = groundItem;
+
+                if (currentItemIndex == -1) EquipItem(hotbarIndex);
+            }
+            else
+            {
+                myItems[invIndex] = groundItem;
+            }
+
+            UpdateInventoryUI();
+            return true; 
+        }
+
+        return false; 
+    }
+
+    public void DropHeldItem()
+    {
+        if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
+        {
+            GameObject itemToDrop = itemSlots[currentItemIndex];
+
+            itemSlots[currentItemIndex] = null;
+            currentItemIndex = -1;
+
+            itemToDrop.transform.SetParent(null);
+            itemToDrop.SetActive(true);
+
+            Collider coll = itemToDrop.GetComponent<Collider>();
+            if (coll != null) coll.enabled = true;
+
+            Rigidbody rb = itemToDrop.GetComponent<Rigidbody>();
+            if (rb == null) rb = itemToDrop.AddComponent<Rigidbody>();
+
+            Vector3 throwDirection = transform.forward + Vector3.up * 0.5f;
+            rb.AddForce(throwDirection * 3f, ForceMode.Impulse);
+
+            UpdateInventoryUI();
+
+        }
     }
 }

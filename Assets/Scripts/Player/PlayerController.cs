@@ -1,7 +1,8 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 
 [RequireComponent(typeof(Rigidbody))]
@@ -96,6 +97,9 @@ public class PlayerController : MonoBehaviour
     private bool isClimbing;
     private RaycastHit climbHit;
 
+    [Header("Animation States")]
+    private int currentHoldType = -1;
+
     private InputSystem_Actions inputActions;
     private Rigidbody rb;
     private Vector2 moveInput;
@@ -110,6 +114,14 @@ public class PlayerController : MonoBehaviour
     private float currentMoveSpeed;
 
     public PlayerInventory inventory;
+
+    [Header("Interaction System")]
+    public float interactRadius = 1.5f;
+    public LayerMask interactableLayer; // เลเยอร์สำหรับไอเทมที่เก็บได้
+    public GameObject interactUI; // UI กดปุ่ม F
+    public TextMeshProUGUI interactText; // Text สำหรับโชว์ชื่อไอเทม
+
+    private GameObject currentInteractItem; // ไอเทมที่อยู่ใกล้สุดตอนนี้
 
     private void Awake()
     {
@@ -162,6 +174,30 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        CheckInteractable();
+
+        if (Keyboard.current.fKey.wasPressedThisFrame && currentInteractItem != null)
+        {
+            if (inventory != null)
+            {
+                bool success = inventory.PickupGroundItem(currentInteractItem);
+                if (success)
+                {
+                    currentInteractItem = null;
+                    if (interactUI != null) interactUI.SetActive(false);
+                }
+            }
+        }
+
+        if (Keyboard.current.gKey.wasPressedThisFrame)
+        {
+            if (inventory != null && !inventory.isInventoryOpen)
+            {
+                inventory.DropHeldItem();
+                UpdateHoldAnimation(); 
+            }
+        }
+
         moveInput = inputActions.Player.Move.ReadValue<Vector2>();
         lookInput = inputActions.Player.Look.ReadValue<Vector2>();
 
@@ -171,6 +207,8 @@ public class PlayerController : MonoBehaviour
         }
 
         HandleStamina();
+
+        UpdateHoldAnimation();
     }
 
     private void FixedUpdate()
@@ -197,6 +235,69 @@ public class PlayerController : MonoBehaviour
         if (isGrounded && isJumping && rb.linearVelocity.y <= 0.1f)
         {
             isJumping = false;
+        }
+    }
+
+    private void CheckInteractable()
+    {
+        // ตีวงกลมค้นหารอบตัวละคร คัดกรองเฉพาะ Interactable Layer
+        Collider[] hits = Physics.OverlapSphere(transform.position, interactRadius, interactableLayer);
+
+        GameObject closestItem = null;
+        float minDistance = Mathf.Infinity;
+
+        // หาไอเทมชิ้นที่อยู่ใกล้ที่สุด
+        foreach (Collider hit in hits)
+        {
+            ItemHolder holder = hit.GetComponent<ItemHolder>();
+            if (holder != null && holder.itemData != null)
+            {
+                float dist = Vector3.Distance(transform.position, hit.transform.position);
+                if (dist < minDistance)
+                {
+                    minDistance = dist;
+                    closestItem = hit.gameObject;
+                }
+            }
+        }
+
+        
+        if (closestItem != null)
+        {
+            currentInteractItem = closestItem;
+            if (interactUI != null && !interactUI.activeSelf)
+                interactUI.SetActive(true);
+
+            if (interactText != null)
+            {
+                ItemHolder holder = currentInteractItem.GetComponent<ItemHolder>();
+                interactText.text = $"Press [F] Pick up {holder.itemData.itemName}";
+            }
+        }
+        else 
+        {
+            currentInteractItem = null;
+            if (interactUI != null && interactUI.activeSelf)
+                interactUI.SetActive(false);
+        }
+    }
+
+    // ===================== HoldItems =====================
+
+    private void UpdateHoldAnimation()
+    {
+        if (inventory != null && animator != null)
+        {
+            int newHoldType = inventory.GetCurrentHoldAnimID();
+
+            if (newHoldType != currentHoldType)
+            {
+                currentHoldType = newHoldType;
+                animator.SetInteger("holdType", currentHoldType);
+
+                // (Optional) ถ้ายกเลิกท่าวิ่ง/ต่อย ทันทีที่สลับของ สามารถสั่งตรงนี้ได้
+                // animator.SetTrigger("resetAction"); 
+            }
         }
     }
 
@@ -620,5 +721,8 @@ public class PlayerController : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(attackPoint.position, attackRange);
         }
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, interactRadius);
     }
 }
