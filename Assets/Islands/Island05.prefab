@@ -108,6 +108,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6060af5290bfd2468519cb4e4474a7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IslandFishSpawner
+  rarityWeights:
+  - rarity: 0
+    spawnWeight: 100
+  - rarity: 1
+    spawnWeight: 50
+  - rarity: 2
+    spawnWeight: 20
+  - rarity: 3
+    spawnWeight: 5
+  - rarity: 4
+    spawnWeight: 1
 --- !u!1 &877487687050909417
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,7 +145,7 @@ Transform:
   m_GameObject: {fileID: 877487687050909417}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -73, y: -0.4, z: -121}
+  m_LocalPosition: {x: -73, y: -0.4, z: -105.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -153,9 +164,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &2164651728798543676
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +196,7 @@ Transform:
   m_GameObject: {fileID: 2164651728798543676}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -100, y: -0.4, z: 120}
+  m_LocalPosition: {x: -100, y: -0.4, z: 102}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -201,9 +215,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &2543000474282855697
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,7 +247,7 @@ Transform:
   m_GameObject: {fileID: 2543000474282855697}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18, y: -0.4, z: 135}
+  m_LocalPosition: {x: -18, y: -0.4, z: 123}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -249,9 +266,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 20
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &2656479532333616852
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,7 +298,7 @@ Transform:
   m_GameObject: {fileID: 2656479532333616852}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 227, y: -0.4, z: 74}
+  m_LocalPosition: {x: 209, y: -0.4, z: 74}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -297,9 +317,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &2663887962857770364
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,8 +361,10 @@ Transform:
   - {fileID: 5304971089358659537}
   - {fileID: 5103418421277055949}
   - {fileID: 6929243346773229551}
+  - {fileID: 213986833221117914}
   - {fileID: 7571031214593991660}
   - {fileID: 1216457618039267259}
+  - {fileID: 3368027378445866613}
   - {fileID: 7168627458331449849}
   m_Father: {fileID: 7817397612480398221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -369,7 +394,7 @@ Transform:
   m_GameObject: {fileID: 3259583325407616693}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 63, y: -0.4, z: -133}
+  m_LocalPosition: {x: 38.1, y: -0.4, z: -115}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -388,9 +413,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 20
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &4559435163744943004
 GameObject:
   m_ObjectHideFlags: 0
@@ -417,7 +445,7 @@ Transform:
   m_GameObject: {fileID: 4559435163744943004}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -129, y: -0.4, z: -55}
+  m_LocalPosition: {x: -115.9, y: -0.4, z: -55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -436,9 +464,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &4638465042884485813
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,7 +589,7 @@ Transform:
   m_GameObject: {fileID: 5723548675270395580}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -123, y: -0.4, z: 34}
+  m_LocalPosition: {x: -111.2, y: -0.4, z: 34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -577,9 +608,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
+--- !u!1 &5830351316615036898
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 213986833221117914}
+  - component: {fileID: 52241621191628896}
+  m_Layer: 0
+  m_Name: FSP1 (12)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &213986833221117914
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5830351316615036898}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -34.8, y: -0.4, z: -131.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3102084697644209356}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &52241621191628896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5830351316615036898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
+  allowedFish:
+  - fishData: {fileID: 0}
+    rarity: 0
+  spawnChance: 100
+  spawnRadius: 20
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &6050282267240800957
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,9 +710,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 20
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &6397624638733284822
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,7 +742,7 @@ Transform:
   m_GameObject: {fileID: 6397624638733284822}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 227, y: -0.4, z: -19}
+  m_LocalPosition: {x: 205, y: -0.4, z: -19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -673,9 +761,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &7125246583409449942
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,7 +793,7 @@ Transform:
   m_GameObject: {fileID: 7125246583409449942}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.4, z: -99}
+  m_LocalPosition: {x: -6.7, y: -0.4, z: -97.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -721,9 +812,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 20
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &7637939508034706782
 GameObject:
   m_ObjectHideFlags: 0
@@ -750,7 +844,7 @@ Transform:
   m_GameObject: {fileID: 7637939508034706782}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 163, y: -0.4, z: 125}
+  m_LocalPosition: {x: 149, y: -0.4, z: 118}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -769,9 +863,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &7688877933189223203
 GameObject:
   m_ObjectHideFlags: 0
@@ -798,7 +895,7 @@ Transform:
   m_GameObject: {fileID: 7688877933189223203}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 227, y: -0.4, z: -102}
+  m_LocalPosition: {x: 211.2, y: -0.4, z: -93}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -817,9 +914,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
+--- !u!1 &9142963307697455485
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3368027378445866613}
+  - component: {fileID: 3613353885913165351}
+  m_Layer: 0
+  m_Name: FSP1 (13)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3368027378445866613
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9142963307697455485}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 100.4, y: -0.4, z: -133.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3102084697644209356}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3613353885913165351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9142963307697455485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
+  allowedFish:
+  - fishData: {fileID: 0}
+    rarity: 0
+  spawnChance: 100
+  spawnRadius: 20
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1001 &798456374403416189
 PrefabInstance:
   m_ObjectHideFlags: 0

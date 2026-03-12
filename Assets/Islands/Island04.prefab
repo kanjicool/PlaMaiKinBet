@@ -69,7 +69,7 @@ Transform:
   m_GameObject: {fileID: 1558333125855234058}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 209, y: 0, z: -230}
+  m_LocalPosition: {x: 209, y: 0, z: -179.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -101,7 +101,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1 &2024220082395696699
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,7 +128,7 @@ Transform:
   m_GameObject: {fileID: 2024220082395696699}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -153, y: 0, z: -100}
+  m_LocalPosition: {x: -129.4, y: 0, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -160,7 +160,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1 &2701055004873822696
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +187,7 @@ Transform:
   m_GameObject: {fileID: 2701055004873822696}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 81, y: 0, z: -210}
+  m_LocalPosition: {x: 81, y: 0, z: -192}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -219,7 +219,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1 &2775331261449662337
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,7 +246,7 @@ Transform:
   m_GameObject: {fileID: 2775331261449662337}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -85, y: 0, z: 325}
+  m_LocalPosition: {x: -68, y: 0, z: 316}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -278,7 +278,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1 &2970453775804874512
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,7 +305,7 @@ Transform:
   m_GameObject: {fileID: 2970453775804874512}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 278, y: 0, z: 69}
+  m_LocalPosition: {x: 257.1, y: 0, z: 69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -337,7 +337,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1 &4184458498676520213
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +364,7 @@ Transform:
   m_GameObject: {fileID: 4184458498676520213}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 273, y: 0, z: 230}
+  m_LocalPosition: {x: 257.2, y: 0, z: 230}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -396,7 +396,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1 &5136874408581093489
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,7 +423,7 @@ Transform:
   m_GameObject: {fileID: 5136874408581093489}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -77, y: 0, z: -225}
+  m_LocalPosition: {x: -77, y: 0, z: -168.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -455,7 +455,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1 &5721276155144669541
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,7 +482,7 @@ Transform:
   m_GameObject: {fileID: 5721276155144669541}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 276, y: 0, z: -103}
+  m_LocalPosition: {x: 234.1, y: 0, z: -92.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -514,7 +514,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1 &6782609562797938839
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,7 +541,7 @@ Transform:
   m_GameObject: {fileID: 6782609562797938839}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 91, y: 0, z: 317}
+  m_LocalPosition: {x: 91, y: 1, z: 291}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -573,7 +573,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1 &7693268701532290853
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,13 +673,13 @@ MonoBehaviour:
   - rarity: 0
     spawnWeight: 100
   - rarity: 1
-    spawnWeight: 50
+    spawnWeight: 60
   - rarity: 2
-    spawnWeight: 20
+    spawnWeight: 40
   - rarity: 3
-    spawnWeight: 5
+    spawnWeight: 20
   - rarity: 4
-    spawnWeight: 1
+    spawnWeight: 10
 --- !u!1 &7770804529791098119
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,7 +706,7 @@ Transform:
   m_GameObject: {fileID: 7770804529791098119}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -40, y: 0, z: 42.3}
+  m_LocalPosition: {x: -18.2, y: 0, z: 42.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -738,7 +738,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1 &8395482249023879293
 GameObject:
   m_ObjectHideFlags: 0
@@ -858,7 +858,7 @@ Transform:
   m_GameObject: {fileID: 8774009064834153970}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -153, y: 0, z: 185}
+  m_LocalPosition: {x: -100.3, y: 0, z: 185}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -890,7 +890,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 25
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1 &9128307357107123685
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,7 +917,7 @@ Transform:
   m_GameObject: {fileID: 9128307357107123685}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -210, y: 0, z: 290}
+  m_LocalPosition: {x: -210, y: 0, z: 273.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -949,7 +949,7 @@ MonoBehaviour:
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
-  maxSpawnLimit: 20
+  maxSpawnLimit: 12
 --- !u!1001 &555183589829016966
 PrefabInstance:
   m_ObjectHideFlags: 0
