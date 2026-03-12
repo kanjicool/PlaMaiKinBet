@@ -1,8 +1,26 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using System.Collections.Generic;
+
+// ‡πÄ‡∏≠‡∏≤‡πÑ‡∏ß‡πâ‡∏Å‡∏≥‡∏´‡∏ô‡∏î‡∏ô‡πâ‡∏≥‡∏´‡∏ô‡∏±‡∏Å‡∏ß‡πà‡∏≤‡πÅ‡∏ï‡πà‡∏•‡∏∞‡∏£‡∏∞‡∏î‡∏±‡∏ö ‡πÇ‡∏≠‡∏Å‡∏≤‡∏™‡∏≠‡∏≠‡∏Å‡πÄ‡∏õ‡πá‡∏ô‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏Ç‡πÄ‡∏ó‡πà‡∏≤‡πÑ‡∏´‡∏£‡πà
+[System.Serializable]
+public class RarityWeightRate
+{
+    public FishRarity rarity;
+    public float spawnWeight;
+}
 
 public class IslandFishSpawner : MonoBehaviour
 {
+    [Header("Global Rarity Weights (‡∏Ñ‡πà‡∏≤‡∏ô‡πâ‡∏≥‡∏´‡∏ô‡∏±‡∏Å‡πÇ‡∏≠‡∏Å‡∏≤‡∏™‡∏≠‡∏≠‡∏Å)")]
+    public List<RarityWeightRate> rarityWeights = new List<RarityWeightRate>()
+    {
+        new RarityWeightRate { rarity = FishRarity.Common, spawnWeight = 100f },
+        new RarityWeightRate { rarity = FishRarity.Uncommon, spawnWeight = 50f },
+        new RarityWeightRate { rarity = FishRarity.Rare, spawnWeight = 20f },
+        new RarityWeightRate { rarity = FishRarity.Epic, spawnWeight = 5f },
+        new RarityWeightRate { rarity = FishRarity.Legendary, spawnWeight = 1f }
+    };
+
     private List<FishSpawnPoint> spawnPoints = new List<FishSpawnPoint>();
 
     private void Awake()
@@ -10,33 +28,32 @@ public class IslandFishSpawner : MonoBehaviour
         spawnPoints = new List<FishSpawnPoint>(GetComponentsInChildren<FishSpawnPoint>());
     }
 
-    // ø—ß°Ï™—ππ’È„ÀÈ GameLoopManager ‡√’¬°‡æ◊ËÕ∂“¡«Ë“ "‡°“–π’È¡’ª≈“Õ–‰√Õ¬ŸË∫È“ß?"
     public List<FishData> GetAvailableFishOnIsland()
     {
         List<FishData> available = new List<FishData>();
-
-        // ∂È“„™È Prefab (¬—ß‰¡Ë Awake) ‡√“µÈÕß¥÷ß Component  ¥Ê
         FishSpawnPoint[] points = GetComponentsInChildren<FishSpawnPoint>();
 
         foreach (FishSpawnPoint point in points)
         {
             if (point.allowedFish == null) continue;
-            foreach (FishData fish in point.allowedFish)
+            foreach (FishSpawnEntry entry in point.allowedFish)
             {
-                if (!available.Contains(fish)) available.Add(fish);
+                if (entry.fishData != null && !available.Contains(entry.fishData))
+                {
+                    available.Add(entry.fishData);
+                }
             }
         }
         return available;
     }
 
-    // ø—ß°Ï™—π ”À√—∫‡ °√–∫∫π‘‡«»ª≈“∑—Èß‡°“–
     public void SpawnEcosystem(FishData questFish, int guaranteedQuestAmount)
     {
         if (spawnPoints.Count == 0) return;
 
         int questFishSpawned = 0;
 
-        //  ≈—∫®ÿ¥‡°‘¥·∫∫ ÿË¡
+        // ‡∏™‡∏•‡∏±‡∏ö‡∏à‡∏∏‡∏î‡πÄ‡∏Å‡∏¥‡∏î
         List<FishSpawnPoint> shuffledPoints = new List<FishSpawnPoint>(spawnPoints);
         for (int i = 0; i < shuffledPoints.Count; i++)
         {
@@ -46,40 +63,40 @@ public class IslandFishSpawner : MonoBehaviour
             shuffledPoints[randomIndex] = temp;
         }
 
-        // «π‡ °ª≈“µ“¡®ÿ¥µË“ßÊ
         foreach (FishSpawnPoint point in shuffledPoints)
         {
             if (point.allowedFish == null || point.allowedFish.Length == 0) continue;
 
             if (Random.Range(0f, 100f) <= point.spawnChance)
             {
-                FishData fishToSpawn = null;
+                int amountToSpawn = point.GetCalculatedSpawnAmount();
 
-                // ‡™Á°«Ë“®ÿ¥π’È “¡“√∂‡ °ª≈“‡§« µÏ‰¥È‰À¡
-                bool canSpawnQuestFish = System.Array.Exists(point.allowedFish, f => f == questFish);
-
-                // ∂È“®ÿ¥π’È‡°‘¥ª≈“‡§« µÏ‰¥È ·≈–ª≈“‡§« µÏ¬—ß‰¡Ë§√∫®”π«π „ÀÈ≈ÁÕ°‡ªÈ“‡ °ª≈“‡§« µÏ°ËÕπ‡≈¬
-                if (canSpawnQuestFish && questFishSpawned < guaranteedQuestAmount)
+                for (int i = 0; i < amountToSpawn; i++)
                 {
-                    fishToSpawn = questFish;
-                    questFishSpawned++;
-                }
-                else
-                {
-                    // ∂È“‚§«µ“‡§« µÏ§√∫·≈È« À√◊Õ®ÿ¥π’È‡ °ª≈“‡§« µÏ‰¡Ë‰¥È „ÀÈ ÿË¡ª≈“ª°µ‘®“°≈‘ µÏ¢Õß®ÿ¥π—Èπ
-                    fishToSpawn = point.allowedFish[Random.Range(0, point.allowedFish.Length)];
-                }
+                    FishData fishToSpawn = null;
+                    bool canSpawnQuestFish = System.Array.Exists(point.allowedFish, e => e.fishData == questFish);
 
-                SpawnFish(point, fishToSpawn);
+                    if (canSpawnQuestFish && questFishSpawned < guaranteedQuestAmount)
+                    {
+                        fishToSpawn = questFish;
+                        questFishSpawned++;
+                    }
+                    else
+                    {
+                        fishToSpawn = GetRandomFishByRarity(point);
+                    }
+
+                    SpawnFish(point, fishToSpawn);
+                }
             }
         }
 
-        // ‡´øµ’È: ∂È“¥«ß´«¬ ª≈“‡§« µÏ‡°‘¥‰¡Ë§√∫µ“¡¢—ÈπµË” „ÀÈ ÿË¡À“®ÿ¥∑’Ë‡ °‰¥È·≈È«∫—ß§—∫‡ °‡æ‘Ë¡
+        // Safety net ‡πÇ‡∏Ñ‡∏ß‡∏ï‡πâ‡∏≤‡πÄ‡∏Ñ‡∏ß‡∏™‡∏ï‡πå
         int safetyNet = 0;
         while (questFishSpawned < guaranteedQuestAmount && safetyNet < 50)
         {
             FishSpawnPoint randomPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
-            bool canSpawn = System.Array.Exists(randomPoint.allowedFish, f => f == questFish);
+            bool canSpawn = System.Array.Exists(randomPoint.allowedFish, e => e.fishData == questFish);
 
             if (canSpawn)
             {
@@ -88,8 +105,49 @@ public class IslandFishSpawner : MonoBehaviour
             }
             safetyNet++;
         }
+    }
 
-        Debug.Log($"[FishSpawner]  √È“ß√–∫∫π‘‡«»∫π‡°“– ”‡√Á® ¡’ª≈“‡§« µÏ‡°‘¥ {questFishSpawned} µ—«");
+    private FishData GetRandomFishByRarity(FishSpawnPoint point)
+    {
+        float totalWeight = 0f;
+        List<FishData> validFishes = new List<FishData>();
+        List<float> validWeights = new List<float>();
+
+        foreach (FishSpawnEntry entry in point.allowedFish)
+        {
+            if (entry.fishData == null) continue;
+
+            // ‡∏Ñ‡πâ‡∏ô‡∏´‡∏≤‡∏ô‡πâ‡∏≥‡∏´‡∏ô‡∏±‡∏Å‡∏à‡∏≤‡∏Å‡πÄ‡∏£‡∏ó‡∏ó‡∏µ‡πà‡πÄ‡∏£‡∏≤‡∏ï‡∏±‡πâ‡∏á‡πÑ‡∏ß‡πâ
+            float weight = 10f;
+            foreach (var rate in rarityWeights)
+            {
+                if (rate.rarity == entry.rarity)
+                {
+                    weight = rate.spawnWeight;
+                    break;
+                }
+            }
+
+            validFishes.Add(entry.fishData);
+            validWeights.Add(weight);
+            totalWeight += weight;
+        }
+
+        if (validFishes.Count == 0) return null;
+
+        float randomRoll = Random.Range(0f, totalWeight);
+        float currentWeight = 0f;
+
+        for (int i = 0; i < validFishes.Count; i++)
+        {
+            currentWeight += validWeights[i];
+            if (randomRoll <= currentWeight)
+            {
+                return validFishes[i];
+            }
+        }
+
+        return validFishes[0];
     }
 
     private void SpawnFish(FishSpawnPoint point, FishData fishData)
@@ -105,7 +163,6 @@ public class IslandFishSpawner : MonoBehaviour
 
         GameObject spawnedFish = Instantiate(fishData.fishPrefab, finalSpawnPos, Quaternion.identity);
 
-        // Õ¬Ë“≈◊¡¬—¥ FishData „ÀÈª≈“¥È«¬!
         FishController controller = spawnedFish.GetComponent<FishController>();
         if (controller != null) controller.Initialize(fishData);
 
