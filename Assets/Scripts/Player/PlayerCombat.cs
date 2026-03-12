@@ -178,6 +178,10 @@ public class PlayerCombat : MonoBehaviour
                 {
                     DummyEnemy dummy = hitObject.GetComponent<DummyEnemy>();
                     if (dummy != null) dummy.TakeDamage(damage);
+
+                    EnemyController enemy = hitObject.GetComponent<EnemyController>();
+                    if (enemy != null) enemy.TakeDamage(damage);
+
                 }
             }
         }
@@ -228,6 +232,9 @@ public class PlayerCombat : MonoBehaviour
                 {
                     DummyEnemy dummy = hit.collider.GetComponent<DummyEnemy>();
                     if (dummy != null) dummy.TakeDamage(gunData.attackDamage);
+
+                    EnemyController enemy = hit.collider.GetComponent<EnemyController>();
+                    if (enemy != null) enemy.TakeDamage(gunData.attackDamage);
                 }
 
                 if (gunData.hitEffectPrefab != null)
@@ -318,4 +325,12 @@ public class PlayerCombat : MonoBehaviour
         }
     }
     public bool IsAttacking() { return Time.time < lastAttackTime + attackLockDuration; }
+
+    public void PlayerDealDamage()
+    {
+        ItemData heldItem = GetCurrentItemData(); // แก้ตัวแปรให้สะกดถูก
+        float finalDamage = (heldItem != null) ? heldItem.attackDamage : baseAttackDamage;
+        ApplyMeleeDamage(finalDamage);
+    }
+
 }

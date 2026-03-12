@@ -209,7 +209,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3400938303016739689}
-  - component: {fileID: 55004776159762258}
   - component: {fileID: 9192883950832236237}
   - component: {fileID: 7530556229878478489}
   - component: {fileID: 8158693951484485731}
@@ -273,18 +272,6 @@ Transform:
   - {fileID: 7470645443511788902}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &55004776159762258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3615262465294282811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76f1445642c40104a984a23e5eed8308, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::IslandTrigger
 --- !u!65 &9192883950832236237
 BoxCollider:
   m_ObjectHideFlags: 0
