@@ -183,6 +183,12 @@ public class PlayerInventory : MonoBehaviour
 
     private void EquipItem(int index)
     {
+        PlayerCombat combat = GetComponent<PlayerCombat>();
+        if (combat != null && combat.IsAttacking())
+        {
+            return;
+        }
+
         if (index >= itemSlots.Length) return;
 
         if (currentItemIndex != -1 && currentItemIndex < itemSlots.Length && itemSlots[currentItemIndex] != null)
@@ -631,6 +637,12 @@ public class PlayerInventory : MonoBehaviour
 
     public void DropHeldItem()
     {
+        PlayerCombat combat = GetComponent<PlayerCombat>();
+        if (combat != null && combat.IsAttacking())
+        {
+            return;
+        }
+
         if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
         {
             GameObject itemToDrop = itemSlots[currentItemIndex];
@@ -652,6 +664,29 @@ public class PlayerInventory : MonoBehaviour
 
             UpdateInventoryUI();
 
+        }
+    }
+
+    public void UseSlashTransform()
+    {
+        if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
+        {
+            GameObject heldItem = itemSlots[currentItemIndex];
+            ItemHolder holder = heldItem.GetComponent<ItemHolder>();
+
+            if (holder != null && holder.itemData != null)
+            {
+                heldItem.transform.localPosition = holder.itemData.attackHoldPositionOffset;
+                heldItem.transform.localRotation = Quaternion.Euler(holder.itemData.attackHoldRotationOffset);
+            }
+        }
+    }
+
+    public void ResetToHoldTransform()
+    {
+        if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
+        {
+            ApplyItemTransform(itemSlots[currentItemIndex]);
         }
     }
 }

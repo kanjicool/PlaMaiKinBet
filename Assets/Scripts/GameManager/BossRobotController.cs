@@ -81,11 +81,11 @@ public class BossRobotController : MonoBehaviour
         {
             Debug.Log("หุ่นยนต์บอสชนผู้เล่นแล้ว GAME OVER!");
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null)
-            {
-                player.TakeDamage(9999f);
-            }
+            //PlayerController player = FindFirstObjectByType<PlayerController>();
+            //if (player != null)
+            //{
+            //    player.TakeDamage(9999f);
+            //}
 
             currentPhase = BossPhase.Returning;
             targetPlayer = null;

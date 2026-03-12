@@ -19,3 +19,5 @@ MonoBehaviour:
   holdAnimID: 3
   holdPositionOffset: {x: 0.037, y: -0.056, z: 0.206}
   holdRotationOffset: {x: 29.431, y: 14.998, z: 104.866}
+  attackHoldPositionOffset: {x: 0.049, y: 0.146, z: 0.244}
+  attackHoldRotationOffset: {x: -29.06, y: 0.248, z: 104.811}

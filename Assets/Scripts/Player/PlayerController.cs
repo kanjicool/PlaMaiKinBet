@@ -8,35 +8,12 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("Health & Combat System")]
-    public float maxHealth = 100f;
-    private float currentHealth;
-    public Transform spawnPoint;
-
-    public Slider healthSlider;
-
-    public float attackDamage = 20f;
-    public float attackRange = 0.8f;
-    public Transform attackPoint;
-
-    public string enemyTag = "Enemy";
-
-    [Header("Combo System")]
-    public float attackCooldown = 0.4f; 
-    public float comboResetTime = 1.2f; 
-    public float attackLockDuration = 0.35f;
-
-    private float nextAttackTime = 0f;
-    private float lastAttackTime = 0f;
-    private int currentComboStep = 0; 
-
     [Header("Movement Settings")]
     public float walkSpeed = 5f;
     public float sprintSpeed = 10f;
     public float swimSpeed = 3f;
     public float jumpForce = 5f;
     public float rotationSpeed = 10f;
-
     public float jumpCooldown = 0.25f;
     private float lastJumpTime;
 
@@ -46,7 +23,6 @@ public class PlayerController : MonoBehaviour
     public float staminaRegenRate = 10f;
     public float staminaRecoveryThreshold = 25f;
     public Slider staminaSlider;
-
     private float currentStamina;
     private bool isSprintingInput;
     private bool isSprinting;
@@ -54,78 +30,65 @@ public class PlayerController : MonoBehaviour
 
     [Header("Water System")]
     public float waterDrag = 2f;
-    public float swimUpKey = 1f; 
-    public float swimDownKey = 1f; 
     public float surfaceOffset = 1f;
-
-    public float swimStartDepth = 1.2f; // ระดับความลึกที่จะเปลี่ยนเป็นท่าว่ายน้ำ
-    public float swimStopDepth = 0.3f;  // ระดับความตื้นที่จะเปลี่ยนกลับเป็นท่ายืน/เดิน (ต้องน้อยกว่า surfaceOffset)
-
+    public float swimStartDepth = 1.2f;
+    public float swimStopDepth = 0.3f;
     private bool isInWater;
     private int waterOverlapCount = 0;
     private float waterSurfaceY;
     private float originalDrag;
     private bool isSwimming;
-
-    [Header("Shore Assist System")]
     private float currentSurfaceOffset;
     private bool isTouchingGround;
 
-    [Header("Ground Check")]
+    [Header("Ground & Climbing")]
     public LayerMask groundLayer;
     public float groundCheckDistance = 1.1f;
-
-    [Header("ScreenEffectManager")]
-    public ScreenEffectManager effectManager;
-
-    [Header("Climbing System")]
     public float climbSpeed = 3f;
     public float climbCheckDistance = 0.6f;
     public LayerMask climbableLayer;
-
     public Vector3 climbRayOffset = new Vector3(0, 1f, 0);
+    private bool isClimbing;
+    private RaycastHit climbHit;
+    private bool isGrounded;
 
-    [Header("Climbing Visual Correction")]
-    public Transform visualModel; // ลาก GameObject ที่เป็นตัวโมเดล (Mesh) มาใส่
-    public Vector3 visualRotationOffset = new Vector3(0, 180f, 0); // ชดเชยองศาหันหน้า
-    public Vector3 visualPositionOffset = new Vector3(0, 0, 0);    // ชดเชยตำแหน่งเยื้องศูนย์
-
+    [Header("Visual Correction")]
+    public Transform visualModel;
+    public Vector3 visualRotationOffset = new Vector3(0, 180f, 0);
+    public Vector3 visualPositionOffset = new Vector3(0, 0, 0);
     private Quaternion originalVisualLocalRot;
     private Vector3 originalVisualLocalPos;
 
-    private bool isClimbing;
-    private RaycastHit climbHit;
+    [Header("Interaction System")]
+    public float interactRadius = 1.5f;
+    public LayerMask interactableLayer;
+    public GameObject interactUI;
+    public TextMeshProUGUI interactText;
+    private GameObject currentInteractItem;
 
-    [Header("Animation States")]
+    [Header("References")]
+    public ScreenEffectManager effectManager;
+    public PlayerInventory inventory;
+    private PlayerCombat combat;
+
     private int currentHoldType = -1;
-
     private InputSystem_Actions inputActions;
     private Rigidbody rb;
     private Vector2 moveInput;
     private Vector2 lookInput;
-    private bool isGrounded;
-
     private bool isMoving;
     private bool isJumping;
-
     private Animator animator;
     private ThirdPersonCameraController cameraCtrl;
     private float currentMoveSpeed;
 
-    public PlayerInventory inventory;
-
-    [Header("Interaction System")]
-    public float interactRadius = 1.5f;
-    public LayerMask interactableLayer; // เลเยอร์สำหรับไอเทมที่เก็บได้
-    public GameObject interactUI; // UI กดปุ่ม F
-    public TextMeshProUGUI interactText; // Text สำหรับโชว์ชื่อไอเทม
-
-    private GameObject currentInteractItem; // ไอเทมที่อยู่ใกล้สุดตอนนี้
+    public bool IsBusy => isSwimming || isClimbing || isExhausted;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        combat = GetComponent<PlayerCombat>();
 
         inputActions = new InputSystem_Actions();
         inputActions.Player.Jump.performed += context => Jump();
@@ -134,26 +97,15 @@ public class PlayerController : MonoBehaviour
 
         originalDrag = rb.linearDamping;
         currentStamina = maxStamina;
-        currentHealth = maxHealth;
         currentMoveSpeed = walkSpeed;
         currentSurfaceOffset = surfaceOffset;
 
-        if (staminaSlider != null)
-        {
-            staminaSlider.maxValue = maxStamina;
-            staminaSlider.value = currentStamina;
-        }
+        if (staminaSlider != null) staminaSlider.maxValue = maxStamina;
 
         if (visualModel != null)
         {
             originalVisualLocalRot = visualModel.localRotation;
             originalVisualLocalPos = visualModel.localPosition;
-        }
-
-        if (healthSlider != null)
-        {
-            healthSlider.maxValue = maxHealth;
-            healthSlider.value = currentHealth;
         }
 
     }
@@ -200,19 +152,15 @@ public class PlayerController : MonoBehaviour
         moveInput = inputActions.Player.Move.ReadValue<Vector2>();
         lookInput = inputActions.Player.Look.ReadValue<Vector2>();
 
-        if (inputActions.Player.Attack.WasPressedThisFrame())
-        {
-            PerformAttack();
-        }
-
         HandleStamina();
         UpdateHoldAnimation();
+
     }
 
     private void FixedUpdate()
     {
         CheckGrounded();
-        CheckWaterDepth(); 
+        CheckWaterDepth();
         CheckClimbing();
 
         if (isSwimming)
@@ -221,30 +169,18 @@ public class PlayerController : MonoBehaviour
             currentSurfaceOffset = Mathf.Lerp(currentSurfaceOffset, targetOffset, Time.fixedDeltaTime * 5f);
         }
 
-        if (isClimbing)
-        {
-            HandleClimbMovement();
-        }
-        else
-        {
-            HandleMovement();
-        }
+        if (isClimbing) HandleClimbMovement();
+        else HandleMovement();
 
-        if (isGrounded && isJumping && rb.linearVelocity.y <= 0.1f)
-        {
-            isJumping = false;
-        }
+        if (isGrounded && isJumping && rb.linearVelocity.y <= 0.1f) isJumping = false;
     }
 
     private void CheckInteractable()
     {
-        // ตีวงกลมค้นหารอบตัวละคร คัดกรองเฉพาะ Interactable Layer
         Collider[] hits = Physics.OverlapSphere(transform.position, interactRadius, interactableLayer);
-
         GameObject closestItem = null;
         float minDistance = Mathf.Infinity;
 
-        // หาไอเทมชิ้นที่อยู่ใกล้ที่สุด
         foreach (Collider hit in hits)
         {
             ItemHolder holder = hit.GetComponent<ItemHolder>();
@@ -259,24 +195,16 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        
         if (closestItem != null)
         {
             currentInteractItem = closestItem;
-            if (interactUI != null && !interactUI.activeSelf)
-                interactUI.SetActive(true);
-
-            if (interactText != null)
-            {
-                ItemHolder holder = currentInteractItem.GetComponent<ItemHolder>();
-                interactText.text = $"Press [F] Pick up {holder.itemData.itemName}";
-            }
+            if (interactUI != null && !interactUI.activeSelf) interactUI.SetActive(true);
+            if (interactText != null) interactText.text = $"Press [F] Pick up {currentInteractItem.GetComponent<ItemHolder>().itemData.itemName}";
         }
-        else 
+        else
         {
             currentInteractItem = null;
-            if (interactUI != null && interactUI.activeSelf)
-                interactUI.SetActive(false);
+            if (interactUI != null && interactUI.activeSelf) interactUI.SetActive(false);
         }
     }
 
@@ -287,117 +215,15 @@ public class PlayerController : MonoBehaviour
         if (inventory != null && animator != null)
         {
             int newHoldType = inventory.GetCurrentHoldAnimID();
-
             if (newHoldType != currentHoldType)
             {
                 currentHoldType = newHoldType;
                 animator.SetInteger("holdType", currentHoldType);
-
-                // (Optional) ถ้ายกเลิกท่าวิ่ง/ต่อย ทันทีที่สลับของ สามารถสั่งตรงนี้ได้
-                // animator.SetTrigger("resetAction"); 
             }
         }
     }
 
-    // ===================== Combat =====================
-    private void PerformAttack()
-    {
-        if (inventory != null && inventory.isInventoryOpen) return;
-
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
-
-        if (isSwimming || isClimbing || isExhausted) return;
-
-        if (Time.time < nextAttackTime) return;
-
-        if (Time.time - lastAttackTime > comboResetTime)
-        {
-            currentComboStep = 0;
-        }
-
-        currentComboStep++;
-
-        float finalDamage = attackDamage;
-
-        if (currentHoldType == 0)
-        {
-            // --- กรณี 1: มือเปล่า (หมัด) ---
-            if (currentComboStep > 4) currentComboStep = 1;
-            animator.SetTrigger("punch" + currentComboStep);
-
-            finalDamage = (currentComboStep == 4) ? attackDamage * 2f : attackDamage;
-            Debug.Log("Punch Combo: " + currentComboStep);
-        }
-        else if (currentHoldType == 3)
-        {
-            // --- กรณี 2: ถืออาวุธระยะประชิด (ดาบ/มีด) ---
-            if (currentComboStep > 3) currentComboStep = 1; // สมมติว่าดาบมี 3 คอมโบ (ปรับเลขได้)
-
-            //animator.SetTrigger("sword" + currentComboStep); // เรียก Trigger ท่าฟันดาบ
-
-            // ให้ดาบตีแรงกว่าหมัด 1.5 เท่า (ในอนาคตเราสามารถดึงดาเมจจาก ItemData มาใช้แทนได้)
-            finalDamage = attackDamage * 1.5f;
-            if (currentComboStep == 3) finalDamage *= 2f; // ท่าสุดท้ายแรงขึ้น 2 เท่า
-
-            Debug.Log("Sword Combo: " + currentComboStep);
-        }
-        else
-        {
-            // ถ้าถือปืน (Type 3, 4) หรือเบ็ดตกปลา (Type 2) ให้กดคลิกซ้ายแล้วไม่ทำอะไร (หรือแยกไปทำระบบยิง)
-            return;
-        }
-
-        lastAttackTime = Time.time;
-        nextAttackTime = Time.time + attackCooldown;
-
-        if (attackPoint != null)
-        {
-            Collider[] hitObjects = Physics.OverlapSphere(attackPoint.position, attackRange);
-
-            foreach (Collider hitObject in hitObjects)
-            {
-                if (hitObject.CompareTag(enemyTag))
-                {
-                    DummyEnemy dummy = hitObject.GetComponent<DummyEnemy>();
-                    if (dummy != null)
-                    {
-                        dummy.TakeDamage(finalDamage);
-                    }
-                }
-            }
-        }
-    }
-
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-        Debug.Log("Player Health: " + currentHealth);
-
-        if (healthSlider != null) healthSlider.value = currentHealth;
-
-        if (currentHealth <= 0)
-        {
-            DieAndRespawn();
-        }
-    }
-
-    private void DieAndRespawn()
-    {
-        Debug.Log("Player Died! Respawning...");
-
-        currentHealth = maxHealth;
-        currentStamina = maxStamina;
-        rb.linearVelocity = Vector3.zero;
-
-        if (healthSlider != null) healthSlider.value = currentHealth;
-
-        if (spawnPoint != null)
-        {
-            transform.position = spawnPoint.position;
-            transform.rotation = spawnPoint.rotation;
-        }
-    }
-
+   
     // ===================== STAMINA =====================
     private void HandleStamina()
     {
@@ -440,15 +266,13 @@ public class PlayerController : MonoBehaviour
     // ===================== MOVEMENT =====================
     private void HandleMovement()
     {
-        bool isAttacking = Time.time < lastAttackTime + attackLockDuration;
-
-        if (isAttacking)
+        // 🌟 ถาม PlayerCombat ว่ากำลังติดแอนิเมชันฟันดาบอยู่ไหม ถ้าใช่ก็ให้หยุดเดิน
+        if (combat != null && combat.IsAttacking())
         {
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
-            animator.SetBool("run", false); // ปิดแอนิเมชันวิ่ง
-            return; 
+            animator.SetBool("run", false);
+            return;
         }
-
 
         Vector3 cameraForward = Camera.main.transform.forward;
         Vector3 cameraRight = Camera.main.transform.right;
@@ -456,14 +280,12 @@ public class PlayerController : MonoBehaviour
         if (isSwimming)
         {
             HandleSwimMovement(cameraForward, cameraRight);
-            animator.SetBool("run", false); // ปิดการวิ่งเมื่ออยู่ในน้ำ
+            animator.SetBool("run", false);
             return;
         }
 
-        cameraForward.y = 0;
-        cameraRight.y = 0;
-        cameraForward.Normalize();
-        cameraRight.Normalize();
+        cameraForward.y = 0; cameraRight.y = 0;
+        cameraForward.Normalize(); cameraRight.Normalize();
 
         Vector3 moveDirection = (cameraForward * moveInput.y + cameraRight * moveInput.x).normalized;
         isMoving = moveDirection.magnitude >= 0.1f;
@@ -472,10 +294,7 @@ public class PlayerController : MonoBehaviour
         {
             Quaternion targetRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-
-            rb.linearVelocity = isMoving
-                ? new Vector3(moveDirection.x * currentMoveSpeed, rb.linearVelocity.y, moveDirection.z * currentMoveSpeed)
-                : new Vector3(0, rb.linearVelocity.y, 0);
+            rb.linearVelocity = isMoving ? new Vector3(moveDirection.x * currentMoveSpeed, rb.linearVelocity.y, moveDirection.z * currentMoveSpeed) : new Vector3(0, rb.linearVelocity.y, 0);
         }
         else
         {
@@ -484,12 +303,8 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = new Vector3(moveDirection.x * currentMoveSpeed, rb.linearVelocity.y, moveDirection.z * currentMoveSpeed);
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), rotationSpeed * Time.fixedDeltaTime);
             }
-            else
-            {
-                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
-            }
+            else rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
         }
-
         animator.SetBool("run", isMoving);
     }
 
@@ -705,24 +520,44 @@ public class PlayerController : MonoBehaviour
         //animator.SetBool("climbMove", isMoving); 
     }
 
-    // ===================== DEBUG GIZMOS =====================
-    private void OnDrawGizmos()
+    public void UseSlashTransform()
     {
-        Vector3 rayOrigin = transform.position + climbRayOffset;
-
-        Gizmos.color = Application.isPlaying && isClimbing ? Color.green : Color.red;
-        Gizmos.DrawRay(rayOrigin, transform.forward * climbCheckDistance);
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(rayOrigin + transform.forward * climbCheckDistance, 0.05f);
-
-        if (attackPoint != null)
+        if (inventory != null)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+            inventory.UseSlashTransform(); 
         }
-
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, interactRadius);
     }
+
+    public ItemData GetCurrentItemData()
+    {
+        if (inventory != null && inventory.GetHeldItem() != null)
+        {
+            ItemHolder holder = inventory.GetHeldItem().GetComponent<ItemHolder>();
+            if (holder != null) return holder.itemData;
+        }
+        return null;
+    }
+
+    public void ResetToHoldTransform()
+    {
+        if (inventory != null)
+        {
+            inventory.ResetToHoldTransform(); 
+        }
+    }
+
+    // ===================== DEBUG GIZMOS =====================
+    //private void OnDrawGizmos()
+    //{
+    //    Vector3 rayOrigin = transform.position + climbRayOffset;
+
+    //    Gizmos.color = Application.isPlaying && isClimbing ? Color.green : Color.red;
+    //    Gizmos.DrawRay(rayOrigin, transform.forward * climbCheckDistance);
+
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawSphere(rayOrigin + transform.forward * climbCheckDistance, 0.05f);
+
+    //    Gizmos.color = Color.cyan;
+    //    Gizmos.DrawWireSphere(transform.position, interactRadius);
+    //}
 }

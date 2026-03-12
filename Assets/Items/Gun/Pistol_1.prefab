@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9021552943095367667
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2669999983167518261}
+  m_Layer: 0
+  m_Name: Barrel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2669999983167518261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9021552943095367667}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.01481, y: 0, z: 0.00594}
+  m_LocalScale: {x: 0.022471908, y: 0.022471853, z: 0.022471853}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7413961972318098793}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &7019166093473952386
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74,7 +105,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 416ac34f37a342942a1001312c5fe9fc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2669999983167518261}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 416ac34f37a342942a1001312c5fe9fc, type: 3}
       insertIndex: -1
@@ -86,6 +120,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 6314304864736673320}
   m_SourcePrefab: {fileID: 100100000, guid: 416ac34f37a342942a1001312c5fe9fc, type: 3}
+--- !u!4 &7413961972318098793 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 416ac34f37a342942a1001312c5fe9fc, type: 3}
+  m_PrefabInstance: {fileID: 7019166093473952386}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7901705796515663827 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 416ac34f37a342942a1001312c5fe9fc, type: 3}

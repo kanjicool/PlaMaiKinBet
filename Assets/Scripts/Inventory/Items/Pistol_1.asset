@@ -19,3 +19,13 @@ MonoBehaviour:
   holdAnimID: 4
   holdPositionOffset: {x: 0.219, y: 0.037, z: -0.091}
   holdRotationOffset: {x: -15.697, y: -11.24, z: -50.273}
+  attackHoldPositionOffset: {x: 0, y: 0, z: 0}
+  attackHoldRotationOffset: {x: 0, y: 0, z: 0}
+  attackDamage: 10
+  attackRange: 100
+  isGun: 1
+  isAutomatic: 0
+  bulletsPerShot: 1
+  bulletSpread: 1
+  fireRate: 0.2
+  hitEffectPrefab: {fileID: 0}

@@ -66,12 +66,11 @@ public class DummyEnemy : MonoBehaviour
 
     private void AttackPlayer()
     {
-        Debug.Log(">>> ATK");
-
+        PlayerCombat playerCombat = FindFirstObjectByType<PlayerCombat>();
         nextAttackTime = Time.time + attackCooldown;
-        if (playerLogic != null)
+        if (playerCombat != null)
         {
-            playerLogic.TakeDamage(attackDamage);
+            playerCombat.TakeDamage(attackDamage);
             Debug.Log("¥—¡¡’Ë‚®¡µ’ Player!");
         }
     }
