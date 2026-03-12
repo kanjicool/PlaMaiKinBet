@@ -19,5 +19,5 @@ public class EnemyData : ScriptableObject
     public float attackRange = 2f;
     public float timeBetweenAttacks = 2f;
     public float damage = 10f;
-
+    public float attackDamage = 10f;
 }

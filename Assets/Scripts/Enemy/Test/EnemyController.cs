@@ -18,6 +18,15 @@ public class EnemyController : MonoBehaviour
     private bool isDead = false;
     private bool isChasing = false;
 
+    [Header("Damage Effect")]
+    public Renderer enemyRenderer;
+    public Color damageColor = Color.red;
+    public float flashDuration = 0.1f;
+
+    private Color originalColor;
+
+
+
     // --- เพิ่มตัวแปรสำหรับระบบยืนพัก ---
     private bool isWaiting = false;
     private float waitTimer = 0f;
@@ -32,6 +41,11 @@ public class EnemyController : MonoBehaviour
         anim = GetComponent<Animator>();
 
         if (data != null) currentHealth = data.maxHealth;
+
+        if (enemyRenderer != null)
+        {
+            originalColor = enemyRenderer.material.color;
+        }
     }
 
     void Update()
@@ -168,6 +182,12 @@ public class EnemyController : MonoBehaviour
         if (isDead) return;
         currentHealth -= amount;
         anim.SetTrigger("getHit");
+
+        if (enemyRenderer != null)
+        {
+            StartCoroutine(DamageFlash());
+        }
+
         if (currentHealth <= 0) Die();
     }
 
@@ -207,4 +227,43 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+
+    private System.Collections.IEnumerator DamageFlash()
+    {
+        enemyRenderer.material.color = damageColor;
+
+        yield return new WaitForSeconds(flashDuration);
+
+        enemyRenderer.material.color = originalColor;
+    }
+
+    public void EnemyDealDamage()
+    {
+        Debug.Log("Player toy Enemy");
+        if (player == null)
+        {
+            Debug.LogError("ศัตรูหา Player ไม่เจอ! เช็ค Tag 'Player' ด่วน");
+            return;
+        }
+
+        float distance = Vector3.Distance(transform.position, player.position);
+        if (distance <= data.attackRange + 1.0f)
+        {
+            var playerHealth = player.GetComponent<PlayerCombat>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(data.attackDamage);
+                Debug.Log("<color=red>โจมตีโดนผู้เล่นแล้ว!</color> ดาเมจ: " + data.attackDamage);
+            }
+            else
+            {
+                Debug.LogError("หาไฟล์ PlayerCombat บนตัวผู้เล่นไม่เจอ!");
+            }
+        }
+        else
+        {
+            Debug.Log("ศัตรูต่อยลม (ระยะห่างเกินไป): " + distance);
+        }
+    }
+
 }

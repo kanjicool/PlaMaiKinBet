@@ -78,7 +78,7 @@ public class DummyEnemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        Debug.Log("ดัมมี่โดนตี! เลือดเหลือ: " + currentHealth);
+        Debug.Log("You toy me: " + currentHealth);
 
         // [NEW] อัปเดตหลอดเลือด
         if (healthSlider != null) healthSlider.value = currentHealth;
