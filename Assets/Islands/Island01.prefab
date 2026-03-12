@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+  - {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+  - {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
   spawnChance: 100
   spawnRadius: 5
 --- !u!1 &1335285203046671429
@@ -145,9 +145,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+  - {fileID: 11400000, guid: 894604391f1b2f14cb049eecc4084aec, type: 2}
+  - {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
   spawnChance: 100
   spawnRadius: 5
 --- !u!1 &1872011702773779970
@@ -195,9 +195,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - {fileID: 11400000, guid: 5847cd39b1dc39e45aa87bbc6284e251, type: 2}
+  - {fileID: 11400000, guid: 8397f625012513c498471e2d86aca866, type: 2}
+  - {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
   spawnChance: 100
   spawnRadius: 5
 --- !u!1 &3615262465294282811
@@ -425,9 +425,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
   - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+  - {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
   spawnChance: 100
   spawnRadius: 5
 --- !u!1 &4802329586631813393
@@ -475,9 +475,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+  - {fileID: 11400000, guid: 727819b87e4f41042925b8443a76d76d, type: 2}
+  - {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
   spawnChance: 100
   spawnRadius: 5
 --- !u!1 &5432570504862719140
@@ -564,9 +564,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+  - {fileID: 11400000, guid: 02e3ee24f35ef6b4699c659ab671eb08, type: 2}
+  - {fileID: 11400000, guid: ceb9e5b244c9fbc4f86528a8a959f5a5, type: 2}
   spawnChance: 100
   spawnRadius: 5
 --- !u!1001 &357285450084852776
