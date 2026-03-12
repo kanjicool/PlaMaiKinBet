@@ -18,6 +18,10 @@ public class EnemyController : MonoBehaviour
     private bool isDead = false;
     private bool isChasing = false;
 
+    // --- เพิ่มตัวแปรสำหรับระบบยืนพัก ---
+    private bool isWaiting = false;
+    private float waitTimer = 0f;
+
     public enum EnemyState { Patrolling, Chasing, Attacking };
     public EnemyState currentState;
 
@@ -49,7 +53,7 @@ public class EnemyController : MonoBehaviour
         else if (playerInSight && !playerInAttackRange) Chasing();
         else Patrolling();
 
-        // Update Animations
+        // Update Animations (ความเร็วจะสัมพันธ์กับ agent.velocity อัตโนมัติ ถ้ายืนนิ่งค่าจะเป็น 0)
         anim.SetFloat("speed", agent.velocity.magnitude);
         anim.SetBool("isChasing", isChasing);
     }
@@ -62,17 +66,58 @@ public class EnemyController : MonoBehaviour
         isChasing = false;
         agent.speed = data.patrolSpeed;
 
-        if (!walkPointSet) SearchWalkPoint();
-        if (walkPointSet) agent.SetDestination(walkPoint);
+        // 1. ถ้าระบบกำลังสั่งให้หยุดรอ ให้หักลบเวลาไปเรื่อยๆ
+        if (isWaiting)
+        {
+            agent.isStopped = true; // สั่งเบรก
+            waitTimer -= Time.deltaTime;
 
-        if (Vector3.Distance(transform.position, walkPoint) < 1f)
+            // หมดเวลายืนรอ
+            if (waitTimer <= 0f)
+            {
+                isWaiting = false;
+            }
+            return; // ไม่ต้องทำอะไรต่อตราบใดที่ยังรออยู่
+        }
+
+        // 2. ถ้าไม่ได้รอ ก็อนุญาตให้เดินได้
+        agent.isStopped = false;
+
+        if (!walkPointSet) SearchWalkPoint();
+
+        if (walkPointSet)
+        {
+            agent.SetDestination(walkPoint);
+
+            // เช็คว่าถ้าเส้นทางนี้ "ไปไม่ถึง"
+            if (agent.pathStatus == NavMeshPathStatus.PathPartial || agent.pathStatus == NavMeshPathStatus.PathInvalid)
+            {
+                Debug.Log("Path blocked! Finding new route...");
+                walkPointSet = false;
+                agent.ResetPath();
+            }
+        }
+
+        // 3. เช็คว่าเดินถึงเป้าหมายหรือยัง (ใช้ stoppingDistance เพื่อความเนียนเวลาเบียดกัน)
+        if (walkPointSet && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
             walkPointSet = false;
+
+            // สั่งให้เริ่มรอ และสุ่มเวลายืนพักระหว่าง 2 ถึง 4 วินาที (ปรับเปลี่ยนได้ตามต้องการ)
+            isWaiting = true;
+            waitTimer = Random.Range(2f, 4f);
+        }
     }
 
     private void Chasing()
     {
         currentState = EnemyState.Chasing;
         isChasing = true;
+
+        // ยกเลิกสถานะรอ และอนุญาตให้วิ่ง
+        isWaiting = false;
+        agent.isStopped = false;
+
         agent.speed = data.chaseSpeed;
         agent.acceleration = data.acceleration;
         agent.SetDestination(player.position);
@@ -81,7 +126,10 @@ public class EnemyController : MonoBehaviour
     private void Attacking()
     {
         currentState = EnemyState.Attacking;
-        agent.SetDestination(transform.position);
+
+        // หยุดเดินเพื่อไม่ให้เบียดรวมร่างกับมอนสเตอร์ตัวอื่นตอนล้อมตี
+        agent.isStopped = true;
+
         transform.LookAt(new Vector3(player.position.x, transform.position.y, player.position.z));
 
         if (!alreadyAttacked)
@@ -96,12 +144,18 @@ public class EnemyController : MonoBehaviour
     {
         float randomZ = Random.Range(-data.walkPointRange, data.walkPointRange);
         float randomX = Random.Range(-data.walkPointRange, data.walkPointRange);
-        Vector3 targetPos = new Vector3(transform.position.x + randomX, transform.position.y + 10f, transform.position.z + randomZ);
+        Vector3 randomPos = transform.position + new Vector3(randomX, 0, randomZ);
 
-        if (Physics.Raycast(targetPos, Vector3.down, out RaycastHit hit, 20f, whatIsGround))
+        NavMeshHit hit;
+        // หาพื้นที่สีฟ้าที่ใกล้ที่สุดในรัศมี 5 เมตร
+        if (NavMesh.SamplePosition(randomPos, out hit, 5f, NavMesh.AllAreas))
         {
-            walkPoint = hit.point;
+            walkPoint = hit.position;
             walkPointSet = true;
+        }
+        else
+        {
+            walkPointSet = false; // ถ้าสุ่มไม่ได้ ให้ผ่านไปก่อน ค่อยหาใหม่เฟรมหน้า
         }
     }
 
@@ -132,5 +186,25 @@ public class EnemyController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, data.sightRange);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, data.attackRange);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Water"))
+        {
+            // ล้างเส้นทางเดิมทิ้งทันที
+            agent.ResetPath();
+
+            // ไม่ต้องรอยืนพักตอนชนน้ำ ให้สุ่มจุดหาทางหนีใหม่ทันที
+            isWaiting = false;
+            walkPointSet = false;
+
+            SearchWalkPoint();
+
+            if (walkPointSet)
+            {
+                agent.SetDestination(walkPoint);
+            }
+        }
     }
 }
