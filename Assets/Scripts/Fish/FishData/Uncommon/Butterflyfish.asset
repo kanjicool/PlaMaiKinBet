@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ced3a65ff0a734786b7c660190593e, type: 3}
+  m_Name: Butterflyfish
+  m_EditorClassIdentifier: Assembly-CSharp::FishData
+  fishName: Butterflyfish
+  fishPrefab: {fileID: 4403622422226707615, guid: 954cecf5accd43b4eba091c3e3b6ea01, type: 3}
+  fishIcon: {fileID: -616073359, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
+  fishItemData: {fileID: 11400000, guid: 42e29501b0c5ce54ca7de76885f2377c, type: 2}
+  escapePower: 5
+  stamina: 90
+  biteDelay: 1.8
+  detectionRadius: 10
+  fleeRaius: 6
+  fleeSpeedMultiplier: 2.2

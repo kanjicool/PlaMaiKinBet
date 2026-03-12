@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 727aee9ad26c6424f9b9db3057cf6887, type: 3}
+  m_Name: BlueTang
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: BlueTang
+  icon: {fileID: -1367989920, guid: 7e5c7aa6062eb024eb2a2e6466bfdf56, type: 3}
+  itemPrefab: {fileID: 8826642617105822048, guid: 3adbae9386cf6434c864bab2c9af16bb, type: 3}
+  price: 50
+  holdAnimID: 2
+  holdPositionOffset: {x: 0, y: 0, z: 0}
+  holdRotationOffset: {x: 0, y: 0, z: 0}

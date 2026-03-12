@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ced3a65ff0a734786b7c660190593e, type: 3}
+  m_Name: MandarinFish
+  m_EditorClassIdentifier: Assembly-CSharp::FishData
+  fishName: MandarinFish
+  fishPrefab: {fileID: 3304345623869425069, guid: e6c52d516eb02cc4e94993302a1a44d3, type: 3}
+  fishIcon: {fileID: 156147430, guid: 7e5c7aa6062eb024eb2a2e6466bfdf56, type: 3}
+  fishItemData: {fileID: 11400000, guid: abac0cb63be99e741b9e81d0cc99a38d, type: 2}
+  escapePower: 9
+  stamina: 150
+  biteDelay: 4
+  detectionRadius: 12
+  fleeRaius: 8
+  fleeSpeedMultiplier: 2.5

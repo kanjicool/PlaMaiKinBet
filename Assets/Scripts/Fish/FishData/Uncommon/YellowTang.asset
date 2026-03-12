@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ced3a65ff0a734786b7c660190593e, type: 3}
+  m_Name: YellowTang
+  m_EditorClassIdentifier: Assembly-CSharp::FishData
+  fishName: YellowTang
+  fishPrefab: {fileID: 738855199866973986, guid: c3274cb9972168c40b307e87614e53b1, type: 3}
+  fishIcon: {fileID: -1748912235, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
+  fishItemData: {fileID: 11400000, guid: c6619fb4480213848a2bbcfd18f52724, type: 2}
+  escapePower: 6.5
+  stamina: 110
+  biteDelay: 2
+  detectionRadius: 10
+  fleeRaius: 6
+  fleeSpeedMultiplier: 2.2

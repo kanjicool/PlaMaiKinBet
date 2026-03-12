@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ced3a65ff0a734786b7c660190593e, type: 3}
+  m_Name: Puffer
+  m_EditorClassIdentifier: Assembly-CSharp::FishData
+  fishName: Puffer
+  fishPrefab: {fileID: 1702190811478737068, guid: b66f09f34140b92429433ea83f5245a4, type: 3}
+  fishIcon: {fileID: -970417947, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
+  fishItemData: {fileID: 11400000, guid: 601f88a5151bb9d44b57a95df425d28d, type: 2}
+  escapePower: 8
+  stamina: 250
+  biteDelay: 3
+  detectionRadius: 12
+  fleeRaius: 8
+  fleeSpeedMultiplier: 2.5

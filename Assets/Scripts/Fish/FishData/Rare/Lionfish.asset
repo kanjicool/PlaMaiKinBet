@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ced3a65ff0a734786b7c660190593e, type: 3}
+  m_Name: Lionfish
+  m_EditorClassIdentifier: Assembly-CSharp::FishData
+  fishName: Lionfish
+  fishPrefab: {fileID: 5248712369879217906, guid: 51a267f43fcff63418771cb50ccd0d1c, type: 3}
+  fishIcon: {fileID: 1675567220, guid: 7e5c7aa6062eb024eb2a2e6466bfdf56, type: 3}
+  fishItemData: {fileID: 11400000, guid: ee07367133958b1488a474cd1773e41b, type: 2}
+  escapePower: 13
+  stamina: 180
+  biteDelay: 3.5
+  detectionRadius: 12
+  fleeRaius: 8
+  fleeSpeedMultiplier: 2.5

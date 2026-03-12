@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ced3a65ff0a734786b7c660190593e, type: 3}
+  m_Name: BlackLionFish
+  m_EditorClassIdentifier: Assembly-CSharp::FishData
+  fishName: BlackLionFish
+  fishPrefab: {fileID: 2170673458656862843, guid: 11571dd37a2197b48bac9abc6f0379f1, type: 3}
+  fishIcon: {fileID: -731249970, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
+  fishItemData: {fileID: 11400000, guid: eebbac47bb0fb1c47bb2bb745e71070e, type: 2}
+  escapePower: 14
+  stamina: 190
+  biteDelay: 3.5
+  detectionRadius: 12
+  fleeRaius: 8
+  fleeSpeedMultiplier: 2.5
