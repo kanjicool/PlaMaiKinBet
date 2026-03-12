@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ced3a65ff0a734786b7c660190593e, type: 3}
+  m_Name: GoblinShark
+  m_EditorClassIdentifier: Assembly-CSharp::FishData
+  fishName: GoblinShark
+  fishPrefab: {fileID: 5057890971881460518, guid: 002929859319e2e48a1013a0ae32d410, type: 3}
+  fishIcon: {fileID: 896967833, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
+  fishItemData: {fileID: 11400000, guid: 32f824fc132eeec4790987b22fc1306b, type: 2}
+  escapePower: 32
+  stamina: 1000
+  biteDelay: 5.5
+  detectionRadius: 20
+  fleeRaius: 12
+  fleeSpeedMultiplier: 3.5

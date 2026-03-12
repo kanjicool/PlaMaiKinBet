@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ced3a65ff0a734786b7c660190593e, type: 3}
+  m_Name: Swordfish
+  m_EditorClassIdentifier: Assembly-CSharp::FishData
+  fishName: Swordfish
+  fishPrefab: {fileID: 5244151724420054668, guid: 1a09566699ae30a4c92f23e19466756d, type: 3}
+  fishIcon: {fileID: 1390965406, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
+  fishItemData: {fileID: 11400000, guid: 09d0f98ec1905324da01761be6b52b0f, type: 2}
+  escapePower: 28
+  stamina: 600
+  biteDelay: 4.5
+  detectionRadius: 20
+  fleeRaius: 12
+  fleeSpeedMultiplier: 3.5
