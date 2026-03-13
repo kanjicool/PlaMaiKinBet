@@ -193,9 +193,19 @@ public class EnemyController : MonoBehaviour
 
     void Die()
     {
+        if (isDead) return;
+
         isDead = true;
-        agent.isStopped = true;
+
         anim.SetBool("isDead", true);
+        agent.isStopped = true;
+        agent.enabled = false;
+
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        Debug.Log(gameObject.name + " has died!");
+
         Destroy(gameObject, 5f);
     }
 
@@ -230,11 +240,18 @@ public class EnemyController : MonoBehaviour
 
     private System.Collections.IEnumerator DamageFlash()
     {
-        enemyRenderer.material.color = damageColor;
+        // เปลี่ยนทุก Material ใน Renderer นั้น
+        foreach (var mat in enemyRenderer.materials)
+        {
+            mat.color = damageColor;
+        }
 
         yield return new WaitForSeconds(flashDuration);
 
-        enemyRenderer.material.color = originalColor;
+        foreach (var mat in enemyRenderer.materials)
+        {
+            mat.color = originalColor;
+        }
     }
 
     public void EnemyDealDamage()

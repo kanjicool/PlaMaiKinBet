@@ -21,3 +21,4 @@ MonoBehaviour:
   attackRange: 2
   timeBetweenAttacks: 2
   damage: 10
+  attackDamage: 10
