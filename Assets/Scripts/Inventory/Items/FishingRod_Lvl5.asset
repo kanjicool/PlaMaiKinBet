@@ -19,3 +19,17 @@ MonoBehaviour:
   holdAnimID: 1
   holdPositionOffset: {x: 0, y: -0.02, z: -0.008}
   holdRotationOffset: {x: 0, y: 0, z: 0}
+  attackHoldPositionOffset: {x: 0, y: 0.219, z: -0.008}
+  attackHoldRotationOffset: {x: 0, y: 0, z: 0}
+  attackDamage: 20
+  attackRange: 100
+  muzzleScale: 0.01
+  shootSound: {fileID: 0}
+  muzzleFlashPrefab: {fileID: 0}
+  bulletTrailPrefab: {fileID: 0}
+  isGun: 0
+  isAutomatic: 0
+  bulletsPerShot: 1
+  bulletSpread: 0
+  fireRate: 0.2
+  hitEffectPrefab: {fileID: 0}

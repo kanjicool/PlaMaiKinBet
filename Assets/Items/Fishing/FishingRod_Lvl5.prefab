@@ -257,6 +257,7 @@ MonoBehaviour:
   maxCastForce: 25
   chargeSpeed: 20
   upwardForce: 5
+  maxLineDistance: 25
 --- !u!114 &2372223206679007988
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ public class Bobber : MonoBehaviour
     private Rigidbody rb;
     private AudioSource audioSource;
     public bool isInWater = false;
+    public bool isBitten = false;
     private float waterBaseY = 0f;
 
     [Header("Buoyancy Settings")]
@@ -32,7 +33,7 @@ public class Bobber : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isInWater)
+        if (isInWater && !isBitten)
         {
             float depth = (waterBaseY + floatOffset) - transform.position.y;
             if (depth > 0)
@@ -73,13 +74,18 @@ public class Bobber : MonoBehaviour
         }
     }
 
-    public void ReceiveFishBite(FishController fish)
+    public bool ReceiveFishBite(FishController fish)
     {
-        Debug.Log("1. ทุ่น (Bobber) รับทราบว่าโดนปลาชนแล้ว!");
+        if (isBitten) return false;
+        
+        isBitten = true;
 
         if (rb != null) rb.AddForce(Vector3.down * 15f, ForceMode.Impulse); 
         if (splashSound != null && audioSource != null) audioSource.PlayOneShot(splashSound);
 
         OnFishBitten?.Invoke(fish);
+        
+        return true;
     }
+
 }

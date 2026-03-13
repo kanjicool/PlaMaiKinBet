@@ -15,6 +15,11 @@ public class FishController : MonoBehaviour
     public float waterSurfaceY = 0f;
     public float swimDepth = 1.5f;
 
+    [Header("Bait Inspection")]
+    private float nibbleTimer = 0f;
+    private Vector3 baitOffset;
+
+
     [Header("Detection")]
     public LayerMask scareLayer;
     public string baitTag = "Bait";
@@ -58,17 +63,43 @@ public class FishController : MonoBehaviour
                 break;
 
             case FishState.ChaseBait:
-                if (currentBait != null)
+                if (currentBait != null && currentBait.TryGetComponent<Bobber>(out Bobber bobber) && !bobber.isBitten)
                 {
-                    targetPosition = currentBait.position;
-                    HandleMovement(normalSpeed * 1.5f);
+                    nibbleTimer -= Time.deltaTime;
 
-                    if (Vector3.Distance(transform.position, currentBait.position) < 0.5f)
-                        BiteBait();
+                    if (nibbleTimer > 0f)
+                    {
+                        // --- เฟสที่ 1: ว่ายวนตอดดูเหยื่อ (Inspect) ---
+                        Vector3 inspectTarget = currentBait.position + baitOffset;
+                        targetPosition = EnsureUnderwater(inspectTarget);
+
+                        HandleMovement(normalSpeed * 0.7f);
+
+                        // ถ้าว่ายมาถึงจุดวนแล้ว ให้สุ่มจุดวนใหม่ (ทำให้ปลาว่ายขยับไปมารอบทุ่นเรื่อยๆ)
+                        if (Vector3.Distance(transform.position, targetPosition) < 0.2f)
+                        {
+                            GenerateBaitOffset();
+                        }
+                    }
+                    else
+                    {
+                        // --- เฟสที่ 2: หมดเวลาตัดสินใจ พุ่งเข้าฮุบเหยื่อ! (Strike) ---
+                        targetPosition = currentBait.position;
+
+                        HandleMovement(normalSpeed * 2.5f);
+                        if (anim != null) anim.SetInteger("SwimState", 2);
+
+                        if (Vector3.Distance(transform.position, currentBait.position) < 0.3f)
+                        {
+                            BiteBait();
+                        }
+                    }
                 }
                 else
                 {
                     currentState = FishState.Wander;
+                    currentBait = null;
+                    SetNewTargetPosition(); 
                 }
                 break;
 
@@ -133,10 +164,14 @@ public class FishController : MonoBehaviour
         Collider[] nearbyBaits = Physics.OverlapSphere(transform.position, myData.detectionRadius);
         foreach (var col in nearbyBaits)
         {
-            if (col.CompareTag(baitTag) && col.TryGetComponent<Bobber>(out Bobber bobber) && bobber.isInWater)
+            if (col.CompareTag(baitTag) && col.TryGetComponent<Bobber>(out Bobber bobber) && bobber.isInWater && !bobber.isBitten)
             {
                 currentBait = col.transform;
                 currentState = FishState.ChaseBait;
+
+                nibbleTimer = UnityEngine.Random.Range(1.5f, 4.0f);
+                GenerateBaitOffset();
+
                 if (anim != null) anim.SetInteger("SwimState", 2);
                 break;
             }
@@ -145,18 +180,30 @@ public class FishController : MonoBehaviour
 
     private void BiteBait()
     {
-        currentState = FishState.HookedAndWait;
-        if (anim != null) anim.SetTrigger("isHooked");
-
-        hookPosition = transform.position;
-        struggleTarget = hookPosition;
-        struggleTimer = 0f;
-
         if (currentBait != null && currentBait.TryGetComponent<Bobber>(out Bobber bobber))
         {
-            bobber.ReceiveFishBite(this);
-            bobberRb = currentBait.GetComponent<Rigidbody>();
+            if (bobber.ReceiveFishBite(this))
+            {
+                currentState = FishState.HookedAndWait;
+                if (anim != null) anim.SetTrigger("isHooked");
+
+                hookPosition = transform.position;
+                struggleTarget = hookPosition;
+                struggleTimer = 0f;
+                bobberRb = currentBait.GetComponent<Rigidbody>();
+            }
+            else
+            {
+                currentState = FishState.Wander;
+                currentBait = null;
+            }
         }
+        else
+        {
+            currentState = FishState.Wander;
+        }
+
+
     }
 
     public void StartReeling(Transform target, System.Action onComplete)
@@ -232,6 +279,18 @@ public class FishController : MonoBehaviour
 
         if (bobberRb != null)
         {
+            Vector3 targetBobberPos = new Vector3(transform.position.x, transform.position.y + 0.8f, transform.position.z);
+            targetBobberPos.y = Mathf.Clamp(targetBobberPos.y, waterSurfaceY - 1.0f, waterSurfaceY);
+            bobberRb.MovePosition(Vector3.Lerp(bobberRb.position, targetBobberPos, Time.deltaTime * 15f));
+
+            Vector3 pullDir = (targetBobberPos - bobberRb.position).normalized;
+            if (pullDir != Vector3.zero)
+            {
+                bobberRb.rotation = Quaternion.Slerp(bobberRb.rotation, Quaternion.LookRotation(pullDir), Time.deltaTime * 10f);
+            }
+
+
+
             Vector3 pullDirection = (transform.position - currentBait.position).normalized;
 
             float pullForce = myData.escapePower * 3f;
@@ -240,9 +299,18 @@ public class FishController : MonoBehaviour
         }
     }
 
+    private void GenerateBaitOffset()
+    {
+        Vector2 rand = UnityEngine.Random.insideUnitCircle * 0.8f;
+
+        float randomDepth = UnityEngine.Random.Range(-0.1f, -0.6f);
+
+        baitOffset = new Vector3(rand.x, randomDepth, rand.y);
+    }
+
 
     // ==========================================
-    // DEBUG GIZMOS (แสดงเส้นไกด์ไลน์ในหน้า Scene)
+    // DEBUG GIZMOS
     // ==========================================
     private void OnDrawGizmosSelected()
     {

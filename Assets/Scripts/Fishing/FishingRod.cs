@@ -13,6 +13,9 @@ public class FishingRod : MonoBehaviour
     public float chargeSpeed = 20f;
     public float upwardForce = 5f;
 
+    [Header("Line Settings")]
+    public float maxLineDistance = 30f;
+
     private LineRenderer lineRenderer;
     private GameObject currentBobberObj;
     private Bobber activeBobber;
@@ -23,6 +26,8 @@ public class FishingRod : MonoBehaviour
     private int chargeDirection = 1;
 
     private FishController currentHookedFish;
+
+    private PlayerFishing playerFishing;
 
     private void Awake()
     {
@@ -35,12 +40,15 @@ public class FishingRod : MonoBehaviour
         inputActions = new InputSystem_Actions();
         inputActions.Player.Fire.started += OnFireStarted;
         inputActions.Player.Fire.canceled += OnFireCanceled;
+
+        playerFishing = GetComponentInParent<PlayerFishing>();
     }
 
     private void OnEnable()
     {
         inputActions.Enable();
         if (currentBobberObj != null || currentHookedFish != null) lineRenderer.enabled = true;
+        if (playerFishing != null) playerFishing.SetEquippedState(true);
     }
 
     private void OnDisable()
@@ -48,6 +56,9 @@ public class FishingRod : MonoBehaviour
         inputActions.Disable();
         lineRenderer.enabled = false;
         isCharging = false;
+        if (playerFishing != null) playerFishing.SetEquippedState(false);
+
+        CancelFishing();
     }
 
     private void OnDestroy() { inputActions.Dispose(); }
@@ -56,6 +67,27 @@ public class FishingRod : MonoBehaviour
     {
         UpdateLineRenderer();
         HandleCharging();
+
+        CheckFishingConditions();
+    }
+
+    private void CheckFishingConditions()
+    {
+        if (transform.parent == null && currentBobberObj != null)
+        {
+            CancelFishing();
+            return;
+        }
+
+        if (currentBobberObj != null)
+        {
+            float distance = Vector3.Distance(transform.root.position, currentBobberObj.transform.position);
+
+            if (distance > maxLineDistance)
+            {
+                CancelFishing();
+            }
+        }
     }
 
     private void UpdateLineRenderer()
@@ -87,6 +119,12 @@ public class FishingRod : MonoBehaviour
         }
 
          UIManager.Instance.UpdateCastBar(currentCharge, maxCastForce);
+
+        float chargePercentage = currentCharge / maxCastForce;
+        if (playerFishing != null)
+        {
+            playerFishing.UpdateChargeAnimation(chargePercentage);
+        }
     }
 
     private void OnFireStarted(InputAction.CallbackContext context)
@@ -102,7 +140,9 @@ public class FishingRod : MonoBehaviour
             isCharging = true;
             currentCharge = 0f;
             chargeDirection = 1;
-             UIManager.Instance.ShowCastBar();
+            UIManager.Instance.ShowCastBar();
+
+            if (playerFishing != null) playerFishing.StartCharging();
         }
     }
 
@@ -110,7 +150,9 @@ public class FishingRod : MonoBehaviour
     {
         if (!isCharging) return;
         isCharging = false;
-         UIManager.Instance.HideCastBar();
+        UIManager.Instance.HideCastBar();
+
+        if (playerFishing != null) playerFishing.ExecuteCast();
 
         CastLine();
     }
@@ -183,6 +225,8 @@ public class FishingRod : MonoBehaviour
         if (currentBobberObj != null) Destroy(currentBobberObj);
         lineRenderer.enabled = false;
         isCharging = false;
+
+        if (playerFishing != null) playerFishing.CancelFishing();
     }
 
     private void CheckQuestCompletion(FishController fish)
