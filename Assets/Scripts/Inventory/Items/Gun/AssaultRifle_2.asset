@@ -19,16 +19,17 @@ MonoBehaviour:
   holdAnimID: 5
   holdPositionOffset: {x: -0.039, y: 0.055, z: 0.047}
   holdRotationOffset: {x: 18.374, y: 198.661, z: -233.374}
-  attackHoldPositionOffset: {x: 0, y: 0, z: 0}
-  attackHoldRotationOffset: {x: 0, y: 0, z: 0}
+  attackHoldPositionOffset: {x: 0.02, y: 0.102, z: 0}
+  attackHoldRotationOffset: {x: 0.432, y: 182.533, z: 72.707}
   attackDamage: 15
   attackRange: 100
+  muzzleScale: 0.15
   shootSound: {fileID: 8300000, guid: ae07488261e013844a09f07bbd4ccca1, type: 3}
-  muzzleFlashPrefab: {fileID: 100006, guid: 2f7910242354c78419d50ac9e64b496f, type: 3}
+  muzzleFlashPrefab: {fileID: 100006, guid: 7e9c50938e32351438a7df9ccad2f2a5, type: 3}
   bulletTrailPrefab: {fileID: 2324235687642853203, guid: 8b46626b2a322744eb580b3012357159, type: 3}
   isGun: 1
   isAutomatic: 1
   bulletsPerShot: 1
   bulletSpread: 0.1
   fireRate: 0.11
-  hitEffectPrefab: {fileID: 100002, guid: 556d09d7fda29fd4185eed4067d5777b, type: 3}
+  hitEffectPrefab: {fileID: 100002, guid: 99c73c92ac40473459640b165473206f, type: 3}

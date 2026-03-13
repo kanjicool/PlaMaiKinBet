@@ -24,7 +24,7 @@ MonoBehaviour:
   attackDamage: 20
   attackRange: 100
   shootSound: {fileID: 0}
-  muzzleFlashPrefab: {fileID: 0}
+  muzzleFlashPrefab: {fileID: 100006, guid: 7e9c50938e32351438a7df9ccad2f2a5, type: 3}
   bulletTrailPrefab: {fileID: 2324235687642853203, guid: 8b46626b2a322744eb580b3012357159, type: 3}
   isGun: 1
   isAutomatic: 0

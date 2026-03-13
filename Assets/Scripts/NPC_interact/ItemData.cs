@@ -24,6 +24,7 @@ public class ItemData : ScriptableObject
     public float attackRange = 100f;
 
     [Header("Gun FX Settings")]
+    public float muzzleScale = 0.01f;
     public AudioClip shootSound; // เสียงตอนยิง
     public GameObject muzzleFlashPrefab; // ประกายไฟปลายปืน
     public GameObject bulletTrailPrefab; // เส้นกระสุน (ใช้ Line Renderer)

@@ -23,6 +23,7 @@ MonoBehaviour:
   attackHoldRotationOffset: {x: 0, y: 0, z: 0}
   attackDamage: 15
   attackRange: 50
+  muzzleScale: 1
   shootSound: {fileID: 8300000, guid: a5ce2406e4b2a0f41891521e1010076e, type: 3}
   muzzleFlashPrefab: {fileID: 100006, guid: 7e9c50938e32351438a7df9ccad2f2a5, type: 3}
   bulletTrailPrefab: {fileID: 2324235687642853203, guid: 8b46626b2a322744eb580b3012357159, type: 3}

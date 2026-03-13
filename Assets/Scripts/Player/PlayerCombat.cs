@@ -98,8 +98,6 @@ public class PlayerCombat : MonoBehaviour
         // 1 = เบ็ดตกปลา, 2 = ถือปลา (แก้ไขเลขให้ตรงกับเกมของคุณ)
         if (holdType == 1 || holdType == 2)
         {
-
-            // ถ้าถือของพวกนี้อยู่ ไม่ต้องรับคำสั่งคลิกซ้ายเลย ให้หยุดฟังก์ชันนี้ไปเลย
             return;
         }
 
@@ -108,11 +106,11 @@ public class PlayerCombat : MonoBehaviour
         {
             if (heldItem.isAutomatic && inputActions.Player.Attack.IsPressed())
             {
-                ShootGun(heldItem);
+                ShootGun(heldItem, holdType);
             }
             else if (!heldItem.isAutomatic && inputActions.Player.Attack.WasPressedThisFrame())
             {
-                ShootGun(heldItem);
+                ShootGun(heldItem, holdType);
             }
         }
         else
@@ -188,25 +186,48 @@ public class PlayerCombat : MonoBehaviour
     }
 
     // ===================== GUN SYSTEM =====================
-    private void ShootGun(ItemData gunData)
+    private void ShootGun(ItemData gunData, int holdType)
     {
         nextAttackTime = Time.time + gunData.fireRate;
-        //animator.SetTrigger("shoot");
+
+        UseSlashTransform();
+
+        if (holdType == 5)
+        {
+            animator.SetTrigger("shootRifle"); 
+        }
+        //else if (holdType == 6)
+        //{
+        //    animator.SetTrigger("shootShotgun");
+        //}
+        //else
+        //{
+        //    animator.SetTrigger("shootGun");
+        //}
 
         if (audioSource != null && gunData.shootSound != null)
             audioSource.PlayOneShot(gunData.shootSound);
+
+        CancelInvoke(nameof(ResetToHoldTransform));
+        Invoke(nameof(ResetToHoldTransform), gunData.fireRate);
 
         Transform firePoint = inventory.handTransform;
         GameObject heldGun = inventory.GetHeldItem();
         if (heldGun != null)
         {
-            Transform barrel = heldGun.transform.Find("Barrel");
+            Transform barrel = FindChildRecursive(heldGun.transform, "Barrel");
             if (barrel != null) firePoint = barrel;
         }
 
         if (gunData.muzzleFlashPrefab != null)
         {
             GameObject flash = Instantiate(gunData.muzzleFlashPrefab, firePoint.position, firePoint.rotation, firePoint);
+
+            flash.transform.localPosition = Vector3.zero;
+            flash.transform.localRotation = Quaternion.identity;
+
+            flash.transform.localScale = new Vector3(gunData.muzzleScale, gunData.muzzleScale, gunData.muzzleScale);
+
             Destroy(flash, 0.1f);
         }
 
@@ -333,4 +354,15 @@ public class PlayerCombat : MonoBehaviour
         ApplyMeleeDamage(finalDamage);
     }
 
+    private Transform FindChildRecursive(Transform parent, string childName)
+    {
+        foreach (Transform child in parent)
+        {
+            if (child.name == childName) return child;
+
+            Transform found = FindChildRecursive(child, childName);
+            if (found != null) return found;
+        }
+        return null;
+    }
 }
