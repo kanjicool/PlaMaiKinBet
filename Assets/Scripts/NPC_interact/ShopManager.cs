@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using TMPro;
 
 public class ShopManager : MonoBehaviour
 {
@@ -9,76 +10,93 @@ public class ShopManager : MonoBehaviour
     [Header("UI Panels")]
     public GameObject shopUI;
     public GameObject dialogueUI;
-
     public PlayerInventory player;
 
-    [Header("Item for Sale")]
-    public List<ItemData> itemsForSale;
+    [Header("Shop Settings")]
+    public List<ItemData> allPossibleItems;
+    public int amountOfItemsToSell = 5; // ปรับจำนวนชิ้นที่จะโชว์ได้เลย
 
-    private void Awake()
+    [Header("Restock Timer")]
+    public float restockTimeInMinutes = 5f;
+    public TextMeshProUGUI countdownText;
+
+    [Header("Spawning References (ระบบอัตโนมัติ)")]
+    public Transform contentPanel;
+    public GameObject shopItemPrefab; // เอา Prefab มาใส่ตรงนี้
+
+    private float currentTimer;
+
+    private void Awake() { if (instance == null) instance = this; }
+
+    private void Start()
     {
-        if (instance == null) instance = this;
+        currentTimer = restockTimeInMinutes * 60f;
+        RefreshShop();
     }
 
     private void Update()
     {
-        // ... (โค้ด Update เดิม)
+        if (currentTimer > 0)
+        {
+            currentTimer -= Time.deltaTime;
+            UpdateTimerUI();
+        }
+        else
+        {
+            currentTimer = restockTimeInMinutes * 60f;
+            RefreshShop();
+        }
     }
 
-    public void OpenDialogue()
+    private void UpdateTimerUI()
     {
-        dialogueUI.SetActive(true);
-        shopUI.SetActive(false);
+        if (countdownText == null) return;
+        int minutes = Mathf.FloorToInt(currentTimer / 60F);
+        int seconds = Mathf.FloorToInt(currentTimer - minutes * 60);
+        countdownText.text = string.Format("Restock in: {0:00}:{1:00}", minutes, seconds);
     }
 
-    public void CloseDialogue()
+    private void RefreshShop()
     {
-        dialogueUI.SetActive(false);
+        // 1. ล้างของเก่าทิ้งให้เกลี้ยง
+        foreach (Transform child in contentPanel)
+        {
+            Destroy(child.gameObject);
+        }
+
+        if (allPossibleItems.Count == 0 || shopItemPrefab == null) return;
+
+        // 2. สุ่มของและเสก UI ขึ้นมาใหม่ตามจำนวน
+        for (int i = 0; i < amountOfItemsToSell; i++)
+        {
+            int randomIndex = Random.Range(0, allPossibleItems.Count);
+            ItemData randomItem = allPossibleItems[randomIndex];
+
+            // เสก Prefab เข้าไปใน Content
+            GameObject newItem = Instantiate(shopItemPrefab, contentPanel);
+
+            // *** ป้องกันบั๊ก Unity บีบ UI จนพัง ***
+            newItem.transform.localScale = Vector3.one;
+
+            ShopItemUI itemUI = newItem.GetComponent<ShopItemUI>();
+            if (itemUI != null)
+            {
+                itemUI.Setup(randomItem, this);
+            }
+        }
     }
 
-    public void ChooseToBuyItems()
-    {
-        CloseDialogue();
-        OpenShop();
-    }
+    public void OpenDialogue() { dialogueUI.SetActive(true); shopUI.SetActive(false); }
+    public void CloseDialogue() { dialogueUI.SetActive(false); }
+    public void ChooseToBuyItems() { CloseDialogue(); OpenShop(); }
+    public void ChooseToLeave() { CloseDialogue(); }
+    public void OpenShop() { shopUI.SetActive(true); }
+    public void CloseShop() { shopUI.SetActive(false); }
 
-    public void ChooseToLeave()
-    {
-        CloseDialogue();
-    }
-
-    public void OpenShop()
-    {
-        shopUI.SetActive(true);
-    }
-
-    public void CloseShop()
-    {
-        shopUI.SetActive(false);
-    }
-
-    // --- แก้ไขตรงนี้ เพื่อเช็กว่าปุ่มทำงานจริงไหม ---
     public void OnBuyButtonClicked(ItemData itemToBuy)
     {
-        Debug.Log("1. มีการคลิกปุ่มซื้อแล้ว! กำลังเช็กว่ามีคนซื้อไหม...");
-
-        // เช็กว่าเผลอลืมใส่ช่อง Player ใน Inspector หรือเปล่า
-        if (player == null)
-        {
-            Debug.LogError("พัง! หาตัวผู้เล่นไม่เจอ: คุณลืมลาก Player มาใส่ใน ShopManager หรือเปล่า?");
-            return;
-        }
-
-        // เช็กว่าปุ่มส่งข้อมูลไอเทมมาให้ถูกไหม
-        if (itemToBuy == null)
-        {
-            Debug.LogError("พัง! ไม่มีข้อมูลไอเทมส่งมา: ไปเช็กที่ OnClick() ของปุ่มซื้ออีกทีครับ");
-            return;
-        }
-
-        Debug.Log($"2. ข้อมูลถูกต้อง! กำลังจะหักเงินผู้เล่นเพื่อซื้อ: {itemToBuy.itemName}");
-
-        // สั่งให้ Player ซื้อ
+        if (player == null || itemToBuy == null) return;
+        Debug.Log($"หักเงินผู้เล่นเพื่อซื้อ: {itemToBuy.itemName}");
         player.BuyItem(itemToBuy);
     }
 }
