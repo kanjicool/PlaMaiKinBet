@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7817397612480398221}
   - component: {fileID: 643324286490734237}
   - component: {fileID: 5075096504915068421}
-  - component: {fileID: 810232454350442091}
+  - component: {fileID: -5753866161351744878}
   m_Layer: 0
   m_Name: Island05
   m_TagString: Untagged
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f1445642c40104a984a23e5eed8308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IslandTrigger
---- !u!114 &810232454350442091
+--- !u!114 &-5753866161351744878
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -112,13 +112,13 @@ MonoBehaviour:
   - rarity: 0
     spawnWeight: 100
   - rarity: 1
-    spawnWeight: 50
+    spawnWeight: 60
   - rarity: 2
-    spawnWeight: 20
+    spawnWeight: 40
   - rarity: 3
-    spawnWeight: 5
+    spawnWeight: 20
   - rarity: 4
-    spawnWeight: 1
+    spawnWeight: 10
 --- !u!1 &877487687050909417
 GameObject:
   m_ObjectHideFlags: 0

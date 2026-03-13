@@ -206,6 +206,7 @@ GameObject:
   - component: {fileID: 8045729641469057461}
   - component: {fileID: 6553613679405031203}
   - component: {fileID: 3498110604842300310}
+  - component: {fileID: -953815479517497867}
   m_Layer: 0
   m_Name: Island06
   m_TagString: Untagged
@@ -282,6 +283,29 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 307.4983, y: 61.619926, z: 280.36093}
   m_Center: {x: 3.7491455, y: 7.923622, z: -49.267807}
+--- !u!114 &-953815479517497867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2943096449120167249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6060af5290bfd2468519cb4e4474a7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IslandFishSpawner
+  rarityWeights:
+  - rarity: 0
+    spawnWeight: 100
+  - rarity: 1
+    spawnWeight: 60
+  - rarity: 2
+    spawnWeight: 40
+  - rarity: 3
+    spawnWeight: 20
+  - rarity: 4
+    spawnWeight: 10
 --- !u!1 &5010639153273323889
 GameObject:
   m_ObjectHideFlags: 0

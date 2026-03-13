@@ -1216,8 +1216,39 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1816331335115656395, guid: 84e67b5f03b69ec4da91d31ca1eb34a4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7088053810622743264}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2213917494534450585, guid: 84e67b5f03b69ec4da91d31ca1eb34a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2331603722482448441}
   m_SourcePrefab: {fileID: 100100000, guid: 84e67b5f03b69ec4da91d31ca1eb34a4, type: 3}
+--- !u!1 &3086177615133905132 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2213917494534450585, guid: 84e67b5f03b69ec4da91d31ca1eb34a4, type: 3}
+  m_PrefabInstance: {fileID: 3777715295056969077}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-2331603722482448441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3086177615133905132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6060af5290bfd2468519cb4e4474a7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IslandFishSpawner
+  rarityWeights:
+  - rarity: 0
+    spawnWeight: 100
+  - rarity: 1
+    spawnWeight: 60
+  - rarity: 2
+    spawnWeight: 40
+  - rarity: 3
+    spawnWeight: 20
+  - rarity: 4
+    spawnWeight: 10
 --- !u!4 &3267858175643414974 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1816331335115656395, guid: 84e67b5f03b69ec4da91d31ca1eb34a4, type: 3}

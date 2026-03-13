@@ -45,11 +45,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 5
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &1258664104789781923
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,11 +100,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 5
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &3494870387906371619
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,11 +155,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 5
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &4735694326649240919
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,11 +267,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 5
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &5474402191353735631
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,11 +322,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 5
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &5981855274554192490
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,11 +377,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 5
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &6159404156318656013
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,11 +432,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 5
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &6294974885132931014
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,11 +566,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 5
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &7388319882919124011
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,11 +621,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 5
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &7454867145344241000
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,7 +676,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2652184090709050194}
-  - component: {fileID: 8118713729080628550}
+  - component: {fileID: 5284501067121355548}
+  - component: {fileID: -1342533277433916013}
+  - component: {fileID: 4654497988942522003}
   m_Layer: 0
   m_Name: Island02
   m_TagString: Untagged
@@ -658,7 +705,40 @@ Transform:
   - {fileID: 8342341746807542885}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8118713729080628550
+--- !u!65 &5284501067121355548
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7536938342256096816}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 101.590836, y: 12.860688, z: 93.14328}
+  m_Center: {x: -0.9096451, y: 0.6667247, z: -3.258667}
+--- !u!114 &-1342533277433916013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7536938342256096816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76f1445642c40104a984a23e5eed8308, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IslandTrigger
+--- !u!114 &4654497988942522003
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -670,6 +750,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6060af5290bfd2468519cb4e4474a7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IslandFishSpawner
+  rarityWeights:
+  - rarity: 0
+    spawnWeight: 100
+  - rarity: 1
+    spawnWeight: 60
+  - rarity: 2
+    spawnWeight: 40
+  - rarity: 3
+    spawnWeight: 20
+  - rarity: 4
+    spawnWeight: 10
 --- !u!1 &8558511021157659265
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,11 +806,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
-  - {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
-  - {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
+  - fishData: {fileID: 0}
+    rarity: 0
   spawnChance: 100
   spawnRadius: 5
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1001 &193113077462690926
 PrefabInstance:
   m_ObjectHideFlags: 0
