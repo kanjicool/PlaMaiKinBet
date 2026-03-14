@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq; // เพิ่มเพื่อใช้ OrderBy
 
 public class ShopManager : MonoBehaviour
 {
@@ -14,15 +15,15 @@ public class ShopManager : MonoBehaviour
 
     [Header("Shop Settings")]
     public List<ItemData> allPossibleItems;
-    public int amountOfItemsToSell = 5; // ปรับจำนวนชิ้นที่จะโชว์ได้เลย
+    public int amountOfItemsToSell = 5;
 
     [Header("Restock Timer")]
     public float restockTimeInMinutes = 5f;
     public TextMeshProUGUI countdownText;
 
-    [Header("Spawning References (ระบบอัตโนมัติ)")]
+    [Header("Spawning References")]
     public Transform contentPanel;
-    public GameObject shopItemPrefab; // เอา Prefab มาใส่ตรงนี้
+    public GameObject shopItemPrefab;
 
     private float currentTimer;
 
@@ -58,7 +59,7 @@ public class ShopManager : MonoBehaviour
 
     private void RefreshShop()
     {
-        // 1. ล้างของเก่าทิ้งให้เกลี้ยง
+        // 1. ล้างของเก่า
         foreach (Transform child in contentPanel)
         {
             Destroy(child.gameObject);
@@ -66,22 +67,28 @@ public class ShopManager : MonoBehaviour
 
         if (allPossibleItems.Count == 0 || shopItemPrefab == null) return;
 
-        // 2. สุ่มของและเสก UI ขึ้นมาใหม่ตามจำนวน
+        // 2. สุ่มของมาเก็บไว้ใน List ชั่วคราวก่อน
+        List<ItemData> selectedItems = new List<ItemData>();
         for (int i = 0; i < amountOfItemsToSell; i++)
         {
             int randomIndex = Random.Range(0, allPossibleItems.Count);
-            ItemData randomItem = allPossibleItems[randomIndex];
+            selectedItems.Add(allPossibleItems[randomIndex]);
+        }
 
-            // เสก Prefab เข้าไปใน Content
+        // 3. เรียงลำดับจากราคาน้อยไปมาก (OrderBy)
+        // ** หมายเหตุ: ต้องมีตัวแปรชื่อ price ใน ItemData **
+        var sortedItems = selectedItems.OrderBy(item => item.price).ToList();
+
+        // 4. สร้าง UI จากรายการที่เรียงแล้ว
+        foreach (var item in sortedItems)
+        {
             GameObject newItem = Instantiate(shopItemPrefab, contentPanel);
-
-            // *** ป้องกันบั๊ก Unity บีบ UI จนพัง ***
             newItem.transform.localScale = Vector3.one;
 
             ShopItemUI itemUI = newItem.GetComponent<ShopItemUI>();
             if (itemUI != null)
             {
-                itemUI.Setup(randomItem, this);
+                itemUI.Setup(item, this);
             }
         }
     }
@@ -96,7 +103,6 @@ public class ShopManager : MonoBehaviour
     public void OnBuyButtonClicked(ItemData itemToBuy)
     {
         if (player == null || itemToBuy == null) return;
-        Debug.Log($"หักเงินผู้เล่นเพื่อซื้อ: {itemToBuy.itemName}");
         player.BuyItem(itemToBuy);
     }
 }
