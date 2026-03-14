@@ -112,4 +112,6 @@ public class BossInteraction : MonoBehaviour
 
         interactPromptUI.SetActive(canInteract);
     }
+
+
 }

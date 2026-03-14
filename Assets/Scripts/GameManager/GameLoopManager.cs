@@ -13,6 +13,22 @@ public class QuestTarget
     public int amount;
 }
 
+[System.Serializable]
+public class QuestRarityProgression
+{
+    public FishRarity rarity;
+    public float baseWeight;           // โอกาสที่บอสจะขอใน Wave 1
+    public float weightChangePerWave;  // โอกาสที่จะเพิ่ม/ลด ต่อ 1 Wave
+    public float minWeight = 0f;       // โอกาสต่ำสุด (เช่น ไม่ต่ำกว่า 0%)
+    public float maxWeight = 100f;     // โอกาสสูงสุด
+
+    public float GetCurrentWeight(int wave)
+    {
+        float weight = baseWeight + (weightChangePerWave * (wave - 1));
+        return Mathf.Clamp(weight, minWeight, maxWeight);
+    }
+}
+
 public class GameLoopManager : MonoBehaviour
 {
     public static GameLoopManager Instance;
@@ -49,6 +65,15 @@ public class GameLoopManager : MonoBehaviour
     [Header("Boss References")]
     public BossRobotController bossRobot;
 
+    [Header("Wave Progression Tuning")]
+    [Tooltip("Every few waves, the boss asks for one more type of fish.")]
+    public int wavesToIncreaseType = 4;
+    [Tooltip("Maximum number of fish types the boss can request at once")]
+    public int maxFishTypesRequired = 5;
+
+    [Header("Rarity Weights per Wave")]
+    public List<QuestRarityProgression> questRarityProgressions = new List<QuestRarityProgression>();
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -62,6 +87,11 @@ public class GameLoopManager : MonoBehaviour
     void Update()
     {
         UpdateBossStateMachine();
+
+        if (Keyboard.current != null && Keyboard.current.pKey.wasPressedThisFrame)
+        {
+            DebugBypassWave();
+        }
     }
 
     #region Boss State Machine
@@ -215,44 +245,116 @@ public class GameLoopManager : MonoBehaviour
 
         currentQuests.Clear();
 
-        int typesRequired = 1;
-        if (currentWave >= 4) typesRequired = 2;
-        if (currentWave >= 9) typesRequired = 3;
+        int typesRequired = 1 + ((currentWave - 1) / wavesToIncreaseType);
+        typesRequired = Mathf.Clamp(typesRequired, 1, Mathf.Min(maxFishTypesRequired, availableFish.Count));
+
+        List<FishSpawnEntry> pool = new List<FishSpawnEntry>(availableFish);
 
         typesRequired = Mathf.Min(typesRequired, availableFish.Count);
 
-        for (int i = 0;i < typesRequired;i++)
+        for (int i = 0; i < typesRequired; i++)
         {
-            FishSpawnEntry entry = availableFish[i];
+            FishSpawnEntry pickedFish = PickRandomFishByWaveWeight(pool, currentWave);
 
-            int baseAmount = 1;
-            switch (entry.rarity)
+            if (pickedFish != null)
             {
-                case FishRarity.Common: baseAmount = Random.Range(2, 5); break;     
-                case FishRarity.Uncommon: baseAmount = Random.Range(1, 3); break;
-                case FishRarity.Rare: baseAmount = 1; break;                        
-                case FishRarity.Epic: baseAmount = 1; break;
-                case FishRarity.Legendary: baseAmount = 1; break;
+                // คำนวณ "จำนวนตัว" แบบสมการ (ไม่ Hardcode แล้ว!)
+                // ใช้สมการถอดรูท (Sqrt) เพื่อให้ช่วงแรกขอเพิ่มไว แต่ช่วง Wave ลึกๆ จำนวนจะไม่เฟ้อจนเกินไป
+                int baseAmount = (pickedFish.rarity == FishRarity.Common) ? 3 :
+                                 (pickedFish.rarity == FishRarity.Uncommon) ? 2 : 1;
+
+                int waveBonus = Mathf.FloorToInt(Mathf.Sqrt(currentWave));
+                int finalAmount = baseAmount + waveBonus;
+
+                currentQuests.Add(new QuestTarget
+                {
+                    fish = pickedFish.fishData,
+                    amount = finalAmount
+                });
+
+                // เอาปลาที่เลือกแล้วออกจากตะกร้า จะได้ไม่สุ่มได้ปลาชนิดเดิมซ้ำ
+                pool.Remove(pickedFish);
             }
-
-            int waveMultiplier = (currentWave / 3);
-            int finalAmount = baseAmount + waveMultiplier;
-
-            currentQuests.Add(new QuestTarget
-            {
-                fish = entry.fishData,
-                amount = finalAmount
-            });
         }
+
+        string debugMsg = $"<color=cyan>[DEBUG Wave {currentWave}]</color> บอสต้องการปลาทั้งหมด {currentQuests.Count} ชนิด ได้แก่:\n";
+        foreach (var quest in currentQuests)
+        {
+            debugMsg += $"- {quest.fish.fishName} : จำนวน {quest.amount} ตัว\n";
+        }
+
+        debugMsg += $"<color=grey>(ข้อมูลเกาะ: มีปลาที่สามารถเกิดได้รวม {availableFish.Count} ชนิด)</color>";
+
+        Debug.Log(debugMsg);
 
         if (currentQuestIsland != null)
         {
             currentQuestIsland.SpawnEcosystem(currentQuests);
         }
 
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateWaveText(currentWave);
+        }
+
         ChangeBossState(BossState.SLEEPING);
 
         if (compass != null) compass.SetTarget(currentQuestIsland.transform);
     }
+
+    private FishSpawnEntry PickRandomFishByWaveWeight(List<FishSpawnEntry> pool, int wave)
+    {
+        float totalWeight = 0f;
+        List<float> weights = new List<float>();
+
+        // คำนวณน้ำหนักของปลาแต่ละตัวในกอง
+        foreach (var entry in pool)
+        {
+            float w = 10f; // ค่าตั้งต้นกันเหนียว
+            foreach (var prog in questRarityProgressions)
+            {
+                if (prog.rarity == entry.rarity)
+                {
+                    w = prog.GetCurrentWeight(wave);
+                    break;
+                }
+            }
+            weights.Add(w);
+            totalWeight += w;
+        }
+
+        // Safety Net
+        if (totalWeight <= 0) return pool[Random.Range(0, pool.Count)];
+
+        // สุ่มตัวเลข 0 ถึง น้ำหนักรวม
+        float randomVal = Random.Range(0f, totalWeight);
+        float currentTotal = 0f;
+
+        // เช็คว่าตกที่ปลาตัวไหน
+        for (int i = 0; i < pool.Count; i++)
+        {
+            currentTotal += weights[i];
+            if (randomVal <= currentTotal) return pool[i];
+        }
+
+        return pool[0];
+    }
+
+
     #endregion
+
+    private void DebugBypassWave()
+    {
+        Debug.Log($"<color=yellow>[DEBUG] ข้าม Wave {currentWave} ไปยัง {currentWave + 1}</color>");
+
+        // 1. ล้างปลาในเกาะปัจจุบันทิ้งก่อน (ป้องกันปลากระจุกตัวตอนกด P รัวๆ)
+        if (currentQuestIsland != null)
+        {
+            currentQuestIsland.ClearOldFishes();
+        }
+
+        // 2. สั่งบวก Wave และเริ่มการสุ่ม Wave ใหม่ทันทีแบบไม่ต้องรอดีเลย์
+        currentWave++;
+        StartNextWave();
+    }
 }

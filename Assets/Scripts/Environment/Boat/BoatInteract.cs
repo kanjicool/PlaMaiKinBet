@@ -89,6 +89,8 @@ public class BoatInteract : MonoBehaviour
             interactUI.SetActive(false);
         }
 
+        playerController.SetDrivingState(true);
+
     }
 
     private void ExitBoat()
@@ -115,6 +117,8 @@ public class BoatInteract : MonoBehaviour
         {
             interactUI.SetActive(true);
         }
+
+        playerController.SetDrivingState(false);
     }
 
 
@@ -194,6 +198,25 @@ public class BoatInteract : MonoBehaviour
 
             boatTransform.position = boatSpawnPoint.position;
             boatTransform.rotation = boatSpawnPoint.rotation;
+        }
+    }
+
+    public void TeleportBoatTo(Transform targetTransform)
+    {
+        if (targetTransform != null)
+        {
+            Transform boatTransform = boatController.transform;
+
+            Rigidbody rb = boatController.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+
+            boatTransform.SetPositionAndRotation(targetTransform.position, targetTransform.rotation);
+
+            Debug.Log("<color=cyan>วาร์ปเรือมาที่แท่นเรียกสำเร็จ!</color>");
         }
     }
 }

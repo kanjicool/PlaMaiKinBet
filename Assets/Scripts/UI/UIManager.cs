@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class UIManager : MonoBehaviour
     public Image castBarFill;
 
     public Gradient castBarGradient;
+
+    [Header("Wave UI")]
+    public TextMeshProUGUI waveText;
 
     private void Awake()
     {
@@ -28,6 +32,9 @@ public class UIManager : MonoBehaviour
         HideCastBar();
     }
 
+    // =============================
+    //       Casting Bar System
+    // =============================
     public void ShowCastBar()
     {
         if (castBarContainer != null) castBarContainer.SetActive(true);
@@ -48,5 +55,16 @@ public class UIManager : MonoBehaviour
         castBarFill.fillAmount = fillPercentage;
 
         castBarFill.color = castBarGradient.Evaluate(fillPercentage);
+    }
+
+    // =============================
+    //         Wave System
+    // =============================
+    public void UpdateWaveText(int currentWave)
+    {
+        if (waveText != null)
+        {
+            waveText.text = $"WAVE {currentWave}";
+        }
     }
 }

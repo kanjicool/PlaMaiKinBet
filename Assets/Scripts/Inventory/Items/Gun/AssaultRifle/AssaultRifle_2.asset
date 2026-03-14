@@ -17,7 +17,7 @@ MonoBehaviour:
   itemPrefab: {fileID: 5533410735107293931, guid: 48f14342da3ac4c49b651027dc4222da, type: 3}
   price: 15
   holdAnimID: 5
-  equipDelay: 1
+  equipDelay: 1.4
   holdPositionOffset: {x: -0.08, y: -0.197, z: -0.074}
   holdRotationOffset: {x: 24.041, y: 166.361, z: 55.005}
   equipSound: {fileID: 8300000, guid: 1f2e9f05e947d604abc8bad3fdd8ab1e, type: 3}

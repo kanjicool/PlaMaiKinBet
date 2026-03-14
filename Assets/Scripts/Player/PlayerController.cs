@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
 
     public bool IsBusy => isSwimming || isClimbing;
     public bool IsSwimming => isSwimming;
+    public bool IsDriving { get; private set; }
 
     private void Awake()
     {
@@ -524,6 +525,27 @@ public class PlayerController : MonoBehaviour
 
         isMoving = climbDirection.magnitude >= 0.1f;
         //animator.SetBool("climbMove", isMoving); 
+    }
+
+    // ===================== DRIVING =====================
+    public void SetDrivingState(bool driving)
+    {
+        IsDriving = driving;
+        if (animator != null)
+        {
+            animator.SetBool("isDriving", IsDriving);
+        }
+
+        if (driving)
+        {
+            animator.SetBool("run", false);
+            animator.SetBool("swim", false);
+
+            if (inventory != null)
+            {
+                inventory.ForceUnequip();
+            }
+        }
     }
 
     public void UseSlashTransform()
