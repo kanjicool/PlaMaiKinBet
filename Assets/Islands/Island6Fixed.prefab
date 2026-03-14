@@ -224,6 +224,71 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5893826033555710952, guid: 179bfebe2ecaaf34790ae760609a939b, type: 3}
+--- !u!1 &706578425294814750
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5393411268765860890}
+  - component: {fileID: 5296175911812696785}
+  m_Layer: 0
+  m_Name: FSP1 (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5393411268765860890
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706578425294814750}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 130.44766, y: 0, z: -97.783264}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 746513592576897302}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5296175911812696785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706578425294814750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
+  allowedFish:
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
+  spawnChance: 100
+  spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &709606190661600513
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,12 +1103,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 111736073659657418}
-  - {fileID: 3152367837170800678}
-  - {fileID: 4789811454437686656}
-  - {fileID: 4579746202433035343}
-  - {fileID: 672837107923407646}
-  - {fileID: 1662785614600073978}
+  - {fileID: 2051416161456957298}
+  - {fileID: 392945713591266855}
+  - {fileID: 7487151753106384564}
+  - {fileID: 5393411268765860890}
+  - {fileID: 8312964834596965569}
+  - {fileID: 6347868969389019457}
   m_Father: {fileID: 920293882505848827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1285574491594021867
@@ -1270,6 +1335,71 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 8280289709596638646, guid: a5994e5636fc64c4eba671e6b3b43f04, type: 3}
+--- !u!1 &1525824090963417037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6347868969389019457}
+  - component: {fileID: 752203606659860045}
+  m_Layer: 0
+  m_Name: FSP1 (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6347868969389019457
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525824090963417037}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -76.752335, y: 0, z: -98.48326}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 746513592576897302}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &752203606659860045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525824090963417037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
+  allowedFish:
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
+  spawnChance: 100
+  spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &1576488453971893466
 GameObject:
   m_ObjectHideFlags: 0
@@ -1494,6 +1624,71 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -7011766824195413768, guid: b0ba9b7cecd675b45894beca57389899, type: 3}
+--- !u!1 &2052104482631800265
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2051416161456957298}
+  - component: {fileID: 1027020978849072447}
+  m_Layer: 0
+  m_Name: FSP1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2051416161456957298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052104482631800265}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -29.75233, y: 0, z: -149.88327}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 746513592576897302}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1027020978849072447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052104482631800265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
+  allowedFish:
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
+  spawnChance: 100
+  spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &2290611331668492231
 GameObject:
   m_ObjectHideFlags: 0
@@ -1807,159 +2002,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2497679977114400626, guid: 1dc2ce7af7a959b4e81997ee9f222d80, type: 3}
---- !u!1 &2705387661482756663
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4579746202433035343}
-  - component: {fileID: 1414304024313823620}
-  m_Layer: 0
-  m_Name: FSP1 (5)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4579746202433035343
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2705387661482756663}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 128.9, y: -0.4, z: -64}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 746513592576897302}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1414304024313823620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2705387661482756663}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
-  allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
-  spawnChance: 100
-  spawnRadius: 30
-  fishDensity: 1
-  maxSpawnLimit: 20
---- !u!1 &2802641744165125951
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4789811454437686656}
-  - component: {fileID: 1440756769054431571}
-  m_Layer: 0
-  m_Name: FSP1 (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4789811454437686656
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2802641744165125951}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 128.9, y: -0.4, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 746513592576897302}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1440756769054431571
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2802641744165125951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
-  allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
-  spawnChance: 100
-  spawnRadius: 30
-  fishDensity: 1
-  maxSpawnLimit: 20
---- !u!1 &2803413724824095172
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3152367837170800678}
-  - component: {fileID: 7800869227160271599}
-  m_Layer: 0
-  m_Name: FSP1 (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3152367837170800678
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2803413724824095172}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 81.9, y: -0.4, z: -125.7}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 746513592576897302}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7800869227160271599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2803413724824095172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
-  allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
-  spawnChance: 100
-  spawnRadius: 30
-  fishDensity: 1
-  maxSpawnLimit: 20
 --- !u!1 &3105680129994461760
 GameObject:
   m_ObjectHideFlags: 0
@@ -2184,6 +2226,71 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -9175286356274333473, guid: b7dc1070c2e9e1b4fab5e6de4993c182, type: 3}
+--- !u!1 &3275554053912094481
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7487151753106384564}
+  - component: {fileID: 5364272293488190090}
+  m_Layer: 0
+  m_Name: FSP1 (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7487151753106384564
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3275554053912094481}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 130.44766, y: 0, z: -34.783264}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 746513592576897302}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5364272293488190090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3275554053912094481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
+  allowedFish:
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
+  spawnChance: 100
+  spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &3646850904351408735
 GameObject:
   m_ObjectHideFlags: 0
@@ -2408,57 +2515,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -9175286356274333473, guid: b7dc1070c2e9e1b4fab5e6de4993c182, type: 3}
---- !u!1 &3739552504544953578
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 672837107923407646}
-  - component: {fileID: 1037354940098430033}
-  m_Layer: 0
-  m_Name: FSP1 (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &672837107923407646
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3739552504544953578}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -91.6, y: -0.4, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 746513592576897302}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1037354940098430033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3739552504544953578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
-  allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
-  spawnChance: 100
-  spawnRadius: 30
-  fishDensity: 1
-  maxSpawnLimit: 20
 --- !u!1 &3757052380259348025
 GameObject:
   m_ObjectHideFlags: 0
@@ -4212,6 +4268,71 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4124758998539789934, guid: 3d9145166365cd140a768889f4fe3c5d, type: 3}
+--- !u!1 &5893520500663928919
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 392945713591266855}
+  - component: {fileID: 8368851915078107225}
+  m_Layer: 0
+  m_Name: FSP1 (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &392945713591266855
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5893520500663928919}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 83.44767, y: 0, z: -159.48326}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 746513592576897302}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8368851915078107225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5893520500663928919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
+  allowedFish:
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
+  spawnChance: 100
+  spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &6229837917760634222
 GameObject:
   m_ObjectHideFlags: 0
@@ -4989,57 +5110,6 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 51ef5d59790f82b49b22dae93bed774e, type: 2}
   m_BuildHeightMesh: 0
---- !u!1 &7116502982888640397
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 111736073659657418}
-  - component: {fileID: 9084493013836780122}
-  m_Layer: 0
-  m_Name: FSP1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &111736073659657418
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7116502982888640397}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -31.3, y: -0.4, z: -116.1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 746513592576897302}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9084493013836780122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7116502982888640397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
-  allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
-  spawnChance: 100
-  spawnRadius: 30
-  fishDensity: 1
-  maxSpawnLimit: 20
 --- !u!1 &7201392123690039573
 GameObject:
   m_ObjectHideFlags: 0
@@ -5600,57 +5670,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: e9089b1db16b58f4282a94e020b9c0e8, type: 3}
---- !u!1 &7762438574157370380
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1662785614600073978}
-  - component: {fileID: 4150929816142555798}
-  m_Layer: 0
-  m_Name: FSP1 (4)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1662785614600073978
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7762438574157370380}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -78.3, y: -0.4, z: -64.7}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 746513592576897302}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4150929816142555798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7762438574157370380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
-  allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
-  spawnChance: 100
-  spawnRadius: 30
-  fishDensity: 1
-  maxSpawnLimit: 20
 --- !u!1 &7816925016134256757
 GameObject:
   m_ObjectHideFlags: 0
@@ -5987,6 +6006,71 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2497679977114400626, guid: 1dc2ce7af7a959b4e81997ee9f222d80, type: 3}
+--- !u!1 &8088003877901309605
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8312964834596965569}
+  - component: {fileID: 2210890145144859281}
+  m_Layer: 0
+  m_Name: FSP1 (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8312964834596965569
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8088003877901309605}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -90.05233, y: 0, z: -34.783264}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 746513592576897302}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2210890145144859281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8088003877901309605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cbe8db7793d1064abeae0864e1068e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
+  allowedFish:
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
+  spawnChance: 100
+  spawnRadius: 30
+  fishDensity: 1
+  maxSpawnLimit: 20
 --- !u!1 &8457894690446279342
 GameObject:
   m_ObjectHideFlags: 0
