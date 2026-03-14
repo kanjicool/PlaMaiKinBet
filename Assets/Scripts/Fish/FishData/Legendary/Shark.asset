@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shark
   m_EditorClassIdentifier: Assembly-CSharp::FishData
   fishName: Shark
-  fishPrefab: {fileID: 1200614406502064886, guid: 66c6fb2b831ed714aab7ee4349392552, type: 3}
+  fishPrefab: {fileID: 315099399651454359, guid: 1a68e173049aa264c91e00f43e1605cb, type: 3}
   fishIcon: {fileID: -1212013111, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
   fishItemData: {fileID: 11400000, guid: ef4b659ed43527f49bf81016b37c6506, type: 2}
   escapePower: 35
