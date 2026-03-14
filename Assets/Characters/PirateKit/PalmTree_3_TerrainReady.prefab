@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5501249610557344662}
   - component: {fileID: 1781803851995859731}
-  - component: {fileID: -4263029557470032498}
   m_Layer: 0
   m_Name: PalmTree_3_TerrainReady
   m_TagString: Untagged
@@ -61,29 +60,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 8100601511095653283}
   m_Enabled: 1
---- !u!136 &-4263029557470032498
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6128264165427933717}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &7469936340083920679
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -162,6 +138,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9709d8c1c58ab3f4da9d3695c09f7c89, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2096920305350387757}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9709d8c1c58ab3f4da9d3695c09f7c89, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2623881043621391313}
   m_SourcePrefab: {fileID: 100100000, guid: 9709d8c1c58ab3f4da9d3695c09f7c89, type: 3}
 --- !u!4 &6926592282187966668 stripped
 Transform:
@@ -190,7 +169,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
@@ -215,6 +194,29 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!136 &2623881043621391313
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7740529252041683574}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.0026892514
+  m_Height: 0.031960882
+  m_Direction: 2
+  m_Center: {x: -0.00057406665, y: -0.00096571725, z: 0.011808328}
 --- !u!23 &8100601511095653283 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 9709d8c1c58ab3f4da9d3695c09f7c89, type: 3}
