@@ -22,12 +22,17 @@ public class PlayerInventory : MonoBehaviour
     public RectTransform selectionHighlight;
     public TextMeshProUGUI goldText;
 
+    private AudioSource audioSource;
+
     private InputSystem_Actions inputActions;
     private int currentItemIndex = -1;
     public bool isInventoryOpen = false;
 
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
+
         inputActions = new InputSystem_Actions();
 
         inputActions.Player.Slot1.performed += ctx => EquipItem(0);
@@ -197,6 +202,11 @@ public class PlayerInventory : MonoBehaviour
 
         if (index >= itemSlots.Length) return;
 
+        if (audioSource != null)
+        {
+            audioSource.Stop();
+        }
+
         if (currentItemIndex != -1 && currentItemIndex < itemSlots.Length && itemSlots[currentItemIndex] != null)
         {
             itemSlots[currentItemIndex].SetActive(false);
@@ -213,6 +223,12 @@ public class PlayerInventory : MonoBehaviour
             {
                 ApplyItemTransform(itemSlots[currentItemIndex]);
                 itemSlots[currentItemIndex].SetActive(true);
+
+                ItemHolder holder = itemSlots[currentItemIndex].GetComponent<ItemHolder>();
+                if (holder != null && holder.itemData != null && holder.itemData.equipSound != null)
+                {
+                    audioSource.PlayOneShot(holder.itemData.equipSound);
+                }
             }
         }
 

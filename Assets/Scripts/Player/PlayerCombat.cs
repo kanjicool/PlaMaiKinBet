@@ -89,10 +89,13 @@ public class PlayerCombat : MonoBehaviour
 
         if (holdType != lastHoldType)
         {
-            currentComboStep = 0; 
-            lastHoldType = holdType; 
+            currentComboStep = 0;
+            lastHoldType = holdType;
 
-            nextAttackTime = Time.time + 0.5f;
+            float delay = (heldItem != null) ? heldItem.equipDelay : 0.5f;
+            nextAttackTime = Time.time + delay;
+
+            return; 
         }
 
         // 1 = เบ็ดตกปลา, 2 = ถือปลา (แก้ไขเลขให้ตรงกับเกมของคุณ)

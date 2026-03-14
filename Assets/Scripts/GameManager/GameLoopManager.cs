@@ -29,6 +29,10 @@ public class GameLoopManager : MonoBehaviour
     public List<QuestTarget> currentQuests = new List<QuestTarget>();
     public TextMeshProUGUI bossQuestText;
 
+    [Header("Quest Slots UI")]
+    public Transform questSlotsContainer; // GameObject ที่ติด Layout Group
+    public GameObject questSlotPrefab;    // Prefab ที่มีสคริปต์ QuestSlotUI
+
     [Header("Wave & Progression")]
     public int currentWave = 1;
     public IslandFishSpawner currentQuestIsland;
@@ -80,16 +84,16 @@ public class GameLoopManager : MonoBehaviour
         {
             case BossState.SLEEPING:
                 daysSinceFed = 0f;
-                UpdateBossUI("Zzz...");
+                UpdateQuestUI("Zzz...", false);
                 break;
             case BossState.HUNGRY:
-                UpdateBossUI($"HUNGRY!\n{GetQuestString()}");
+                UpdateQuestUI("HUNGRY!", true);
                 break;
             case BossState.ANGRY:
-                UpdateBossUI($"<color=red>ANGRY!</color>\n{GetQuestString()}");
+                UpdateQuestUI("<color=red>ANGRY!</color>", true);
                 break;
             case BossState.RAMPAGING:
-                UpdateBossUI("<color=red>ERROR! TARGET LOCKED!</color>");
+                UpdateQuestUI("<color=red>ERROR! TARGET LOCKED!</color>", false);
                 if (bossRobot != null && player != null)
                 {
                     bossRobot.StartRampage(player);
@@ -98,23 +102,40 @@ public class GameLoopManager : MonoBehaviour
         }
     }
 
-    private string GetQuestString()
-    {
-        string text = "";
-        foreach (var quest in currentQuests)
-        {
-            text += $"- {quest.fish.fishName} : {quest.amount} ตัว\n";
-        }
-        return text;
-    }
-
-    public void UpdateBossUI(string message)
+    public void UpdateQuestUI(string mainMessage, bool showFishSlots)
     {
         if (bossQuestText != null)
         {
-            bossQuestText.text = message;
+            bossQuestText.text = mainMessage;
+        }
+
+        if (questSlotsContainer != null)
+        {
+            foreach (Transform child in questSlotsContainer)
+            {
+                Destroy(child.gameObject);
+            }
+
+            if (showFishSlots && questSlotPrefab != null)
+            {
+                foreach (var quest in currentQuests)
+                {
+                    GameObject slotObj = Instantiate(questSlotPrefab, questSlotsContainer);
+
+                    slotObj.transform.localScale = Vector3.one;
+
+                    QuestSlotUI slotUI = slotObj.GetComponent<QuestSlotUI>();
+
+                    if (slotUI != null)
+                    {
+                        slotUI.SetupSlot(quest.fish.fishIcon, $"{quest.fish.fishName} x{quest.amount}");
+                    }
+                }
+            }
         }
     }
+
+
 
     public void ResetBossState()
     {
@@ -143,7 +164,6 @@ public class GameLoopManager : MonoBehaviour
 
         if (hasAllItems)
         {
-            Debug.Log("ให้อาหารบอสสำเร็จ!");
             foreach (var quest in currentQuests)
             {
                 inventory.ConsumeItems(quest.fish.fishItemData, quest.amount);
@@ -154,10 +174,11 @@ public class GameLoopManager : MonoBehaviour
             currentWave++;
             Invoke("StartNextWave", 3f);
         }
+
         else
         {
             Debug.Log("ของไม่พอ!");
-            UpdateBossUI(missingText);
+            UpdateQuestUI($"<color=orange>{missingText}</color>", true);
         }
     }
     #endregion
@@ -229,9 +250,7 @@ public class GameLoopManager : MonoBehaviour
             currentQuestIsland.SpawnEcosystem(currentQuests);
         }
 
-        bossState = BossState.SLEEPING;
-        daysSinceFed = 0f;
-        UpdateBossUI($"{GetQuestString()}");
+        ChangeBossState(BossState.SLEEPING);
 
         if (compass != null) compass.SetTarget(currentQuestIsland.transform);
     }

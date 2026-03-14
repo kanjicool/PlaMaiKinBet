@@ -12,9 +12,14 @@ public class ItemData : ScriptableObject
     [Tooltip("0=Bare hands, 1=Holding FishingRob, 2=Holding Fish, 3=Sword Idle, 4=Pistol Aim, 5=Rifle Idle")]
     public int holdAnimID = 1;
 
+    public float equipDelay = 0.5f;
+
     [Header("Hold Settings")]
     public Vector3 holdPositionOffset;
     public Vector3 holdRotationOffset;
+
+    [Header("Audio Settings")]
+    public AudioClip equipSound;
 
     public Vector3 attackHoldPositionOffset;
     public Vector3 attackHoldRotationOffset;

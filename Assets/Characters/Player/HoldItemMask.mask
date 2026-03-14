@@ -14,7 +14,7 @@ AvatarMask:
   - m_Path: Armature
     m_Weight: 0
   - m_Path: Armature/Hips
-    m_Weight: 0
+    m_Weight: 1
   - m_Path: Armature/Hips/LeftUpLeg
     m_Weight: 0
   - m_Path: Armature/Hips/LeftUpLeg/LeftLeg
@@ -32,7 +32,7 @@ AvatarMask:
   - m_Path: Armature/Hips/Spine/Spine1
     m_Weight: 0
   - m_Path: Armature/Hips/Spine/Spine1/Spine2
-    m_Weight: 0
+    m_Weight: 1
   - m_Path: Armature/Hips/Spine/Spine1/Spine2/Head
     m_Weight: 1
   - m_Path: Armature/Hips/Spine/Spine1/Spine2/LeftShoulder

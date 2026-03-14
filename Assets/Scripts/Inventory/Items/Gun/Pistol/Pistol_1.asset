@@ -17,10 +17,12 @@ MonoBehaviour:
   itemPrefab: {fileID: 7901705796515663827, guid: 8a70ff6f0c617b44f8c504e68b433bd0, type: 3}
   price: 10
   holdAnimID: 4
+  equipDelay: 1
   holdPositionOffset: {x: 0.219, y: 0.037, z: -0.091}
   holdRotationOffset: {x: -15.697, y: -11.24, z: -50.273}
-  attackHoldPositionOffset: {x: 0, y: 0, z: 0}
-  attackHoldRotationOffset: {x: 0, y: 0, z: 0}
+  equipSound: {fileID: 8300000, guid: 32c913714352a6243811544ce5358578, type: 3}
+  attackHoldPositionOffset: {x: 0.23, y: 0.023, z: -0.085}
+  attackHoldRotationOffset: {x: -10.55, y: -6.928, z: -51.254}
   attackDamage: 15
   attackRange: 50
   muzzleScale: 1

@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
     private ThirdPersonCameraController cameraCtrl;
     private float currentMoveSpeed;
 
-    public bool IsBusy => isSwimming || isClimbing || isExhausted;
+    public bool IsBusy => isSwimming || isClimbing;
     public bool IsSwimming => isSwimming;
 
     private void Awake()
