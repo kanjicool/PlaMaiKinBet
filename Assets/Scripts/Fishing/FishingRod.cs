@@ -231,12 +231,47 @@ public class FishingRod : MonoBehaviour
 
     private void CheckQuestCompletion(FishController fish)
     {
-        if (GameLoopManager.Instance != null && GameLoopManager.Instance.currentQuestFish != null)
+        if (GameLoopManager.Instance == null || GameLoopManager.Instance.currentQuests.Count == 0) return;
+
+        bool isQuestFish = false;
+
+        // 1. เช็คว่าปลาที่เพิ่งตกได้ อยู่ในรายชื่อเควสต์ที่บอสต้องการไหม
+        foreach (var quest in GameLoopManager.Instance.currentQuests)
         {
-            if (fish.myData.fishItemData == GameLoopManager.Instance.currentQuestFish.fishItemData)
+            if (fish.myData.fishItemData == quest.fish.fishItemData)
             {
+                isQuestFish = true;
+                break;
+            }
+        }
+
+        // 2. ถ้าเป็นปลาเควสต์ ให้เช็คต่อว่าตอนนี้เก็บของใน Inventory ครบทุกเควสต์หรือยัง
+        if (isQuestFish)
+        {
+            PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
+            if (inventory == null) return;
+
+            bool allQuestsCompleted = true;
+
+            foreach (var quest in GameLoopManager.Instance.currentQuests)
+            {
+                int currentAmount = inventory.GetItemCount(quest.fish.fishItemData);
+                if (currentAmount < quest.amount)
+                {
+                    allQuestsCompleted = false;
+                    break; // ขาดแม้แต่ตัวเดียว ก็ถือว่ายังไม่ครบ
+                }
+            }
+
+            // 3. ถ้าครบหมดแล้ว ชี้เป้าเข็มทิศกลับไปที่เกาะบอส!
+            if (allQuestsCompleted)
+            {
+                Debug.Log("ได้ปลาครบตามเควสต์แล้ว! กลับไปหาบอสกันเถอะ!");
                 if (GameLoopManager.Instance.compass != null)
+                {
+                    // ต้องลาก Hub Island กลับไปให้ Compass ชี้
                     GameLoopManager.Instance.compass.SetTarget(GameLoopManager.Instance.hubIsland);
+                }
             }
         }
     }
