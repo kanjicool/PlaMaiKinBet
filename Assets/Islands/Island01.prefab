@@ -344,10 +344,6 @@ MonoBehaviour:
     spawnWeight: 60
   - rarity: 2
     spawnWeight: 40
-  - rarity: 3
-    spawnWeight: 20
-  - rarity: 4
-    spawnWeight: 10
 --- !u!1 &3858855816526242187
 GameObject:
   m_ObjectHideFlags: 0

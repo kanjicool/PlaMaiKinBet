@@ -171,8 +171,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -222,8 +236,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -330,14 +358,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::IslandFishSpawner
   rarityWeights:
   - rarity: 0
-    spawnWeight: 100
+    spawnWeight: 40
   - rarity: 1
     spawnWeight: 60
   - rarity: 2
-    spawnWeight: 40
+    spawnWeight: 30
   - rarity: 3
-    spawnWeight: 20
-  - rarity: 4
     spawnWeight: 10
 --- !u!1 &5010639153273323889
 GameObject:
@@ -384,8 +410,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -435,8 +475,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -486,8 +540,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -537,8 +605,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
+  - fishData: {fileID: 11400000, guid: b66cbdba88b70f7438ae61560cd2a231, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 0f59ad4c65d9b99439ce90a4d5d1a972, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5a9447abf5639764e86984f795fd364a, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: cbf3848fa909a114589d5e19e138ded1, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 5e8168e1f59fc104c9c96b7893054fc0, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b4d9e6dfe2cddf44993b2342d07f8bfa, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 0db9f39dfef1002429bae245986cccba, type: 2}
+    rarity: 3
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1

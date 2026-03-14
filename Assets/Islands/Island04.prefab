@@ -52,7 +52,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4085038258086097324}
-  - component: {fileID: 2775921530139620536}
+  - component: {fileID: 6564526282061901776}
   m_Layer: 0
   m_Name: FSP (12)
   m_TagString: Untagged
@@ -75,7 +75,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2845603919666724194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2775921530139620536
+--- !u!114 &6564526282061901776
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,16 +88,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
@@ -111,7 +117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8512293613198565345}
-  - component: {fileID: 7083890959490347575}
+  - component: {fileID: 8768976023221771685}
   m_Layer: 0
   m_Name: FSP (2)
   m_TagString: Untagged
@@ -134,7 +140,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2845603919666724194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7083890959490347575
+--- !u!114 &8768976023221771685
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,16 +153,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
@@ -170,7 +182,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3670709868273836379}
-  - component: {fileID: 2097832684613944134}
+  - component: {fileID: 3740350947709031146}
   m_Layer: 0
   m_Name: FSP (11)
   m_TagString: Untagged
@@ -193,7 +205,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2845603919666724194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2097832684613944134
+--- !u!114 &3740350947709031146
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -206,16 +218,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
@@ -229,7 +247,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8961133542522564464}
-  - component: {fileID: 5910293302893579810}
+  - component: {fileID: 8059064444052224313}
   m_Layer: 0
   m_Name: FSP (8)
   m_TagString: Untagged
@@ -252,7 +270,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2845603919666724194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5910293302893579810
+--- !u!114 &8059064444052224313
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -265,16 +283,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
@@ -288,7 +312,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4521674063983470311}
-  - component: {fileID: 8700648453898888050}
+  - component: {fileID: 694613341375757562}
   m_Layer: 0
   m_Name: FSP (5)
   m_TagString: Untagged
@@ -311,7 +335,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2845603919666724194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8700648453898888050
+--- !u!114 &694613341375757562
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -324,16 +348,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
@@ -347,7 +377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6437342837950002637}
-  - component: {fileID: 8352854953870415222}
+  - component: {fileID: 492720112885112669}
   m_Layer: 0
   m_Name: FSP (6)
   m_TagString: Untagged
@@ -370,7 +400,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2845603919666724194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8352854953870415222
+--- !u!114 &492720112885112669
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -383,16 +413,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
@@ -406,7 +442,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1325488096448097150}
-  - component: {fileID: 6114159254181411157}
+  - component: {fileID: 2948413428703810865}
   m_Layer: 0
   m_Name: FSP (10)
   m_TagString: Untagged
@@ -429,7 +465,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2845603919666724194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6114159254181411157
+--- !u!114 &2948413428703810865
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -442,16 +478,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
@@ -465,7 +507,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2170804026092045161}
-  - component: {fileID: 7423553750680816089}
+  - component: {fileID: 6647532705513800272}
   m_Layer: 0
   m_Name: FSP (4)
   m_TagString: Untagged
@@ -488,7 +530,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2845603919666724194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7423553750680816089
+--- !u!114 &6647532705513800272
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -501,16 +543,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
@@ -524,7 +572,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1940602378019205771}
-  - component: {fileID: 5670770072456388482}
+  - component: {fileID: 1267866957802530210}
   m_Layer: 0
   m_Name: FSP (7)
   m_TagString: Untagged
@@ -547,7 +595,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2845603919666724194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5670770072456388482
+--- !u!114 &1267866957802530210
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -560,16 +608,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
@@ -675,11 +729,7 @@ MonoBehaviour:
   - rarity: 1
     spawnWeight: 60
   - rarity: 2
-    spawnWeight: 40
-  - rarity: 3
     spawnWeight: 20
-  - rarity: 4
-    spawnWeight: 10
 --- !u!1 &7770804529791098119
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,16 +775,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5
@@ -841,7 +897,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5012735978323464288}
-  - component: {fileID: 2274612402798230994}
+  - component: {fileID: 4039173484317049692}
   m_Layer: 0
   m_Name: FSP (3)
   m_TagString: Untagged
@@ -864,7 +920,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2845603919666724194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2274612402798230994
+--- !u!114 &4039173484317049692
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -877,16 +933,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 25
   fishDensity: 0.5
@@ -900,7 +962,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2656098644858611941}
-  - component: {fileID: 4559311787773748303}
+  - component: {fileID: 1301449234633830840}
   m_Layer: 0
   m_Name: FSP (9)
   m_TagString: Untagged
@@ -923,7 +985,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2845603919666724194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4559311787773748303
+--- !u!114 &1301449234633830840
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -936,16 +998,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 11400000, guid: b937a3567fe6b514099afe2319fd6e1a, type: 2}
+  - fishData: {fileID: 11400000, guid: 18cf56d29c2911947bcc70e8e40d750e, type: 2}
     rarity: 0
-  - fishData: {fileID: 11400000, guid: fcf2c3602043dea47bcf12d58034d3dc, type: 2}
+  - fishData: {fileID: 11400000, guid: 1699a8d5c66d74447a07bcb140e17399, type: 2}
     rarity: 0
+  - fishData: {fileID: 11400000, guid: 8ca01c7488b119042bd0ff6b2f23bb65, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: d5e54b26459428f46907c43ee3ea93fe, type: 2}
+    rarity: 0
+  - fishData: {fileID: 11400000, guid: 8dd3a1ba1bfb4684a8edbff4e5a3ca46, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: e3a274becda257d4f8945720af568600, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: ecdb441eec2b90948928bf38fd3ce8b7, type: 2}
+    rarity: 1
   - fishData: {fileID: 11400000, guid: 37628cbff882ce942b889e98823a7289, type: 2}
     rarity: 2
-  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
-    rarity: 3
-  - fishData: {fileID: 11400000, guid: 78154b22769f7fe49a0ab19946e64591, type: 2}
-    rarity: 4
   spawnChance: 100
   spawnRadius: 35
   fishDensity: 0.5

@@ -171,8 +171,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
+  - fishData: {fileID: 11400000, guid: 727819b87e4f41042925b8443a76d76d, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 7b7eee49aca338c45b0d84b51b2fb780, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 9424ddab7706aae47aa3451762b682f1, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 5847cd39b1dc39e45aa87bbc6284e251, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: da2fb51b08f21314897b4f258aee6b09, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: b54abe3479f5f3743a97cf8c005bafeb, type: 2}
+    rarity: 4
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -222,8 +234,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
+  - fishData: {fileID: 11400000, guid: 727819b87e4f41042925b8443a76d76d, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 7b7eee49aca338c45b0d84b51b2fb780, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 9424ddab7706aae47aa3451762b682f1, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 5847cd39b1dc39e45aa87bbc6284e251, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: da2fb51b08f21314897b4f258aee6b09, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: b54abe3479f5f3743a97cf8c005bafeb, type: 2}
+    rarity: 4
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -273,8 +297,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
+  - fishData: {fileID: 11400000, guid: 727819b87e4f41042925b8443a76d76d, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 7b7eee49aca338c45b0d84b51b2fb780, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 9424ddab7706aae47aa3451762b682f1, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 5847cd39b1dc39e45aa87bbc6284e251, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: da2fb51b08f21314897b4f258aee6b09, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: b54abe3479f5f3743a97cf8c005bafeb, type: 2}
+    rarity: 4
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -324,8 +360,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
+  - fishData: {fileID: 11400000, guid: 727819b87e4f41042925b8443a76d76d, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 7b7eee49aca338c45b0d84b51b2fb780, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 9424ddab7706aae47aa3451762b682f1, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 5847cd39b1dc39e45aa87bbc6284e251, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: da2fb51b08f21314897b4f258aee6b09, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: b54abe3479f5f3743a97cf8c005bafeb, type: 2}
+    rarity: 4
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -421,14 +469,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IslandFishSpawner
   rarityWeights:
-  - rarity: 0
-    spawnWeight: 100
   - rarity: 1
-    spawnWeight: 60
+    spawnWeight: 100
   - rarity: 2
-    spawnWeight: 40
+    spawnWeight: 60
   - rarity: 3
-    spawnWeight: 20
+    spawnWeight: 30
   - rarity: 4
     spawnWeight: 10
 --- !u!1 &2388331986646408251
@@ -476,8 +522,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
+  - fishData: {fileID: 11400000, guid: 727819b87e4f41042925b8443a76d76d, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 7b7eee49aca338c45b0d84b51b2fb780, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 9424ddab7706aae47aa3451762b682f1, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 5847cd39b1dc39e45aa87bbc6284e251, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: da2fb51b08f21314897b4f258aee6b09, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: b54abe3479f5f3743a97cf8c005bafeb, type: 2}
+    rarity: 4
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -566,8 +624,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
+  - fishData: {fileID: 11400000, guid: 727819b87e4f41042925b8443a76d76d, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 7b7eee49aca338c45b0d84b51b2fb780, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 9424ddab7706aae47aa3451762b682f1, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 5847cd39b1dc39e45aa87bbc6284e251, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: da2fb51b08f21314897b4f258aee6b09, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: b54abe3479f5f3743a97cf8c005bafeb, type: 2}
+    rarity: 4
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -617,8 +687,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
+  - fishData: {fileID: 11400000, guid: 727819b87e4f41042925b8443a76d76d, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 7b7eee49aca338c45b0d84b51b2fb780, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 9424ddab7706aae47aa3451762b682f1, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 5847cd39b1dc39e45aa87bbc6284e251, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: da2fb51b08f21314897b4f258aee6b09, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: b54abe3479f5f3743a97cf8c005bafeb, type: 2}
+    rarity: 4
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
@@ -668,8 +750,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawnPoint
   allowedFish:
-  - fishData: {fileID: 0}
-    rarity: 0
+  - fishData: {fileID: 11400000, guid: 727819b87e4f41042925b8443a76d76d, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 7b7eee49aca338c45b0d84b51b2fb780, type: 2}
+    rarity: 1
+  - fishData: {fileID: 11400000, guid: 9424ddab7706aae47aa3451762b682f1, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: 5847cd39b1dc39e45aa87bbc6284e251, type: 2}
+    rarity: 2
+  - fishData: {fileID: 11400000, guid: b17a51bdedef6db4aa8b7f513b70a510, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: da2fb51b08f21314897b4f258aee6b09, type: 2}
+    rarity: 3
+  - fishData: {fileID: 11400000, guid: b54abe3479f5f3743a97cf8c005bafeb, type: 2}
+    rarity: 4
   spawnChance: 100
   spawnRadius: 30
   fishDensity: 1
