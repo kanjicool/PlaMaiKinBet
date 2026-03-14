@@ -16,9 +16,12 @@ MonoBehaviour:
   icon: {fileID: -2140426678, guid: 7e5c7aa6062eb024eb2a2e6466bfdf56, type: 3}
   itemPrefab: {fileID: 8868597340506327003, guid: d1edd1bca08ed5b45aebb7665fdf65da, type: 3}
   price: 400
+  maxStock: -1
   holdAnimID: 1
+  equipDelay: 0.5
   holdPositionOffset: {x: 0, y: 0, z: 0}
   holdRotationOffset: {x: 0, y: 0, z: 0}
+  equipSound: {fileID: 0}
   attackHoldPositionOffset: {x: 0, y: 0, z: 0}
   attackHoldRotationOffset: {x: 0, y: 0, z: 0}
   attackDamage: 20

@@ -8,6 +8,10 @@ public class ItemData : ScriptableObject
     public GameObject itemPrefab;
     public int price;
 
+    [Header("Shop Settings")]
+    [Tooltip("จำนวนสินค้าสูงสุดที่มีขายในร้านค้าต่อการ restock หนึ่งครั้ง")]
+    public int maxStock = 1; // เพิ่มส่วนนี้สำหรับระบบจำกัดจำนวนซื้อ
+
     [Header("Animation Settings")]
     [Tooltip("0=Bare hands, 1=Holding FishingRob, 2=Holding Fish, 3=Sword Idle, 4=Pistol Aim, 5=Rifle Idle")]
     public int holdAnimID = 1;
@@ -30,15 +34,15 @@ public class ItemData : ScriptableObject
 
     [Header("Gun FX Settings")]
     public float muzzleScale = 0.01f;
-    public AudioClip shootSound; // เสียงตอนยิง
-    public GameObject muzzleFlashPrefab; // ประกายไฟปลายปืน
-    public GameObject bulletTrailPrefab; // เส้นกระสุน (ใช้ Line Renderer)
+    public AudioClip shootSound;
+    public GameObject muzzleFlashPrefab;
+    public GameObject bulletTrailPrefab;
 
 
     public bool isGun = false;
-    public bool isAutomatic = false; // ปืนกล (กดค้างได้ไหม)
-    public int bulletsPerShot = 1; // จำนวนกระสุนต่อการกด 1 ครั้ง (ลูกซองใส่ 5-8)
-    public float bulletSpread = 0f; // ความบานของเป้า (ปืนพก/ไรเฟิล = 0 หรือ 0.02, ลูกซอง = 0.1)
-    public float fireRate = 0.2f; // ความเร็วในการยิง (แทน Attack Cooldown เดิม)
-    public GameObject hitEffectPrefab; // (Optional) เอฟเฟกต์รอยกระสุน/ประกายไฟตอนยิงโดน
-}   
+    public bool isAutomatic = false;
+    public int bulletsPerShot = 1;
+    public float bulletSpread = 0f;
+    public float fireRate = 0.2f;
+    public GameObject hitEffectPrefab;
+}

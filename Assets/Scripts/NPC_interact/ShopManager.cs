@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using System.Linq; // เพิ่มเพื่อใช้ OrderBy
+using System.Linq;
+using System.Collections;
 
 public class ShopManager : MonoBehaviour
 {
@@ -13,9 +13,14 @@ public class ShopManager : MonoBehaviour
     public GameObject dialogueUI;
     public PlayerInventory player;
 
+    [Header("Feedback UI")]
+    public TextMeshProUGUI notificationText;
+    public float notifyDuration = 2f;
+
     [Header("Shop Settings")]
+    public List<ItemData> permanentItems;
     public List<ItemData> allPossibleItems;
-    public int amountOfItemsToSell = 5;
+    public int amountOfRandomItemsToSell = 3;
 
     [Header("Restock Timer")]
     public float restockTimeInMinutes = 5f;
@@ -31,6 +36,7 @@ public class ShopManager : MonoBehaviour
 
     private void Start()
     {
+        if (notificationText != null) notificationText.gameObject.SetActive(false);
         currentTimer = restockTimeInMinutes * 60f;
         RefreshShop();
     }
@@ -59,50 +65,68 @@ public class ShopManager : MonoBehaviour
 
     private void RefreshShop()
     {
-        // 1. ล้างของเก่า
-        foreach (Transform child in contentPanel)
+        foreach (Transform child in contentPanel) { Destroy(child.gameObject); }
+
+        List<ItemData> itemsToShow = new List<ItemData>();
+        if (permanentItems != null) itemsToShow.AddRange(permanentItems);
+
+        if (allPossibleItems != null && allPossibleItems.Count > 0)
         {
-            Destroy(child.gameObject);
+            int countToRandom = Mathf.Min(amountOfRandomItemsToSell, allPossibleItems.Count);
+            List<ItemData> tempPool = new List<ItemData>(allPossibleItems);
+            for (int i = 0; i < countToRandom; i++)
+            {
+                int randomIndex = Random.Range(0, tempPool.Count);
+                itemsToShow.Add(tempPool[randomIndex]);
+                tempPool.RemoveAt(randomIndex);
+            }
         }
 
-        if (allPossibleItems.Count == 0 || shopItemPrefab == null) return;
+        var sortedItems = itemsToShow.OrderBy(item => item.price).ToList();
 
-        // 2. สุ่มของมาเก็บไว้ใน List ชั่วคราวก่อน
-        List<ItemData> selectedItems = new List<ItemData>();
-        for (int i = 0; i < amountOfItemsToSell; i++)
-        {
-            int randomIndex = Random.Range(0, allPossibleItems.Count);
-            selectedItems.Add(allPossibleItems[randomIndex]);
-        }
-
-        // 3. เรียงลำดับจากราคาน้อยไปมาก (OrderBy)
-        // ** หมายเหตุ: ต้องมีตัวแปรชื่อ price ใน ItemData **
-        var sortedItems = selectedItems.OrderBy(item => item.price).ToList();
-
-        // 4. สร้าง UI จากรายการที่เรียงแล้ว
         foreach (var item in sortedItems)
         {
             GameObject newItem = Instantiate(shopItemPrefab, contentPanel);
             newItem.transform.localScale = Vector3.one;
-
-            ShopItemUI itemUI = newItem.GetComponent<ShopItemUI>();
-            if (itemUI != null)
-            {
-                itemUI.Setup(item, this);
-            }
+            newItem.GetComponent<ShopItemUI>().Setup(item, this);
         }
     }
 
+    // --- เพิ่มฟังก์ชันที่หายไปสำหรับ NPC กลับคืนมา ---
     public void OpenDialogue() { dialogueUI.SetActive(true); shopUI.SetActive(false); }
     public void CloseDialogue() { dialogueUI.SetActive(false); }
     public void ChooseToBuyItems() { CloseDialogue(); OpenShop(); }
     public void ChooseToLeave() { CloseDialogue(); }
     public void OpenShop() { shopUI.SetActive(true); }
     public void CloseShop() { shopUI.SetActive(false); }
+    // ------------------------------------------
 
-    public void OnBuyButtonClicked(ItemData itemToBuy)
+    public bool OnBuyButtonClicked(ItemData itemToBuy)
     {
-        if (player == null || itemToBuy == null) return;
-        player.BuyItem(itemToBuy);
+        if (player.money >= itemToBuy.price)
+        {
+            player.BuyItem(itemToBuy);
+            return true;
+        }
+        else
+        {
+            ShowNotification("Not Enough money");
+            return false;
+        }
+    }
+
+    public void ShowNotification(string message)
+    {
+        if (notificationText == null) return;
+        StopAllCoroutines();
+        StartCoroutine(NotifyRoutine(message));
+    }
+
+    private IEnumerator NotifyRoutine(string message)
+    {
+        notificationText.text = message;
+        notificationText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(notifyDuration);
+        notificationText.gameObject.SetActive(false);
     }
 }
