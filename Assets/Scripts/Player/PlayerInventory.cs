@@ -8,7 +8,6 @@ public class PlayerInventory : MonoBehaviour
 {
     [Header("Shop & Money")]
     public int money = 500;
-    // 🌟 เปลี่ยนจาก ItemData มาเก็บ GameObject ตัวเป็นๆ เพื่อให้สคริปต์ไอเทมไม่หาย
     public List<GameObject> myItems = new List<GameObject>();
 
     [Header("Hotbar Slots")]
@@ -22,8 +21,13 @@ public class PlayerInventory : MonoBehaviour
     public RectTransform selectionHighlight;
     public TextMeshProUGUI goldText;
 
-    private AudioSource audioSource;
+    // 🌟 ส่วนที่เพิ่มเข้ามาสำหรับระบบ Bait
+    [Header("Bait System")]
+    public GameObject baitSlotUI; // ลาก UI GameObject ของปุ่มช่องเหยื่อมาใส่
+    public Image baitIcon;        // ลาก Image ของรูปไอเทมในช่องเหยื่อมาใส่
+    public GameObject currentBaitItem; // เก็บ GameObject ของเหยื่อ
 
+    private AudioSource audioSource;
     private InputSystem_Actions inputActions;
     private int currentItemIndex = -1;
     public bool isInventoryOpen = false;
@@ -58,7 +62,7 @@ public class PlayerInventory : MonoBehaviour
 
                 slotUI.slotType = SlotUI.SlotType.Hotbar;
                 slotUI.slotIndex = i;
-                slotUI.itemIcon = hotbarIcons[i]; // 🌟 ผูกตัวแปรไอคอน
+                slotUI.itemIcon = hotbarIcons[i];
 
                 Transform lockIcon = slotObj.transform.Find("LockIcon");
                 if (lockIcon != null) slotUI.lockImage = lockIcon.GetComponent<Image>();
@@ -76,17 +80,31 @@ public class PlayerInventory : MonoBehaviour
 
                 slotUI.slotType = SlotUI.SlotType.Inventory;
                 slotUI.slotIndex = i;
-                slotUI.itemIcon = inventoryIcons[i]; // 🌟 ผูกตัวแปรไอคอน
+                slotUI.itemIcon = inventoryIcons[i];
 
                 Transform lockIcon = slotObj.transform.Find("LockIcon");
                 if (lockIcon != null) slotUI.lockImage = lockIcon.GetComponent<Image>();
             }
         }
+
+        // 🌟 3. จัดการ Bait Slot
+        if (baitIcon != null)
+        {
+            GameObject slotObj = baitIcon.transform.parent.gameObject;
+            SlotUI slotUI = slotObj.GetComponent<SlotUI>();
+            if (slotUI == null) slotUI = slotObj.AddComponent<SlotUI>();
+
+            slotUI.slotType = SlotUI.SlotType.Bait;
+            slotUI.slotIndex = 0;
+            slotUI.itemIcon = baitIcon;
+
+            Transform lockIcon = slotObj.transform.Find("LockIcon");
+            if (lockIcon != null) slotUI.lockImage = lockIcon.GetComponent<Image>();
+        }
     }
 
     private void Start()
     {
-        // 🌟 จองพื้นที่ให้ช่องกระเป๋าเท่ากับจำนวน UI เป๊ะๆ (เริ่มต้นจะเป็น null ทั้งหมด)
         if (myItems.Count != inventoryIcons.Length)
         {
             myItems = new List<GameObject>(new GameObject[inventoryIcons.Length]);
@@ -145,7 +163,7 @@ public class PlayerInventory : MonoBehaviour
             else
             {
                 hotbarIcons[i].sprite = null;
-                hotbarIcons[i].color = new Color(0, 0, 0, 0); // โปร่งใส
+                hotbarIcons[i].color = new Color(0, 0, 0, 0);
                 hotbarIcons[i].enabled = true;
             }
         }
@@ -166,12 +184,48 @@ public class PlayerInventory : MonoBehaviour
             else
             {
                 inventoryIcons[i].sprite = null;
-                inventoryIcons[i].color = new Color(0, 0, 0, 0); // ซ่อนรูปถ้าช่องว่าง
+                inventoryIcons[i].color = new Color(0, 0, 0, 0);
                 inventoryIcons[i].enabled = true;
             }
         }
 
-        // 3. อัปเดตตำแหน่ง Highlight
+        // 🌟 3. อัปเดตระบบ Bait
+        bool isHoldingFishingRod = false;
+        if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
+        {
+            ItemHolder holder = itemSlots[currentItemIndex].GetComponent<ItemHolder>();
+            if (holder != null && holder.itemData != null && holder.itemData.isFishingRod)
+            {
+                isHoldingFishingRod = true;
+            }
+        }
+
+        if (baitSlotUI != null)
+        {
+            baitSlotUI.SetActive(isHoldingFishingRod);
+
+            if (baitIcon != null)
+            {
+                if (currentBaitItem != null)
+                {
+                    ItemHolder baitHolder = currentBaitItem.GetComponent<ItemHolder>();
+                    if (baitHolder != null && baitHolder.itemData != null)
+                    {
+                        baitIcon.sprite = baitHolder.itemData.icon;
+                        baitIcon.color = Color.white;
+                        baitIcon.enabled = true;
+                    }
+                }
+                else
+                {
+                    baitIcon.sprite = null;
+                    baitIcon.color = new Color(0, 0, 0, 0);
+                    baitIcon.enabled = true;
+                }
+            }
+        }
+
+        // 4. อัปเดตตำแหน่ง Highlight
         if (selectionHighlight != null)
         {
             if (currentItemIndex >= 0 && currentItemIndex < hotbarIcons.Length)
@@ -189,23 +243,14 @@ public class PlayerInventory : MonoBehaviour
     private void EquipItem(int index)
     {
         PlayerCombat combat = GetComponent<PlayerCombat>();
-        if (combat != null && combat.IsAttacking())
-        {
-            return;
-        }
+        if (combat != null && combat.IsAttacking()) return;
 
         PlayerController playerCtrl = FindFirstObjectByType<PlayerController>();
-        if (playerCtrl != null && playerCtrl.IsBusy)
-        {
-            return;
-        }
+        if (playerCtrl != null && playerCtrl.IsBusy) return;
 
         if (index >= itemSlots.Length) return;
 
-        if (audioSource != null)
-        {
-            audioSource.Stop();
-        }
+        if (audioSource != null) audioSource.Stop();
 
         if (currentItemIndex != -1 && currentItemIndex < itemSlots.Length && itemSlots[currentItemIndex] != null)
         {
@@ -257,7 +302,6 @@ public class PlayerInventory : MonoBehaviour
             }
             else
             {
-                // 🌟 เสกไอเทมขึ้นมาเลย แล้วซ่อนไว้ลงกระเป๋า
                 GameObject spawnedItem = Instantiate(item.itemPrefab, handTransform);
                 ItemHolder holder = spawnedItem.GetComponent<ItemHolder>() ?? spawnedItem.AddComponent<ItemHolder>();
                 holder.itemData = item;
@@ -266,7 +310,6 @@ public class PlayerInventory : MonoBehaviour
                 myItems[emptyInventoryIndex] = spawnedItem;
             }
 
-            Debug.Log($"ซื้อ {item.itemName} สำเร็จ! เงินเหลือ: {money}");
             UpdateInventoryUI();
             return true;
         }
@@ -293,7 +336,7 @@ public class PlayerInventory : MonoBehaviour
 
                 spawnedItem.transform.localPosition = item.holdPositionOffset;
                 spawnedItem.transform.localRotation = Quaternion.Euler(item.holdRotationOffset);
-                
+
                 spawnedItem.SetActive(false);
 
                 itemSlots[i] = spawnedItem;
@@ -316,14 +359,13 @@ public class PlayerInventory : MonoBehaviour
     public void SellItem(GameObject itemToSell, int price)
     {
         money += price;
-        Debug.Log($"ขายของสำเร็จ! ได้เงินมา {price} เหรียญ");
 
         if (currentItemIndex != -1 && itemSlots[currentItemIndex] == itemToSell)
         {
             itemSlots[currentItemIndex] = null;
             currentItemIndex = -1;
         }
-        else // เช็คช่องอื่นใน Hotbar เผื่อไม่ได้ถืออยู่
+        else
         {
             for (int i = 0; i < itemSlots.Length; i++)
             {
@@ -331,7 +373,6 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        // หาให้เจอว่าไอเทมนี้อยู่ช่องไหนในกระเป๋า แล้วเคลียร์เป็น null
         for (int i = 0; i < myItems.Count; i++)
         {
             if (myItems[i] == itemToSell)
@@ -363,7 +404,6 @@ public class PlayerInventory : MonoBehaviour
                 spawnedFish.SetActive(false);
 
                 itemSlots[i] = spawnedFish;
-                Debug.Log($"ตกได้ {fishItem.itemName} เก็บเข้า Hotbar ช่อง {i}");
                 addedToHotbar = true;
                 break;
             }
@@ -385,7 +425,6 @@ public class PlayerInventory : MonoBehaviour
                 spawnedFish.SetActive(false);
 
                 myItems[emptyInventoryIndex] = spawnedFish;
-                Debug.Log($"Hotbar เต็ม! เก็บ {fishItem.itemName} เข้า Inventory ช่องที่ {emptyInventoryIndex}");
             }
             else
             {
@@ -398,9 +437,7 @@ public class PlayerInventory : MonoBehaviour
     public int SellAllFish()
     {
         int totalEarnings = 0;
-        int fishCount = 0;
 
-        // 1. Hotbar
         for (int i = 0; i < itemSlots.Length; i++)
         {
             if (itemSlots[i] != null)
@@ -412,7 +449,6 @@ public class PlayerInventory : MonoBehaviour
                 if (fishHolder != null)
                 {
                     totalEarnings += itemSlots[i].GetComponent<ItemHolder>().itemData.price;
-                    fishCount++;
                     Destroy(itemSlots[i]);
                     itemSlots[i] = null;
                     if (currentItemIndex == i) currentItemIndex = -1;
@@ -420,7 +456,6 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        // 2. Inventory
         for (int i = 0; i < myItems.Count; i++)
         {
             if (myItems[i] == null) continue;
@@ -433,10 +468,9 @@ public class PlayerInventory : MonoBehaviour
             {
                 ItemHolder holder = myItems[i].GetComponent<ItemHolder>();
                 totalEarnings += holder.itemData.price;
-                fishCount++;
 
-                Destroy(myItems[i]); // 🌟 ลบทิ้งเมื่อได้เงิน
-                myItems[i] = null; // คืนที่ว่างให้กระเป๋า
+                Destroy(myItems[i]);
+                myItems[i] = null;
             }
         }
 
@@ -445,7 +479,6 @@ public class PlayerInventory : MonoBehaviour
         return totalEarnings;
     }
 
-    // 🌟 3 ฟังก์ชันด้านล่างคือหัวใจสำคัญในการสลับ GameObject ข้ามไปมา
     public void SwapItems(SlotUI fromSlot, SlotUI toSlot)
     {
         GameObject fromObj = GetGameObjectFromSlot(fromSlot);
@@ -454,7 +487,6 @@ public class PlayerInventory : MonoBehaviour
         SetGameObjectToSlot(fromSlot, toObj);
         SetGameObjectToSlot(toSlot, fromObj);
 
-        // สลับสถานะแม่กุญแจ
         bool tempLock = fromSlot.isLocked;
         fromSlot.isLocked = toSlot.isLocked;
         if (fromSlot.lockImage != null) fromSlot.lockImage.enabled = fromSlot.isLocked;
@@ -465,15 +497,20 @@ public class PlayerInventory : MonoBehaviour
         UpdateInventoryUI();
     }
 
-    private GameObject GetGameObjectFromSlot(SlotUI slot)
+    // 🌟 ดึงข้อมูล GameObject ให้รองรับช่อง Bait
+    public GameObject GetGameObjectFromSlot(SlotUI slot)
     {
         if (slot.slotType == SlotUI.SlotType.Hotbar)
             return itemSlots[slot.slotIndex];
         else if (slot.slotType == SlotUI.SlotType.Inventory)
             return slot.slotIndex < myItems.Count ? myItems[slot.slotIndex] : null;
+        else if (slot.slotType == SlotUI.SlotType.Bait)
+            return currentBaitItem;
+
         return null;
     }
 
+    // 🌟 เซ็ตข้อมูล GameObject ให้รองรับช่อง Bait
     private void SetGameObjectToSlot(SlotUI slot, GameObject itemObj)
     {
         if (slot.slotType == SlotUI.SlotType.Hotbar)
@@ -481,9 +518,9 @@ public class PlayerInventory : MonoBehaviour
             itemSlots[slot.slotIndex] = itemObj;
             if (itemObj != null)
             {
-                itemObj.transform.SetParent(handTransform); // เอาไปถือในมือ
+                itemObj.transform.SetParent(handTransform);
                 ApplyItemTransform(itemObj);
-                itemObj.SetActive(currentItemIndex == slot.slotIndex); // โชว์ถ้าถือช่องนั้นอยู่
+                itemObj.SetActive(currentItemIndex == slot.slotIndex);
             }
         }
         else if (slot.slotType == SlotUI.SlotType.Inventory)
@@ -495,8 +532,17 @@ public class PlayerInventory : MonoBehaviour
                 {
                     itemObj.transform.SetParent(handTransform);
                     ApplyItemTransform(itemObj);
-                    itemObj.SetActive(false); // ซ่อนทันทีเมื่อลงกระเป๋า
+                    itemObj.SetActive(false);
                 }
+            }
+        }
+        else if (slot.slotType == SlotUI.SlotType.Bait)
+        {
+            currentBaitItem = itemObj;
+            if (itemObj != null)
+            {
+                itemObj.transform.SetParent(handTransform);
+                itemObj.SetActive(false);
             }
         }
     }
@@ -511,14 +557,11 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
-    // --- Boss quest system ---
-
     public int GetItemCount(ItemData itemToCheck)
     {
         int count = 0;
         if (itemToCheck == null) return count;
 
-        // นับใน Hotbar
         foreach (GameObject slotObj in itemSlots)
         {
             if (slotObj != null)
@@ -528,7 +571,6 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        // นับใน Inventory
         foreach (GameObject itemObj in myItems)
         {
             if (itemObj != null)
@@ -544,10 +586,9 @@ public class PlayerInventory : MonoBehaviour
     {
         int removedCount = 0;
 
-        // ลบจาก Hotbar ก่อน
         for (int i = 0; i < itemSlots.Length; i++)
         {
-            if (removedCount >= amountToConsume) break; // ครบแล้วหยุด
+            if (removedCount >= amountToConsume) break;
 
             if (itemSlots[i] != null)
             {
@@ -562,10 +603,9 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        // ถ้าลบใน Hotbar ไม่พอ ให้มาลบใน Inventory ต่อ
         for (int i = 0; i < myItems.Count; i++)
         {
-            if (removedCount >= amountToConsume) break; // ครบแล้วหยุด
+            if (removedCount >= amountToConsume) break;
 
             if (myItems[i] != null)
             {
@@ -589,7 +629,7 @@ public class PlayerInventory : MonoBehaviour
             ItemHolder holder = itemSlots[currentItemIndex].GetComponent<ItemHolder>();
             if (holder != null && holder.itemData != null)
             {
-                return holder.itemData.holdAnimID; // ส่งค่า ID ท่าถือกลับไป
+                return holder.itemData.holdAnimID;
             }
         }
         return 0;
@@ -600,7 +640,7 @@ public class PlayerInventory : MonoBehaviour
         if (itemObj == null) return;
 
         ItemHolder holder = itemObj.GetComponent<ItemHolder>();
-        if (holder != null && holder.itemData != null) 
+        if (holder != null && holder.itemData != null)
         {
             itemObj.transform.localPosition = holder.itemData.holdPositionOffset;
             itemObj.transform.localRotation = Quaternion.Euler(holder.itemData.holdRotationOffset);
@@ -636,13 +676,12 @@ public class PlayerInventory : MonoBehaviour
             if (coll != null) coll.enabled = false;
 
             groundItem.transform.SetParent(handTransform);
-            ApplyItemTransform(groundItem); 
-            groundItem.SetActive(false); 
+            ApplyItemTransform(groundItem);
+            groundItem.SetActive(false);
 
             if (hotbarIndex != -1)
             {
                 itemSlots[hotbarIndex] = groundItem;
-
                 if (currentItemIndex == -1) EquipItem(hotbarIndex);
             }
             else
@@ -651,19 +690,16 @@ public class PlayerInventory : MonoBehaviour
             }
 
             UpdateInventoryUI();
-            return true; 
+            return true;
         }
 
-        return false; 
+        return false;
     }
 
     public void DropHeldItem()
     {
         PlayerCombat combat = GetComponent<PlayerCombat>();
-        if (combat != null && combat.IsAttacking())
-        {
-            return;
-        }
+        if (combat != null && combat.IsAttacking()) return;
 
         if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
         {
@@ -685,7 +721,6 @@ public class PlayerInventory : MonoBehaviour
             rb.AddForce(throwDirection * 3f, ForceMode.Impulse);
 
             UpdateInventoryUI();
-
         }
     }
 
@@ -724,5 +759,4 @@ public class PlayerInventory : MonoBehaviour
             if (ctrl != null) ctrl.SendMessage("UpdateHoldAnimation", SendMessageOptions.DontRequireReceiver);
         }
     }
-    
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems; // 🌟 1. เพิ่ม EventSystems เพื่อให้รู้จักการคลิก UI
 
 [RequireComponent(typeof(LineRenderer))]
 public class FishingRod : MonoBehaviour
@@ -118,7 +119,7 @@ public class FishingRod : MonoBehaviour
             chargeDirection = 1;
         }
 
-         UIManager.Instance.UpdateCastBar(currentCharge, maxCastForce);
+        UIManager.Instance.UpdateCastBar(currentCharge, maxCastForce);
 
         float chargePercentage = currentCharge / maxCastForce;
         if (playerFishing != null)
@@ -131,6 +132,20 @@ public class FishingRod : MonoBehaviour
     {
         if (!gameObject.activeInHierarchy) return;
 
+        // 🌟 2. ดักว่าถ้าเมาส์กำลังชี้อยู่บน UI (เช่น ลากเหยื่อ หรือกดปุ่มช่องเก็บของ) ให้ยกเลิกการเริ่มชาร์จเบ็ด
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        // 🌟 3. ดักอีกชั้นว่าถ้าเปิดหน้าต่างกระเป๋า (Inventory) ค้างอยู่ ก็ไม่ให้เหวี่ยงเบ็ดทะลุกระเป๋า
+        PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
+        if (inventory != null && inventory.isInventoryOpen)
+        {
+            return;
+        }
+
+        // --- โค้ดชาร์จเหวี่ยงเบ็ดเดิม ---
         if (currentBobberObj != null || currentHookedFish != null)
         {
             CancelFishing();

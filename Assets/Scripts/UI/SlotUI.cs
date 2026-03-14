@@ -4,8 +4,9 @@ using UnityEngine.UI;
 
 public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
-    public enum SlotType { Hotbar, Inventory }
-    
+    // 🌟 เพิ่ม Bait ลงใน Enum
+    public enum SlotType { Hotbar, Inventory, Bait }
+
     [Header("Slot Info")]
     public SlotType slotType;
     public int slotIndex;
@@ -13,8 +14,7 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
 
     [Header("Lock System")]
     public bool isLocked = false;
-    // 🌟 เปลี่ยนจาก GameObject เป็น Image
-    public Image lockImage; 
+    public Image lockImage;
 
     private PlayerInventory inventory;
     private static SlotUI slotBeingDragged;
@@ -23,31 +23,33 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
     private void Start()
     {
         inventory = FindFirstObjectByType<PlayerInventory>();
-        
-        // 🌟 ซ่อนรูปกุญแจตอนเริ่มเกม (ใช้ .enabled แทน .SetActive)
+
         if (lockImage != null) lockImage.enabled = false;
     }
 
-    // --- 1. ระบบดับเบิ้ลคลิกเพื่อล็อก ---
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.clickCount == 2) 
+        if (eventData.clickCount == 2)
         {
+            // 🌟 เช็คว่าช่องว่างหรือไม่ ถ้าว่างให้ return ออกไปเลย ไม่ต้องล็อก
+            if (itemIcon == null || itemIcon.sprite == null || itemIcon.color.a == 0)
+            {
+                Debug.LogWarning("ช่องว่าง ไม่สามารถล็อกได้!");
+                return;
+            }
+
             isLocked = !isLocked;
-            
-            // 🌟 โชว์/ซ่อน รูปกุญแจตามสถานะ
+
             if (lockImage != null) lockImage.enabled = isLocked;
-            
+
             Debug.Log($"[SlotUI] {(isLocked ? "ล็อก" : "ปลดล็อก")} ช่อง {slotType} ที่ {slotIndex}");
         }
     }
 
-    // --- 2. เริ่มลาก (ส่วนนี้เหมือนเดิม) ---
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (isLocked || inventory == null) return;
 
-        // 🌟 เปลี่ยนมาใช้ itemIcon ตรงๆ แทนการ Find
         if (itemIcon == null || itemIcon.sprite == null || itemIcon.color.a == 0) return;
 
         slotBeingDragged = this;
@@ -57,7 +59,7 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
         ghostIcon.transform.SetAsLastSibling();
 
         Image ghostImage = ghostIcon.AddComponent<Image>();
-        ghostImage.sprite = itemIcon.sprite; // 🌟 ใช้ itemIcon
+        ghostImage.sprite = itemIcon.sprite;
         ghostImage.raycastTarget = false;
 
         RectTransform ghostRect = ghostIcon.GetComponent<RectTransform>();
@@ -83,6 +85,36 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
     {
         if (slotBeingDragged != null && slotBeingDragged != this && !isLocked)
         {
+            // 🌟 เช็คเงื่อนไขถ้าจะลากมาใส่ช่อง Bait
+            if (this.slotType == SlotType.Bait)
+            {
+                GameObject draggedObj = inventory.GetGameObjectFromSlot(slotBeingDragged);
+                if (draggedObj != null)
+                {
+                    ItemHolder holder = draggedObj.GetComponent<ItemHolder>();
+                    if (holder == null || holder.itemData == null || !holder.itemData.isBait)
+                    {
+                        Debug.LogWarning("ช่องนี้ใส่ได้เฉพาะเหยื่อตกปลาเท่านั้น!");
+                        return; // ยกเลิกการใส่
+                    }
+                }
+            }
+
+            // 🌟 เช็คเงื่อนไขถ้าจะลากออกจากช่อง Bait ไปทับช่องอื่น
+            if (slotBeingDragged.slotType == SlotType.Bait)
+            {
+                GameObject targetObj = inventory.GetGameObjectFromSlot(this);
+                if (targetObj != null)
+                {
+                    ItemHolder targetHolder = targetObj.GetComponent<ItemHolder>();
+                    if (targetHolder != null && targetHolder.itemData != null && !targetHolder.itemData.isBait)
+                    {
+                        Debug.LogWarning("สลับออกได้กับช่องว่าง หรือเหยื่อด้วยกันเท่านั้น!");
+                        return;
+                    }
+                }
+            }
+
             inventory.SwapItems(slotBeingDragged, this);
         }
     }

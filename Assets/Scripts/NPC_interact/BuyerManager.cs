@@ -73,10 +73,18 @@ public class BuyerManager : MonoBehaviour
             return;
         }
 
-        // 2. ส่งของในมือไปเช็กราคา
+        // 🌟 2. เช็กว่าเป็นเหยื่อตกปลาหรือไม่ ถ้าใช่ให้พ่อค้าปฏิเสธ
+        ItemHolder itemHolder = heldItem.GetComponent<ItemHolder>();
+        if (itemHolder != null && itemHolder.itemData != null && itemHolder.itemData.isBait)
+        {
+            if (dialogueText != null) dialogueText.text = "That's bait! I don't buy bait. Keep it for fishing.";
+            return;
+        }
+
+        // 3. ส่งของในมือไปเช็กราคา
         int currentItemPrice = GetItemPrice(heldItem, out string itemName);
 
-        // 3. เปลี่ยนข้อความตามราคาที่เช็กได้
+        // 4. เปลี่ยนข้อความตามราคาที่เช็กได้
         if (currentItemPrice > 0)
         {
             if (dialogueText != null) dialogueText.text = $"Oh! That's a {itemName}... I'll buy it for {currentItemPrice} coins. Deal?";
@@ -110,14 +118,22 @@ public class BuyerManager : MonoBehaviour
             return;
         }
 
-        // 🌟 2. ถ้าถือของอยู่ -> เช็คก่อนว่าของในมือโดนล็อกไว้ไหม?
+        // 🌟 2. เช็กว่าเป็นเหยื่อตกปลาหรือไม่ ถ้าใช่ไม่ให้ขาย
+        ItemHolder itemHolder = heldItem.GetComponent<ItemHolder>();
+        if (itemHolder != null && itemHolder.itemData != null && itemHolder.itemData.isBait)
+        {
+            if (dialogueText != null) dialogueText.text = "I told you, I don't buy bait! Bring me some fish instead.";
+            return;
+        }
+
+        // 3. ถ้าถือของอยู่ -> เช็คก่อนว่าของในมือโดนล็อกไว้ไหม?
         if (player.IsHeldItemLocked())
         {
             if (dialogueText != null) dialogueText.text = "Hey! You locked this item. Unlock it first if you want to sell it.";
             return; // ไล่กลับไปปลดล็อกก่อน ไม่ให้ขาย!
         }
 
-        // 3. ถ้าไม่ได้ล็อก -> ขายได้ปกติ
+        // 4. ถ้าไม่ได้ล็อก -> ขายได้ปกติ
         int currentItemPrice = GetItemPrice(heldItem, out string itemName);
 
         if (currentItemPrice > 0)
@@ -137,7 +153,7 @@ public class BuyerManager : MonoBehaviour
         itemName = "";
         int price = 0;
 
-        ItemHolder itemHolder = item.GetComponent<ItemHolder>();    
+        ItemHolder itemHolder = item.GetComponent<ItemHolder>();
 
         if (itemHolder != null && itemHolder.itemData != null)
         {

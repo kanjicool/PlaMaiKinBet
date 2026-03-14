@@ -17,6 +17,8 @@ MonoBehaviour:
   itemPrefab: {fileID: 8868597340506327003, guid: d1edd1bca08ed5b45aebb7665fdf65da, type: 3}
   price: 400
   maxStock: -1
+  isFishingRod: 0
+  isBait: 1
   holdAnimID: 1
   equipDelay: 0.5
   holdPositionOffset: {x: 0, y: 0, z: 0}

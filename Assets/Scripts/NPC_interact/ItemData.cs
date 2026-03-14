@@ -10,7 +10,12 @@ public class ItemData : ScriptableObject
 
     [Header("Shop Settings")]
     [Tooltip("จำนวนสินค้าสูงสุดที่มีขายในร้านค้าต่อการ restock หนึ่งครั้ง")]
-    public int maxStock = 1; // เพิ่มส่วนนี้สำหรับระบบจำกัดจำนวนซื้อ
+    public int maxStock = 1;
+
+    // 🌟 ส่วนที่เพิ่มเข้ามาสำหรับระบบตกปลา
+    [Header("Fishing System")]
+    public bool isFishingRod = false; // ติ๊กถูกถ้าเป็นเบ็ด
+    public bool isBait = false;       // ติ๊กถูกถ้าเป็นเหยื่อ
 
     [Header("Animation Settings")]
     [Tooltip("0=Bare hands, 1=Holding FishingRob, 2=Holding Fish, 3=Sword Idle, 4=Pistol Aim, 5=Rifle Idle")]
@@ -37,7 +42,6 @@ public class ItemData : ScriptableObject
     public AudioClip shootSound;
     public GameObject muzzleFlashPrefab;
     public GameObject bulletTrailPrefab;
-
 
     public bool isGun = false;
     public bool isAutomatic = false;
