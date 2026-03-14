@@ -319,9 +319,23 @@ public class PlayerCombat : MonoBehaviour
 
     private void DieAndRespawn()
     {
+        BoatInteract[] allBoats = FindObjectsByType<BoatInteract>(FindObjectsSortMode.None);
+        foreach (BoatInteract boat in allBoats)
+        {
+            boat.ForceExitBoat();
+            boat.RespawnBoat();
+        }
+
         currentHealth = maxHealth;
-        rb.linearVelocity = Vector3.zero;
+
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.linearVelocity = Vector3.zero;
+        }
+
         if (healthSlider != null) healthSlider.value = currentHealth;
+
         if (spawnPoint != null)
         {
             transform.position = spawnPoint.position;

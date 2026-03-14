@@ -83,6 +83,7 @@ public class PlayerController : MonoBehaviour
     private float currentMoveSpeed;
 
     public bool IsBusy => isSwimming || isClimbing || isExhausted;
+    public bool IsSwimming => isSwimming;
 
     private void Awake()
     {
@@ -445,6 +446,11 @@ public class PlayerController : MonoBehaviour
         isSwimming = true;
         rb.linearDamping = waterDrag;
         animator.SetBool("swim", true);
+
+        if (inventory != null)
+        {
+            inventory.ForceUnequip();
+        }
     }
 
     private void StopSwimming()

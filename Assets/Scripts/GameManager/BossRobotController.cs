@@ -7,6 +7,11 @@ public class BossRobotController : MonoBehaviour
     public float returnSpeed = 40f;
     public float hoverHeight = 2f;
 
+    [Header("interaction Settings")]
+    public float lookRotationSpeed = 5f;
+    [HideInInspector] public bool isPlayerNear = false;
+    [HideInInspector] public Transform interactPlayerTransform;
+
     private Vector3 originalHubPosition;
     private Quaternion originalHubRotation;
     private Transform targetPlayer;
@@ -29,6 +34,27 @@ public class BossRobotController : MonoBehaviour
             case BossPhase.Idle:
                 float newY = originalHubPosition.y + Mathf.Sin(Time.time * 2f) * 0.5f;
                 transform.position = new Vector3(originalHubPosition.x, newY, originalHubPosition.z);
+                
+                if (isPlayerNear && interactPlayerTransform != null)
+                {
+                    Vector3 directionToPlayer = interactPlayerTransform.position - transform.position;
+                    directionToPlayer.y = 0;
+
+                    if (directionToPlayer != Vector3.zero)
+                    {
+                        Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+                        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * lookRotationSpeed);
+                    }
+
+                }
+                else
+                {
+                    if (transform.rotation != originalHubRotation)
+                    {
+                        transform.rotation = Quaternion.Slerp(transform.rotation, originalHubRotation, Time.deltaTime * lookRotationSpeed);
+                    }
+                }
+
                 break;
 
             case BossPhase.Chasing:
@@ -81,11 +107,11 @@ public class BossRobotController : MonoBehaviour
         {
             Debug.Log("หุ่นยนต์บอสชนผู้เล่นแล้ว GAME OVER!");
 
-            //PlayerController player = FindFirstObjectByType<PlayerController>();
-            //if (player != null)
-            //{
-            //    player.TakeDamage(9999f);
-            //}
+            PlayerCombat playerCombat = FindFirstObjectByType<PlayerCombat>(FindObjectsInactive.Include);
+            if (playerCombat != null)
+            {
+                playerCombat.TakeDamage(9999f);
+            }
 
             currentPhase = BossPhase.Returning;
             targetPlayer = null;

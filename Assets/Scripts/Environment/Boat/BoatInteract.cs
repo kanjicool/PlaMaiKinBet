@@ -8,6 +8,9 @@ public class BoatInteract : MonoBehaviour
     public Transform seatPosition;
     public Transform exitPosition;
 
+    [Header("Respawn Settings")]
+    public Transform boatSpawnPoint;
+
     [Header("Camera Settings")]
     public ThirdPersonCameraController cameraController;
     public Transform boatCamTarget; 
@@ -149,6 +152,48 @@ public class BoatInteract : MonoBehaviour
                 interactUI.SetActive(false);
             }
 
+        }
+    }
+
+    public void ForceExitBoat()
+    {
+        if (!isPlayerDriving) return;
+
+        isPlayerDriving = false;
+        boatController.isPlayerDriving = false;
+
+        if (playerController != null) playerController.enabled = true;
+        if (playerRb != null)
+        {
+            playerRb.isKinematic = false;
+            playerRb.linearVelocity = Vector3.zero;
+        }
+        if (playerCollider != null) playerCollider.enabled = true;
+
+        if (cameraController != null && playerCamTarget != null)
+        {
+            cameraController.SetDrivingMode(false, playerCamTarget);
+        }
+
+        isPlayerNear = false;
+        if (interactUI != null) interactUI.SetActive(false);
+    }
+
+    public void RespawnBoat()
+    {
+        if (boatSpawnPoint != null)
+        {
+            Transform boatTransform = boatController.transform;
+
+            Rigidbody rb = boatController.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+
+            boatTransform.position = boatSpawnPoint.position;
+            boatTransform.rotation = boatSpawnPoint.rotation;
         }
     }
 }

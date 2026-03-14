@@ -8,6 +8,7 @@ TagManager:
   - Bait
   - Ground
   - Enemy
+  - Boat
   layers:
   - Default
   - TransparentFX

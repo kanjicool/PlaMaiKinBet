@@ -189,6 +189,12 @@ public class PlayerInventory : MonoBehaviour
             return;
         }
 
+        PlayerController playerCtrl = FindFirstObjectByType<PlayerController>();
+        if (playerCtrl != null && playerCtrl.IsBusy)
+        {
+            return;
+        }
+
         if (index >= itemSlots.Length) return;
 
         if (currentItemIndex != -1 && currentItemIndex < itemSlots.Length && itemSlots[currentItemIndex] != null)
@@ -689,4 +695,18 @@ public class PlayerInventory : MonoBehaviour
             ApplyItemTransform(itemSlots[currentItemIndex]);
         }
     }
+
+    public void ForceUnequip()
+    {
+        if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
+        {
+            itemSlots[currentItemIndex].SetActive(false);
+            currentItemIndex = -1;
+            UpdateInventoryUI();
+
+            PlayerController ctrl = GetComponent<PlayerController>();
+            if (ctrl != null) ctrl.SendMessage("UpdateHoldAnimation", SendMessageOptions.DontRequireReceiver);
+        }
+    }
+    
 }

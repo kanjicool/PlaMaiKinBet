@@ -1,17 +1,24 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Collider))] // บังคับว่า GameObject นี้ต้องมี Collider
+[RequireComponent(typeof(Collider))]
 public class BossInteraction : MonoBehaviour
 {
     [Header("UI Prompt (Optional)")]
-    [Tooltip("ลาก GameObject หรือ Canvas ที่เขียนว่า 'กด E เพื่อส่งปลา' มาใส่ตรงนี้")]
     public GameObject interactPromptUI;
+
+    [Header("Boss Reference")]
+    public BossRobotController bossController;
 
     private bool isPlayerNear = false;
 
     private void Start()
     {
+        if (bossController == null)
+        {
+            bossController = GetComponentInParent<BossRobotController>();
+        }
+
         if (interactPromptUI != null)
         {
             interactPromptUI.SetActive(false);
@@ -23,6 +30,15 @@ public class BossInteraction : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerNear = true;
+
+            Debug.Log($"bossController : {bossController}");
+
+            if (bossController != null)
+            {
+                bossController.isPlayerNear = true;
+                bossController.interactPlayerTransform = other.transform;
+            }
+
 
             if (interactPromptUI != null)
             {
@@ -43,6 +59,13 @@ public class BossInteraction : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerNear = false;
+
+            if (bossController != null)
+            {
+                bossController.isPlayerNear = false;
+                bossController.interactPlayerTransform = null;
+            }
+
 
             if (interactPromptUI != null)
             {
