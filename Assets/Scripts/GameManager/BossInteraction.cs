@@ -39,18 +39,28 @@ public class BossInteraction : MonoBehaviour
                 bossController.interactPlayerTransform = other.transform;
             }
 
-
             if (interactPromptUI != null)
             {
                 interactPromptUI.SetActive(true);
                 UpdatePromptUI();
-
             }
 
-            if (GameLoopManager.Instance != null && GameLoopManager.Instance.currentQuestFish != null)
+            // --- ส่วนที่แก้ไข ---
+            // เปลี่ยนจากการดึง currentQuestFish ตัวเดียว มาเป็นการวนลูปเอาชื่อปลาทั้งหมดใน List มาแสดง
+            if (GameLoopManager.Instance != null && GameLoopManager.Instance.currentQuests.Count > 0)
             {
-                Debug.Log($"[Boss] เข้าใกล้บอสแล้ว! กด 'E' เพื่อส่ง {GameLoopManager.Instance.currentQuestFish.fishName}");
+                string questList = "";
+                foreach (var quest in GameLoopManager.Instance.currentQuests)
+                {
+                    questList += $"{quest.fish.fishName} ({quest.amount} ตัว), ";
+                }
+
+                // ตัดลูกน้ำอันสุดท้ายออกเพื่อความสวยงาม
+                questList = questList.TrimEnd(',', ' ');
+
+                Debug.Log($"[Boss] เข้าใกล้บอสแล้ว! กด 'E' เพื่อส่ง: {questList}");
             }
+            // -------------------
         }
     }
 
@@ -65,7 +75,6 @@ public class BossInteraction : MonoBehaviour
                 bossController.isPlayerNear = false;
                 bossController.interactPlayerTransform = null;
             }
-
 
             if (interactPromptUI != null)
             {
@@ -85,6 +94,7 @@ public class BossInteraction : MonoBehaviour
             return;
         }
 
+        // ตรวจสอบการกดปุ่ม E
         if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
         {
             if (GameLoopManager.Instance != null)

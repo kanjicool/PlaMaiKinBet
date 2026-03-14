@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-// เอาไว้กำหนดน้ำหนักว่าแต่ละระดับ โอกาสออกเป็นตัวเลขเท่าไหร่
+
 [System.Serializable]
 public class RarityWeightRate
 {
@@ -47,13 +47,20 @@ public class IslandFishSpawner : MonoBehaviour
         return available;
     }
 
-    public void SpawnEcosystem(FishData questFish, int guaranteedQuestAmount)
+    public void SpawnEcosystem(List<QuestTarget> currentQuests)
     {
         if (spawnPoints.Count == 0) return;
 
-        int questFishSpawned = 0;
+        ClearOldFishes(); // ล้างของเก่าออกก่อน
 
-        // สลับจุดเกิด
+        // เก็บข้อมูลว่าเราเกิดปลาแต่ละเควสต์ไปกี่ตัวแล้ว
+        Dictionary<FishData, int> questFishSpawnedCount = new Dictionary<FishData, int>();
+        foreach (var quest in currentQuests)
+        {
+            questFishSpawnedCount[quest.fish] = 0;
+        }
+
+        // สลับจุดเกิด (Shuffle)
         List<FishSpawnPoint> shuffledPoints = new List<FishSpawnPoint>(spawnPoints);
         for (int i = 0; i < shuffledPoints.Count; i++)
         {
@@ -63,6 +70,7 @@ public class IslandFishSpawner : MonoBehaviour
             shuffledPoints[randomIndex] = temp;
         }
 
+        // เริ่มวนลูปเกิดปลาตามจุดต่างๆ
         foreach (FishSpawnPoint point in shuffledPoints)
         {
             if (point.allowedFish == null || point.allowedFish.Length == 0) continue;
@@ -74,14 +82,20 @@ public class IslandFishSpawner : MonoBehaviour
                 for (int i = 0; i < amountToSpawn; i++)
                 {
                     FishData fishToSpawn = null;
-                    bool canSpawnQuestFish = System.Array.Exists(point.allowedFish, e => e.fishData == questFish);
 
-                    if (canSpawnQuestFish && questFishSpawned < guaranteedQuestAmount)
+                    foreach (var quest in currentQuests)
                     {
-                        fishToSpawn = questFish;
-                        questFishSpawned++;
+                        bool canSpawnThisQuestFish = System.Array.Exists(point.allowedFish, e => e.fishData == quest.fish);
+
+                        if (canSpawnThisQuestFish && questFishSpawnedCount[quest.fish] < (quest.amount))
+                        {
+                            fishToSpawn = quest.fish;
+                            questFishSpawnedCount[quest.fish]++;
+                            break; 
+                        }
                     }
-                    else
+
+                    if (fishToSpawn == null)
                     {
                         fishToSpawn = GetRandomFishByRarity(point);
                     }
@@ -91,19 +105,21 @@ public class IslandFishSpawner : MonoBehaviour
             }
         }
 
-        // Safety net โควต้าเควสต์
-        int safetyNet = 0;
-        while (questFishSpawned < guaranteedQuestAmount && safetyNet < 50)
+        foreach (var quest in currentQuests)
         {
-            FishSpawnPoint randomPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
-            bool canSpawn = System.Array.Exists(randomPoint.allowedFish, e => e.fishData == questFish);
-
-            if (canSpawn)
+            int safetyNet = 0;
+            while (questFishSpawnedCount[quest.fish] < quest.amount && safetyNet < 50)
             {
-                SpawnFish(randomPoint, questFish);
-                questFishSpawned++;
+                FishSpawnPoint randomPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
+                bool canSpawn = System.Array.Exists(randomPoint.allowedFish, e => e.fishData == quest.fish);
+
+                if (canSpawn)
+                {
+                    SpawnFish(randomPoint, quest.fish);
+                    questFishSpawnedCount[quest.fish]++;
+                }
+                safetyNet++;
             }
-            safetyNet++;
         }
     }
 
@@ -168,4 +184,39 @@ public class IslandFishSpawner : MonoBehaviour
 
         spawnedFish.transform.SetParent(this.transform);
     }
+
+    public List<FishSpawnEntry> GetAvailableFishEntries()
+    {
+        List<FishSpawnEntry> available = new List<FishSpawnEntry>();
+        List<FishData> trackedFishes = new List<FishData>();
+
+        FishSpawnPoint[] points = GetComponentsInChildren<FishSpawnPoint>();
+        foreach (FishSpawnPoint point in points)
+        {
+            if (point.allowedFish == null) continue;
+            foreach (FishSpawnEntry entry in point.allowedFish)
+            {
+                if (entry.fishData != null && !trackedFishes.Contains(entry.fishData))
+                {
+                    available.Add(entry);
+                    trackedFishes.Add(entry.fishData);
+                }
+            }
+        }
+        return available;
+    }
+
+    public void ClearOldFishes()
+    {
+        foreach (Transform child in transform)
+        {
+            FishController fish = child.GetComponent<FishController>();
+            if (fish != null)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+    }
+
+
 }

@@ -1,8 +1,17 @@
-﻿using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum BossState { SLEEPING, HUNGRY, ANGRY, RAMPAGING }
+
+[System.Serializable]
+public class QuestTarget
+{
+    public FishData fish;
+    public int amount;
+}
 
 public class GameLoopManager : MonoBehaviour
 {
@@ -11,17 +20,18 @@ public class GameLoopManager : MonoBehaviour
     [Header("References")]
     public Transform player;
     public Transform hubIsland;
-    public GameObject[] islandPrefabs;
     public CompassDirection compass;
 
+    [Header("World Islands")]
+    public IslandFishSpawner[] sceneIslands;
+
     [Header("Quest System & UI")]
-    public FishData currentQuestFish;
-    public int currentQuestAmount = 1; // จำนวนปลาที่ต้องการ
-    public TextMeshProUGUI bossQuestText; // ข้อความ Canvas ลอยหน้าบอส
+    public List<QuestTarget> currentQuests = new List<QuestTarget>();
+    public TextMeshProUGUI bossQuestText;
 
     [Header("Wave & Progression")]
     public int currentWave = 1;
-    public GameObject currentQuestIsland;
+    public IslandFishSpawner currentQuestIsland;
     private int lastIslandIndex = -1;
 
     [Header("Boss State Machine")]
@@ -73,21 +83,29 @@ public class GameLoopManager : MonoBehaviour
                 UpdateBossUI("Zzz...");
                 break;
             case BossState.HUNGRY:
-                UpdateBossUI($"HUNGRY! >>> {currentQuestFish?.fishName} : {currentQuestAmount}");
+                UpdateBossUI($"HUNGRY!\n{GetQuestString()}");
                 break;
             case BossState.ANGRY:
-                UpdateBossUI($"<color=red>ANGRY!</color>\n {currentQuestFish?.fishName} {currentQuestAmount}");
+                UpdateBossUI($"<color=red>ANGRY!</color>\n{GetQuestString()}");
                 break;
             case BossState.RAMPAGING:
                 UpdateBossUI("<color=red>ERROR! TARGET LOCKED!</color>");
-
                 if (bossRobot != null && player != null)
                 {
                     bossRobot.StartRampage(player);
                 }
-
                 break;
         }
+    }
+
+    private string GetQuestString()
+    {
+        string text = "";
+        foreach (var quest in currentQuests)
+        {
+            text += $"- {quest.fish.fishName} : {quest.amount} ตัว\n";
+        }
+        return text;
     }
 
     public void UpdateBossUI(string message)
@@ -105,82 +123,115 @@ public class GameLoopManager : MonoBehaviour
 
     public void TryFeedBoss()
     {
-        if (currentQuestFish == null) return;
+        if (currentQuests.Count == 0) return;
 
         PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
         if (inventory == null) return;
 
-        int currentAmount = inventory.GetItemCount(currentQuestFish.fishItemData);
+        bool hasAllItems = true;
+        string missingText = "Still not enough!";
 
-        if (currentAmount >= currentQuestAmount)
+        foreach (var quest in currentQuests)
         {
-            Debug.Log($"ให้อาหารบอสสำเร็จ!");
+            int currentAmount = inventory.GetItemCount(quest.fish.fishItemData);
+            if (currentAmount < quest.amount)
+            {
+                hasAllItems = false;
+                missingText += $"You're still missing {quest.fish.fishName} : {quest.amount - currentAmount}\n";
+            }
+        }
 
-            inventory.ConsumeItems(currentQuestFish.fishItemData, currentQuestAmount);
+        if (hasAllItems)
+        {
+            Debug.Log("ให้อาหารบอสสำเร็จ!");
+            foreach (var quest in currentQuests)
+            {
+                inventory.ConsumeItems(quest.fish.fishItemData, quest.amount);
+            }
 
             ChangeBossState(BossState.SLEEPING);
 
-            if (currentQuestIsland != null) Destroy(currentQuestIsland);
-
             currentWave++;
-            Invoke("StartNextWave", 3f); // หน่วงเวลา 3 วินาทีก่อนเริ่ม Wave ใหม่ ให้ผู้เล่นได้พักหายใจ
+            Invoke("StartNextWave", 3f);
         }
         else
         {
-            Debug.Log($"ของไม่พอ! ตอนนี้มี {currentAmount}/{currentQuestAmount} ตัว");
-            UpdateBossUI($"ยังไม่พอ!\nต้องการ: {currentQuestFish.fishName}\nขาดอีก: {currentQuestAmount - currentAmount} ตัว");
+            Debug.Log("ของไม่พอ!");
+            UpdateBossUI(missingText);
         }
     }
     #endregion
 
 
-    #region Wave & Radial Spawning
+    #region Wave Generation
     public void StartNextWave()
     {
-        if (islandPrefabs == null || islandPrefabs.Length == 0) return;
+        if (sceneIslands == null || sceneIslands.Length == 0)
+        {
+            Debug.LogError("ยังไม่ได้ลาก Scene Islands ใส่ใน GameLoopManager!");
+            return;
+        }
 
-        int randomIslandIndex = Random.Range(0, islandPrefabs.Length);
-        if (islandPrefabs.Length > 1 && randomIslandIndex == lastIslandIndex)
-            randomIslandIndex = (randomIslandIndex + Random.Range(1, islandPrefabs.Length)) % islandPrefabs.Length;
+        int randomIslandIndex = Random.Range(0, sceneIslands.Length);
+        if (sceneIslands.Length > 1 && randomIslandIndex == lastIslandIndex)
+        {
+            randomIslandIndex = (randomIslandIndex + Random.Range(1, sceneIslands.Length)) % sceneIslands.Length;
+        }
+
         lastIslandIndex = randomIslandIndex;
+        currentQuestIsland = sceneIslands[randomIslandIndex];
 
-        GameObject selectedIslandPrefab = islandPrefabs[randomIslandIndex];
+        List<FishSpawnEntry> availableFish = currentQuestIsland.GetAvailableFishEntries();
+        if (availableFish.Count == 0) return;
 
-        IslandFishSpawner spawnerPrefab = selectedIslandPrefab.GetComponent<IslandFishSpawner>();
-        System.Collections.Generic.List<FishData> availableFishOnIsland = spawnerPrefab.GetAvailableFishOnIsland();
+        for (int i = 0; i < availableFish.Count; i++)
+        {
+            FishSpawnEntry temp = availableFish[i];
+            int rand = Random.Range(i, availableFish.Count);
+            availableFish[i] = availableFish[rand];
+            availableFish[rand] = temp;
+        }
 
-        if (availableFishOnIsland.Count == 0) return;
+        currentQuests.Clear();
 
-        // บอสสุ่มชนิดปลา และ สุ่มจำนวน (เช่น Wave ท้ายๆ อาจจะขอ 2-4 ตัว)
-        currentQuestFish = availableFishOnIsland[Random.Range(0, availableFishOnIsland.Count)];
+        int typesRequired = 1;
+        if (currentWave >= 4) typesRequired = 2;
+        if (currentWave >= 9) typesRequired = 3;
 
-        // คำนวณความยาก: ยิ่ง Wave ลึก ยิ่งขอจำนวนเยอะขึ้น (ปรับได้ตามชอบ)
-        int minFish = 1 + (currentWave / 3);
-        int maxFish = 3 + (currentWave / 2);
-        currentQuestAmount = Random.Range(minFish, maxFish);
+        typesRequired = Mathf.Min(typesRequired, availableFish.Count);
 
-        // รีเซ็ตสถานะบอส และอัปเดตป้ายเควสต์
+        for (int i = 0;i < typesRequired;i++)
+        {
+            FishSpawnEntry entry = availableFish[i];
+
+            int baseAmount = 1;
+            switch (entry.rarity)
+            {
+                case FishRarity.Common: baseAmount = Random.Range(2, 5); break;     
+                case FishRarity.Uncommon: baseAmount = Random.Range(1, 3); break;
+                case FishRarity.Rare: baseAmount = 1; break;                        
+                case FishRarity.Epic: baseAmount = 1; break;
+                case FishRarity.Legendary: baseAmount = 1; break;
+            }
+
+            int waveMultiplier = (currentWave / 3);
+            int finalAmount = baseAmount + waveMultiplier;
+
+            currentQuests.Add(new QuestTarget
+            {
+                fish = entry.fishData,
+                amount = finalAmount
+            });
+        }
+
+        if (currentQuestIsland != null)
+        {
+            currentQuestIsland.SpawnEcosystem(currentQuests);
+        }
+
         bossState = BossState.SLEEPING;
         daysSinceFed = 0f;
-        UpdateBossUI($"{currentQuestFish.fishName} : {currentQuestAmount}");
-
-        float minDist = 400f, maxDist = 600f;
-        if (currentWave >= 4 && currentWave <= 6) { minDist = 600f; maxDist = 900f; }
-        else if (currentWave >= 7) { minDist = 900f; maxDist = 1200f; }
-
-        float currentSpawnDistance = Random.Range(minDist, maxDist);
-        float randomAngle = Random.Range(0f, 360f);
-        Vector3 spawnDirection = Quaternion.Euler(0, randomAngle, 0) * Vector3.forward;
-        Vector3 spawnPos = hubIsland.position + (spawnDirection.normalized * currentSpawnDistance);
-        spawnPos.y = 0;
-
-        currentQuestIsland = Instantiate(selectedIslandPrefab, spawnPos, Quaternion.identity);
-
-        IslandFishSpawner spawnedIslandScript = currentQuestIsland.GetComponent<IslandFishSpawner>();
-        if (spawnedIslandScript != null)
-        {
-            spawnedIslandScript.SpawnEcosystem(currentQuestFish, currentQuestAmount + 2);
-        }
+        UpdateBossUI($"{GetQuestString()}");
 
         if (compass != null) compass.SetTarget(currentQuestIsland.transform);
     }
