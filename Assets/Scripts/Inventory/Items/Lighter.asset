@@ -22,7 +22,7 @@ MonoBehaviour:
   baitTier: 1
   biteChanceBonus: 10
   escapePowerReduction: 0
-  holdAnimID: 6
+  holdAnimID: 4
   equipDelay: 0.5
   holdPositionOffset: {x: 0, y: 0, z: 0}
   holdRotationOffset: {x: 0, y: 0, z: 0}
