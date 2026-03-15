@@ -9,15 +9,13 @@ public class QuestSlotUI : MonoBehaviour
 
     public void SetupSlot(Sprite icon, string nameAndAmount)
     {
-        if (fishIcon != null)
+        if (fishIcon != null && fishText != null)
         {
             fishIcon.sprite = icon;
-            fishIcon.enabled = (icon != null); // ป้องกันบั๊กกรณีลืมใส่รูปใน FishData
-        }
-
-        if (fishText != null)
-        {
+            fishIcon.enabled = (icon != null);
+        
             fishText.text = nameAndAmount;
+    
         }
     }
 }

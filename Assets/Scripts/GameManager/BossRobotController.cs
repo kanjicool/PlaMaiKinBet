@@ -84,10 +84,7 @@ public class BossRobotController : MonoBehaviour
                     transform.rotation = originalHubRotation; 
                     currentPhase = BossPhase.Idle;
 
-                    if (GameLoopManager.Instance != null)
-                    {
-                        GameLoopManager.Instance.ResetBossState();
-                    }
+
                 }
                 break;
 
@@ -115,6 +112,11 @@ public class BossRobotController : MonoBehaviour
 
             currentPhase = BossPhase.Returning;
             targetPlayer = null;
+
+            if (GameLoopManager.Instance != null)
+            {
+                GameLoopManager.Instance.ResetBossState();
+            }
         }
     }
 }

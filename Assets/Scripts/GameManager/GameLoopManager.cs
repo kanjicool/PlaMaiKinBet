@@ -45,9 +45,18 @@ public class GameLoopManager : MonoBehaviour
     public List<QuestTarget> currentQuests = new List<QuestTarget>();
     public TextMeshProUGUI bossQuestText;
 
+    [Header("UI Layout Settings")]
+    [Tooltip("HUNGRY, ANGRY")]
+    public Vector2 textPosWithSlots = new Vector2(0, 100);
+    [Tooltip("SLEEPING, RAMPAGING")]
+    public Vector2 textPosCentered = new Vector2(0, 0);
+
     [Header("Quest Slots UI")]
     public Transform questSlotsContainer; // GameObject ที่ติด Layout Group
     public GameObject questSlotPrefab;    // Prefab ที่มีสคริปต์ QuestSlotUI
+    public GameObject scrollViewObject;
+
+
 
     [Header("Wave & Progression")]
     public int currentWave = 1;
@@ -114,16 +123,22 @@ public class GameLoopManager : MonoBehaviour
         {
             case BossState.SLEEPING:
                 daysSinceFed = 0f;
-                UpdateQuestUI("Zzz...", false);
+                UpdateQuestUI("...Zzz...", false);
+                if (ScreenEffectManager.Instance != null) ScreenEffectManager.Instance.ClearBossPressure();
                 break;
             case BossState.HUNGRY:
-                UpdateQuestUI("HUNGRY!", true);
+                UpdateQuestUI(">:( HUNGRY!", true);
+                if (ScreenEffectManager.Instance != null) ScreenEffectManager.Instance.ClearBossPressure();
                 break;
             case BossState.ANGRY:
                 UpdateQuestUI("<color=red>ANGRY!</color>", true);
+                if (ScreenEffectManager.Instance != null) ScreenEffectManager.Instance.TriggerBossAngry();
                 break;
             case BossState.RAMPAGING:
                 UpdateQuestUI("<color=red>ERROR! TARGET LOCKED!</color>", false);
+
+                if (ScreenEffectManager.Instance != null) ScreenEffectManager.Instance.TriggerBossRampage();
+
                 if (bossRobot != null && player != null)
                 {
                     bossRobot.StartRampage(player);
@@ -137,6 +152,12 @@ public class GameLoopManager : MonoBehaviour
         if (bossQuestText != null)
         {
             bossQuestText.text = mainMessage;
+
+            RectTransform textRect = bossQuestText.GetComponent<RectTransform>();
+            if (textRect != null)
+            {
+                textRect.anchoredPosition = showFishSlots ? textPosWithSlots : textPosCentered;
+            }
         }
 
         if (questSlotsContainer != null)
@@ -146,8 +167,13 @@ public class GameLoopManager : MonoBehaviour
                 Destroy(child.gameObject);
             }
 
+            scrollViewObject.SetActive(false);
+
+
             if (showFishSlots && questSlotPrefab != null)
             {
+                scrollViewObject.SetActive(true);
+
                 foreach (var quest in currentQuests)
                 {
                     GameObject slotObj = Instantiate(questSlotPrefab, questSlotsContainer);
@@ -164,8 +190,6 @@ public class GameLoopManager : MonoBehaviour
             }
         }
     }
-
-
 
     public void ResetBossState()
     {
