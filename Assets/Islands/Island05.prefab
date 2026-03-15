@@ -103,11 +103,11 @@ MonoBehaviour:
   - rarity: 0
     spawnWeight: 100
   - rarity: 1
-    spawnWeight: 60
+    spawnWeight: 40
   - rarity: 2
-    spawnWeight: 30
+    spawnWeight: 20
   - rarity: 3
-    spawnWeight: 10
+    spawnWeight: 5
 --- !u!1 &877487687050909417
 GameObject:
   m_ObjectHideFlags: 0

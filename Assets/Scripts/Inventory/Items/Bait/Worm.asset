@@ -20,7 +20,7 @@ MonoBehaviour:
   isFishingRod: 0
   isBait: 1
   baitTier: 1
-  biteChanceBonus: 20
+  biteChanceBonus: 70
   escapePowerReduction: 0
   holdAnimID: 1
   equipDelay: 0.5
