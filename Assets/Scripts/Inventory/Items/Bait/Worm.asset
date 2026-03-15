@@ -19,11 +19,15 @@ MonoBehaviour:
   maxStock: -1
   isFishingRod: 0
   isBait: 1
+  baitTier: 1
+  biteChanceBonus: 20
+  escapePowerReduction: 0
   holdAnimID: 1
   equipDelay: 0.5
   holdPositionOffset: {x: 0, y: 0, z: 0}
   holdRotationOffset: {x: 0, y: 0, z: 0}
   equipSound: {fileID: 0}
+  attackSound: {fileID: 0}
   attackHoldPositionOffset: {x: 0, y: 0, z: 0}
   attackHoldRotationOffset: {x: 0, y: 0, z: 0}
   attackDamage: 20
@@ -38,3 +42,12 @@ MonoBehaviour:
   bulletSpread: 0
   fireRate: 0.2
   hitEffectPrefab: {fileID: 0}
+  isConsumable: 0
+  useItemHoldTime: 2
+  healAmount: 20
+  useSound: {fileID: 0}
+  isFlashlight: 0
+  lightIntensity: 10
+  lightRange: 30
+  lightColor: {r: 1, g: 1, b: 1, a: 1}
+  toggleSound: {fileID: 0}
