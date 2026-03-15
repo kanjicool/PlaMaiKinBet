@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -12,6 +13,11 @@ public class PlayerCombat : MonoBehaviour
     private float currentHealth;
     public Slider healthSlider;
     public Transform spawnPoint;
+
+    [Header("Life System")]
+    public int maxLives = 3;
+    private int currentLives;
+    public TextMeshProUGUI livesText;
 
     [Header("Damge Effect")]
     public Renderer[] playerRenderers;
@@ -60,6 +66,10 @@ public class PlayerCombat : MonoBehaviour
         if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
 
         inputActions = new InputSystem_Actions();
+
+        currentLives = maxLives;
+        UpdateLivesUI();
+
         currentHealth = maxHealth;
         if (healthSlider != null)
         {
@@ -384,6 +394,17 @@ public class PlayerCombat : MonoBehaviour
 
     private void DieAndRespawn()
     {
+        currentLives--;
+        UpdateLivesUI();
+
+        if (UIManager.Instance != null && GameLoopManager.Instance != null)
+        {
+            UIManager.Instance.ShowDeathScreen(GameLoopManager.Instance.currentWave, currentLives);
+        }
+    }
+
+    public void ExecuteRespawn()
+    {
         BoatInteract[] allBoats = FindObjectsByType<BoatInteract>(FindObjectsSortMode.None);
         foreach (BoatInteract boat in allBoats)
         {
@@ -403,10 +424,21 @@ public class PlayerCombat : MonoBehaviour
 
         if (spawnPoint != null)
         {
+            // วาร์ปกลับจุดเกิด
             transform.position = spawnPoint.position;
             transform.rotation = spawnPoint.rotation;
         }
     }
+
+
+    private void UpdateLivesUI()
+    {
+        if (livesText != null)
+        {
+            livesText.text = $"LIVES: {currentLives}";
+        }
+    }
+
 
     // Animation Events
     public void UseSlashTransform()
