@@ -21,7 +21,7 @@ MonoBehaviour:
   isBait: 1
   baitTier: 7
   biteChanceBonus: 100
-  escapePowerReduction: 15
+  escapePowerReduction: 20
   holdAnimID: 1
   equipDelay: 0.5
   holdPositionOffset: {x: 0, y: 0, z: 0}

@@ -57,7 +57,10 @@ public class ShopItemUI : MonoBehaviour
     {
         if (iconImage != null) iconImage.sprite = data.icon;
         if (titleText != null) titleText.text = data.itemName;
-        if (priceText != null) priceText.text = "Price : " + data.price;
+
+        // 🌟 ถ้าราคาเป็น 0 ให้โชว์คำว่า Free ถ้าไม่ใช่ก็โชว์ราคาปกติ
+        if (priceText != null) priceText.text = data.price == 0 ? "Free" : "Price : " + data.price;
+
         UpdateStockDisplay();
     }
 
@@ -67,7 +70,7 @@ public class ShopItemUI : MonoBehaviour
         {
             if (isUnlimited)
             {
-                stockText.text = "Stock: ∞"; // หรือใช้คำว่า Unlimited
+                stockText.text = "Stock: Unlimited"; // หรือใช้คำว่า Unlimited
                 stockText.color = Color.black; // เปลี่ยนสีให้ดูพิเศษหน่อย
             }
             else if (currentStock <= 0)
