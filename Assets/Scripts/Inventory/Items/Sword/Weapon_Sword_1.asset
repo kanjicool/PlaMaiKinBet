@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Weapon_Sword_1
   icon: {fileID: -1120898295, guid: 70cc2e48c9d52954fbf60a816de119bc, type: 3}
-  itemPrefab: {fileID: 6994091639069717064, guid: 3200ff734be5fb6438b72e8c7d0f9e86, type: 3}
+  itemPrefab: {fileID: 2675101762664803947, guid: bdaf4828dbab75245ab73d63933654e1, type: 3}
   price: 10
   maxStock: 1
   isFishingRod: 0

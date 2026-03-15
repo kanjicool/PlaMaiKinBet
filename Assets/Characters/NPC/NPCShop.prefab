@@ -3010,6 +3010,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9ed29a2b435b7014a975af26e7b56540, type: 2}
   - {fileID: 11400000, guid: 1012406d9ef0de142964cd06a8ec4e37, type: 2}
   - {fileID: 11400000, guid: 3265fccb004b06f49a0d38d5e38c1268, type: 2}
+  - {fileID: 11400000, guid: 7e45c337c4564d14185ab87fb7f652da, type: 2}
+  - {fileID: 11400000, guid: 0d2f8c8cb35fe5445955d9607323bca0, type: 2}
+  - {fileID: 11400000, guid: 9a43e199cb1597548a1b3ef5383eec28, type: 2}
   amountOfRandomItemsToSell: 15
   restockTimeInMinutes: 10
   countdownText: {fileID: 4900695312402028735}
