@@ -10,6 +10,9 @@ public class LightingManager : MonoBehaviour
     [SerializeField, Range(0, 24)] private float TimeOfDay;
     [SerializeField] private float dayLengthInMinutes = 1f;
 
+    public float GetTime() { return TimeOfDay; }
+    public bool IsNight() { return TimeOfDay >= 18 || TimeOfDay <= 6; }
+
 
     private void Update()
     {
@@ -36,7 +39,6 @@ public class LightingManager : MonoBehaviour
         RenderSettings.ambientLight = Preset.AmbientColor.Evaluate(timePercent);
         RenderSettings.fogColor = Preset.FogColor.Evaluate(timePercent);
 
-        //If the directional light is set then rotate and set it's color, I actually rarely use the rotation because it casts tall shadows unless you clamp the value
         if (DirectionalLight != null)
         {
             DirectionalLight.color = Preset.DirectionalColor.Evaluate(timePercent);
@@ -71,4 +73,6 @@ public class LightingManager : MonoBehaviour
             }
         }
     }
+
+
 }

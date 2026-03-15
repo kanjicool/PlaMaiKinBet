@@ -25,7 +25,8 @@ public class EnemyController : MonoBehaviour
 
     private Color originalColor;
 
-
+    public bool dieAtDawn = false; // ถ้าติ๊กถูก มอนตัวนี้จะตายตอนเช้า
+    private LightingManager lightSystem;
 
     // --- เพิ่มตัวแปรสำหรับระบบยืนพัก ---
     private bool isWaiting = false;
@@ -33,6 +34,23 @@ public class EnemyController : MonoBehaviour
 
     public enum EnemyState { Patrolling, Chasing, Attacking };
     public EnemyState currentState;
+
+    [Header("Optimization")]
+    public float despawnDistance = 70f; // ถ้าห่างจากผู้เล่นเกิน 70 เมตร ให้หายไป
+    private float despawnCheckTimer;
+
+    void Start()
+    {
+        // ค้นหา LightingManager ในฉาก
+        lightSystem = Object.FindFirstObjectByType<LightingManager>();
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(transform.position, out hit, 2.0f, NavMesh.AllAreas))
+        {
+            agent.Warp(hit.position);
+        }
+    }
+
 
     void Awake()
     {
@@ -56,6 +74,28 @@ public class EnemyController : MonoBehaviour
         {
             Debug.LogWarning(gameObject.name + " can not found NavMesh!");
             return;
+        }
+
+        despawnCheckTimer += Time.deltaTime;
+        if (despawnCheckTimer >= 2f)
+        {
+            despawnCheckTimer = 0;
+            if (player != null)
+            {
+                float dist = Vector3.Distance(transform.position, player.position);
+                if (dist > despawnDistance)
+                {
+                    // หายไปเงียบๆ (ไม่เล่นท่าตาย) เพื่อประหยัดทรัพยากร
+                    Destroy(gameObject);
+                }
+            }
+        }
+
+
+            if (dieAtDawn && lightSystem != null && !lightSystem.IsNight())
+        {
+            Debug.Log(gameObject.name + " สลายไปเพราะแสงอาทิตย์!");
+            Die(); // หรือใช้ Destroy(gameObject); ถ้าไม่อยากให้เล่นท่าตาย
         }
 
         // Check Ranges
@@ -207,6 +247,8 @@ public class EnemyController : MonoBehaviour
         Debug.Log(gameObject.name + " has died!");
 
         Destroy(gameObject, 5f);
+        agent.enabled = false;
+        this.enabled = false;
     }
 
     private void OnDrawGizmosSelected()
