@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.EventSystems; // 🌟 1. เพิ่ม EventSystems เพื่อให้รู้จักการคลิก UI
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(LineRenderer))]
 public class FishingRod : MonoBehaviour
@@ -132,20 +132,17 @@ public class FishingRod : MonoBehaviour
     {
         if (!gameObject.activeInHierarchy) return;
 
-        // 🌟 2. ดักว่าถ้าเมาส์กำลังชี้อยู่บน UI (เช่น ลากเหยื่อ หรือกดปุ่มช่องเก็บของ) ให้ยกเลิกการเริ่มชาร์จเบ็ด
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
         {
             return;
         }
 
-        // 🌟 3. ดักอีกชั้นว่าถ้าเปิดหน้าต่างกระเป๋า (Inventory) ค้างอยู่ ก็ไม่ให้เหวี่ยงเบ็ดทะลุกระเป๋า
         PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
         if (inventory != null && inventory.isInventoryOpen)
         {
             return;
         }
 
-        // --- โค้ดชาร์จเหวี่ยงเบ็ดเดิม ---
         if (currentBobberObj != null || currentHookedFish != null)
         {
             CancelFishing();
@@ -181,6 +178,31 @@ public class FishingRod : MonoBehaviour
         if (activeBobber != null)
         {
             activeBobber.OnFishBitten += HandleFishBite;
+
+            PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
+            if (inventory != null)
+            {
+                ItemData baitData = inventory.GetCurrentBaitData();
+
+                // 🌟 ใส่ Debug มาเช็คว่าเจอเหยื่อไหม
+                if (baitData != null)
+                {
+                    Debug.Log("<color=green>คันเบ็ด: เจอเหยื่อชื่อ " + baitData.name + " กำลังจะสร้างโมเดลห้อยทุ่น!</color>");
+
+                    if (baitData.itemPrefab != null)
+                    {
+                        activeBobber.SetBaitVisual(baitData.itemPrefab);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("<color=red>คันเบ็ด: เจอเหยื่อ แต่คุณลืมใส่ Item Prefab ในไฟล์ ItemData ของเหยื่อตัวนี้!</color>");
+                    }
+                }
+                else
+                {
+                    Debug.Log("<color=yellow>คันเบ็ด: ไม่มีเหยื่อในช่อง (Bait Slot ว่างเปล่า)</color>");
+                }
+            }
         }
 
         if (currentBobberObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
@@ -194,6 +216,13 @@ public class FishingRod : MonoBehaviour
     private void HandleFishBite(FishController fish)
     {
         Debug.Log("2. คันเบ็ด (FishingRod) รับทราบจากทุ่น กำลังจะเปิดมินิเกม!");
+
+        // 🌟 หักเหยื่อออกจากช่อง UI ตอนปลากินทันที
+        PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
+        if (inventory != null)
+        {
+            inventory.ConsumeBait();
+        }
 
         currentHookedFish = fish;
 
@@ -250,7 +279,6 @@ public class FishingRod : MonoBehaviour
 
         bool isQuestFish = false;
 
-        // 1. เช็คว่าปลาที่เพิ่งตกได้ อยู่ในรายชื่อเควสต์ที่บอสต้องการไหม
         foreach (var quest in GameLoopManager.Instance.currentQuests)
         {
             if (fish.myData.fishItemData == quest.fish.fishItemData)
@@ -260,7 +288,6 @@ public class FishingRod : MonoBehaviour
             }
         }
 
-        // 2. ถ้าเป็นปลาเควสต์ ให้เช็คต่อว่าตอนนี้เก็บของใน Inventory ครบทุกเควสต์หรือยัง
         if (isQuestFish)
         {
             PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
@@ -274,17 +301,15 @@ public class FishingRod : MonoBehaviour
                 if (currentAmount < quest.amount)
                 {
                     allQuestsCompleted = false;
-                    break; // ขาดแม้แต่ตัวเดียว ก็ถือว่ายังไม่ครบ
+                    break;
                 }
             }
 
-            // 3. ถ้าครบหมดแล้ว ชี้เป้าเข็มทิศกลับไปที่เกาะบอส!
             if (allQuestsCompleted)
             {
                 Debug.Log("ได้ปลาครบตามเควสต์แล้ว! กลับไปหาบอสกันเถอะ!");
                 if (GameLoopManager.Instance.compass != null)
                 {
-                    // ต้องลาก Hub Island กลับไปให้ Compass ชี้
                     GameLoopManager.Instance.compass.SetTarget(GameLoopManager.Instance.hubIsland);
                 }
             }

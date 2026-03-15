@@ -13,9 +13,28 @@ MonoBehaviour:
   m_Name: Tetra
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Tetra
-  icon: {fileID: -1212013111, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
+  icon: {fileID: -839077793, guid: 7e5c7aa6062eb024eb2a2e6466bfdf56, type: 3}
   itemPrefab: {fileID: 8991282864701730590, guid: 1d56dee706b1dcd43b5cdbea56eee4b8, type: 3}
   price: 12
+  maxStock: 1
+  isFishingRod: 0
+  isBait: 0
   holdAnimID: 2
+  equipDelay: 0.5
   holdPositionOffset: {x: 0, y: 0, z: 0}
   holdRotationOffset: {x: 0, y: 0, z: 0}
+  equipSound: {fileID: 0}
+  attackHoldPositionOffset: {x: 0, y: 0, z: 0}
+  attackHoldRotationOffset: {x: 0, y: 0, z: 0}
+  attackDamage: 20
+  attackRange: 100
+  muzzleScale: 0.01
+  shootSound: {fileID: 0}
+  muzzleFlashPrefab: {fileID: 0}
+  bulletTrailPrefab: {fileID: 0}
+  isGun: 0
+  isAutomatic: 0
+  bulletsPerShot: 1
+  bulletSpread: 0
+  fireRate: 0.2
+  hitEffectPrefab: {fileID: 0}

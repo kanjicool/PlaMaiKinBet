@@ -21,11 +21,10 @@ public class PlayerInventory : MonoBehaviour
     public RectTransform selectionHighlight;
     public TextMeshProUGUI goldText;
 
-    // 🌟 ส่วนที่เพิ่มเข้ามาสำหรับระบบ Bait
     [Header("Bait System")]
-    public GameObject baitSlotUI; // ลาก UI GameObject ของปุ่มช่องเหยื่อมาใส่
-    public Image baitIcon;        // ลาก Image ของรูปไอเทมในช่องเหยื่อมาใส่
-    public GameObject currentBaitItem; // เก็บ GameObject ของเหยื่อ
+    public GameObject baitSlotUI;
+    public Image baitIcon;
+    public GameObject currentBaitItem;
 
     private AudioSource audioSource;
     private InputSystem_Actions inputActions;
@@ -51,7 +50,6 @@ public class PlayerInventory : MonoBehaviour
 
     private void AutoSetupSlotUI()
     {
-        // 1. จัดการ Hotbar
         for (int i = 0; i < hotbarIcons.Length; i++)
         {
             if (hotbarIcons[i] != null)
@@ -69,7 +67,6 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        // 2. จัดการ Inventory
         for (int i = 0; i < inventoryIcons.Length; i++)
         {
             if (inventoryIcons[i] != null)
@@ -87,7 +84,6 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        // 🌟 3. จัดการ Bait Slot
         if (baitIcon != null)
         {
             GameObject slotObj = baitIcon.transform.parent.gameObject;
@@ -147,7 +143,6 @@ public class PlayerInventory : MonoBehaviour
     {
         if (goldText != null) goldText.text = "Gold : " + money;
 
-        // 1. อัปเดต Hotbar Icons
         for (int i = 0; i < hotbarIcons.Length; i++)
         {
             if (i < itemSlots.Length && itemSlots[i] != null)
@@ -168,7 +163,6 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        // 2. อัปเดต Inventory Icons
         for (int i = 0; i < inventoryIcons.Length; i++)
         {
             if (i < myItems.Count && myItems[i] != null)
@@ -189,7 +183,6 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        // 🌟 3. อัปเดตระบบ Bait
         bool isHoldingFishingRod = false;
         if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
         {
@@ -225,7 +218,6 @@ public class PlayerInventory : MonoBehaviour
             }
         }
 
-        // 4. อัปเดตตำแหน่ง Highlight
         if (selectionHighlight != null)
         {
             if (currentItemIndex >= 0 && currentItemIndex < hotbarIcons.Length)
@@ -333,10 +325,8 @@ public class PlayerInventory : MonoBehaviour
                 holder.itemData = item;
 
                 spawnedItem.transform.SetParent(handTransform);
-
                 spawnedItem.transform.localPosition = item.holdPositionOffset;
                 spawnedItem.transform.localRotation = Quaternion.Euler(item.holdRotationOffset);
-
                 spawnedItem.SetActive(false);
 
                 itemSlots[i] = spawnedItem;
@@ -497,7 +487,6 @@ public class PlayerInventory : MonoBehaviour
         UpdateInventoryUI();
     }
 
-    // 🌟 ดึงข้อมูล GameObject ให้รองรับช่อง Bait
     public GameObject GetGameObjectFromSlot(SlotUI slot)
     {
         if (slot.slotType == SlotUI.SlotType.Hotbar)
@@ -510,7 +499,6 @@ public class PlayerInventory : MonoBehaviour
         return null;
     }
 
-    // 🌟 เซ็ตข้อมูล GameObject ให้รองรับช่อง Bait
     private void SetGameObjectToSlot(SlotUI slot, GameObject itemObj)
     {
         if (slot.slotType == SlotUI.SlotType.Hotbar)
@@ -757,6 +745,28 @@ public class PlayerInventory : MonoBehaviour
 
             PlayerController ctrl = GetComponent<PlayerController>();
             if (ctrl != null) ctrl.SendMessage("UpdateHoldAnimation", SendMessageOptions.DontRequireReceiver);
+        }
+    }
+
+    // 🌟 1. ดึงข้อมูลเหยื่อปัจจุบัน
+    public ItemData GetCurrentBaitData()
+    {
+        if (currentBaitItem != null)
+        {
+            ItemHolder holder = currentBaitItem.GetComponent<ItemHolder>();
+            if (holder != null) return holder.itemData;
+        }
+        return null;
+    }
+
+    // 🌟 2. ลบเหยื่อออกจากช่อง (กินเหยื่อ)
+    public void ConsumeBait()
+    {
+        if (currentBaitItem != null)
+        {
+            Destroy(currentBaitItem);
+            currentBaitItem = null;
+            UpdateInventoryUI();
         }
     }
 }

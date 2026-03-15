@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishData
   fishName: Tetra
   fishPrefab: {fileID: 2105890581167151376, guid: 16d727ef49b0126409afa0ee267d7995, type: 3}
-  fishIcon: {fileID: -1212013111, guid: 60fb7aeec35bf7041b1c8ab8a33f7897, type: 3}
+  fishIcon: {fileID: -839077793, guid: 7e5c7aa6062eb024eb2a2e6466bfdf56, type: 3}
   fishItemData: {fileID: 11400000, guid: 85799112b7eb3764e8f3b7d2ffb5731a, type: 2}
   escapePower: 2.5
   stamina: 40
