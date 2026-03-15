@@ -16,11 +16,19 @@ MonoBehaviour:
   icon: {fileID: -409693905, guid: 97993459d79f7af4fb71d27e393743ac, type: 3}
   itemPrefab: {fileID: 7271232897234687636, guid: ae97007f409e57b4e91f810d4a991038, type: 3}
   price: 10
+  maxStock: 1
+  isFishingRod: 0
+  isBait: 0
+  baitTier: 1
+  biteChanceBonus: 10
+  escapePowerReduction: 0
   holdAnimID: 4
+  equipDelay: 1.4
   holdPositionOffset: {x: 0.219, y: 0.037, z: -0.091}
-  holdRotationOffset: {x: -15.697, y: -11.24, z: -50.273}
-  attackHoldPositionOffset: {x: 0, y: 0, z: 0}
-  attackHoldRotationOffset: {x: 0, y: 0, z: 0}
+  holdRotationOffset: {x: 12.083, y: 171.324, z: 51.352}
+  equipSound: {fileID: 8300000, guid: 32c913714352a6243811544ce5358578, type: 3}
+  attackHoldPositionOffset: {x: 0.219, y: 0.037, z: -0.091}
+  attackHoldRotationOffset: {x: 4.603, y: 175.585, z: 54.635}
   attackDamage: 15
   attackRange: 50
   muzzleScale: 1
@@ -33,3 +41,7 @@ MonoBehaviour:
   bulletSpread: 0.01
   fireRate: 0.2
   hitEffectPrefab: {fileID: 100002, guid: 99c73c92ac40473459640b165473206f, type: 3}
+  isConsumable: 0
+  useItemHoldTime: 2
+  healAmount: 20
+  useSound: {fileID: 0}

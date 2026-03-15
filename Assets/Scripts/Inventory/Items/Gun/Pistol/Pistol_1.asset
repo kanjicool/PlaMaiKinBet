@@ -16,6 +16,12 @@ MonoBehaviour:
   icon: {fileID: -182245376, guid: 97993459d79f7af4fb71d27e393743ac, type: 3}
   itemPrefab: {fileID: 7901705796515663827, guid: 8a70ff6f0c617b44f8c504e68b433bd0, type: 3}
   price: 10
+  maxStock: 1
+  isFishingRod: 0
+  isBait: 0
+  baitTier: 1
+  biteChanceBonus: 10
+  escapePowerReduction: 0
   holdAnimID: 4
   equipDelay: 1.4
   holdPositionOffset: {x: 0.219, y: 0.037, z: -0.091}
@@ -35,3 +41,7 @@ MonoBehaviour:
   bulletSpread: 0.01
   fireRate: 0.2
   hitEffectPrefab: {fileID: 100002, guid: 99c73c92ac40473459640b165473206f, type: 3}
+  isConsumable: 0
+  useItemHoldTime: 2
+  healAmount: 20
+  useSound: {fileID: 0}

@@ -16,20 +16,32 @@ MonoBehaviour:
   icon: {fileID: -614326659, guid: 97993459d79f7af4fb71d27e393743ac, type: 3}
   itemPrefab: {fileID: 7364701146085601875, guid: 2fee8bc3e0673e9498f68df61554a053, type: 3}
   price: 15
+  maxStock: 1
+  isFishingRod: 0
+  isBait: 0
+  baitTier: 1
+  biteChanceBonus: 10
+  escapePowerReduction: 0
   holdAnimID: 5
-  holdPositionOffset: {x: -0.051, y: 0.009, z: 0.101}
-  holdRotationOffset: {x: -12.832, y: 9.86, z: -123.477}
-  attackHoldPositionOffset: {x: 0, y: 0, z: 0}
-  attackHoldRotationOffset: {x: 0, y: 0, z: 0}
+  equipDelay: 1
+  holdPositionOffset: {x: -0.134, y: -0.135, z: 0.065}
+  holdRotationOffset: {x: 26.943, y: -195.232, z: 64.751}
+  equipSound: {fileID: 8300000, guid: cc45fea8620fd1349b7f32abc94f689a, type: 3}
+  attackHoldPositionOffset: {x: -0.114, y: -0.189, z: 0.092}
+  attackHoldRotationOffset: {x: 23.305, y: -189.321, z: 67.619}
   attackDamage: 20
   attackRange: 100
   muzzleScale: 0.01
-  shootSound: {fileID: 0}
+  shootSound: {fileID: 8300000, guid: 191731b6cf7e1e74d80644aaa73bcccd, type: 3}
   muzzleFlashPrefab: {fileID: 100006, guid: 7e9c50938e32351438a7df9ccad2f2a5, type: 3}
   bulletTrailPrefab: {fileID: 2324235687642853203, guid: 8b46626b2a322744eb580b3012357159, type: 3}
   isGun: 1
   isAutomatic: 0
   bulletsPerShot: 5
   bulletSpread: 0.1
-  fireRate: 0.3
-  hitEffectPrefab: {fileID: 0}
+  fireRate: 1.5
+  hitEffectPrefab: {fileID: 100002, guid: 99c73c92ac40473459640b165473206f, type: 3}
+  isConsumable: 0
+  useItemHoldTime: 2
+  healAmount: 20
+  useSound: {fileID: 0}

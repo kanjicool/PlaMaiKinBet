@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &133574752708076171
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6347855119302440222}
+  m_Layer: 0
+  m_Name: Barrel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6347855119302440222
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133574752708076171}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -0.03876, y: 0, z: 0.00235}
+  m_LocalScale: {x: 0.018115895, y: 0.018115899, z: 0.018115941}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5274265168440609371}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1001 &5673213112315227568
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66,7 +97,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8d213f7e67ed818478258d91432bd74e, type: 3}
       propertyPath: m_Name
-      value: Shotgun_1
+      value: Shotgun_0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8d213f7e67ed818478258d91432bd74e, type: 3}
       propertyPath: m_Layer
@@ -74,7 +105,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8d213f7e67ed818478258d91432bd74e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6347855119302440222}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d213f7e67ed818478258d91432bd74e, type: 3}
       insertIndex: -1
@@ -152,3 +186,8 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.05214978, y: 0.002465336, z: 0.009426807}
   m_Center: {x: -0.011930805, y: -1.7462301e-10, z: -0.00052666414}
+--- !u!4 &5274265168440609371 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8d213f7e67ed818478258d91432bd74e, type: 3}
+  m_PrefabInstance: {fileID: 5673213112315227568}
+  m_PrefabAsset: {fileID: 0}
