@@ -10,25 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 727aee9ad26c6424f9b9db3057cf6887, type: 3}
-  m_Name: FishingRod_Lvl5
+  m_Name: Weapon_Sword_2
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: FishingRod_Lvl5
-  icon: {fileID: 21300000, guid: 3576f495f64574246afa15ee14bf5b85, type: 3}
-  itemPrefab: {fileID: 7552146890612866810, guid: f2d0781b808cc7f4b8bfc42a30eadce0, type: 3}
-  price: 0
+  itemName: Weapon_Sword_2
+  icon: {fileID: -1310369393, guid: 70cc2e48c9d52954fbf60a816de119bc, type: 3}
+  itemPrefab: {fileID: 6994091639069717064, guid: 3200ff734be5fb6438b72e8c7d0f9e86, type: 3}
+  price: 10
   maxStock: 1
-  isFishingRod: 1
+  isFishingRod: 0
   isBait: 0
   baitTier: 1
   biteChanceBonus: 10
   escapePowerReduction: 0
-  holdAnimID: 1
+  holdAnimID: 3
   equipDelay: 0.5
-  holdPositionOffset: {x: 0, y: -0.02, z: -0.008}
-  holdRotationOffset: {x: 0, y: 0, z: 0}
-  equipSound: {fileID: 0}
-  attackHoldPositionOffset: {x: 0, y: 0.219, z: -0.008}
-  attackHoldRotationOffset: {x: 0, y: 0, z: 0}
+  holdPositionOffset: {x: 0.049, y: 0.146, z: 0.244}
+  holdRotationOffset: {x: -1.473, y: 186.928, z: 256.255}
+  equipSound: {fileID: 8300000, guid: 824a9e4f070091643b343ae9b017a12b, type: 3}
+  attackSound: {fileID: 8300000, guid: edfd1dedd6cbcb94293f47607c6165eb, type: 3}
+  attackHoldPositionOffset: {x: 0.049, y: 0.146, z: 0.244}
+  attackHoldRotationOffset: {x: -1.473, y: 186.928, z: 256.255}
   attackDamage: 20
   attackRange: 100
   muzzleScale: 0.01

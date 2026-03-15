@@ -34,6 +34,7 @@ public class ItemData : ScriptableObject
 
     [Header("Audio Settings")]
     public AudioClip equipSound;
+    public AudioClip attackSound;
 
     public Vector3 attackHoldPositionOffset;
     public Vector3 attackHoldRotationOffset;

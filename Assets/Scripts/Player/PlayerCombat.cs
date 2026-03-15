@@ -55,6 +55,8 @@ public class PlayerCombat : MonoBehaviour
     private AudioSource audioSource;
     private Rigidbody rb;
 
+    public AudioClip defaultPunchSound;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -235,6 +237,18 @@ public class PlayerCombat : MonoBehaviour
         nextAttackTime = Time.time + currentHitCooldown;
 
         ApplyMeleeDamage(finalDamage);
+
+        if (audioSource != null)
+        {
+            if (weaponData != null && weaponData.attackSound != null)
+            {
+                audioSource.PlayOneShot(weaponData.attackSound);
+            }
+            else if (defaultPunchSound != null)
+            {
+                audioSource.PlayOneShot(defaultPunchSound);
+            }
+        }
 
         Debug.Log($"โจมตีด้วยท่าที่ {currentComboStep} ทำดาเมจ: {finalDamage}");
     }
