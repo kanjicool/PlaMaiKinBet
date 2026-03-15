@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Worm
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b69f0913b2adc1a4e8470324cc90805a, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -71,6 +75,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b69f0913b2adc1a4e8470324cc90805a, type: 3}
       insertIndex: -1
       addedObject: {fileID: -2379608699770876553}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b69f0913b2adc1a4e8470324cc90805a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8960572030075515257}
   m_SourcePrefab: {fileID: 100100000, guid: b69f0913b2adc1a4e8470324cc90805a, type: 3}
 --- !u!1 &7358068056126544105 stripped
 GameObject:
@@ -90,3 +97,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemHolder
   itemData: {fileID: 11400000, guid: 425720b5c17e75749ab29fc356cc4197, type: 2}
+--- !u!65 &-8960572030075515257
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7358068056126544105}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0023620112, y: 0.0020601186, z: 0.0023123298}
+  m_Center: {x: -0.0000940159, y: 0.0000813428, z: 0.0011647205}

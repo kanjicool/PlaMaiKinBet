@@ -1,9 +1,9 @@
-﻿using System.Collections; // 🌟 เพิ่มบรรทัดนี้เพื่อใช้งาน Coroutine
+﻿using System.Collections; 
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using TMPro;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -336,6 +336,8 @@ public class PlayerInventory : MonoBehaviour
                 holder.itemData = item;
                 spawnedItem.SetActive(false);
 
+                DisableItemPhysics(spawnedItem);
+
                 myItems[emptyInventoryIndex] = spawnedItem;
             }
 
@@ -365,6 +367,8 @@ public class PlayerInventory : MonoBehaviour
                 spawnedItem.transform.localPosition = item.holdPositionOffset;
                 spawnedItem.transform.localRotation = Quaternion.Euler(item.holdRotationOffset);
                 spawnedItem.SetActive(false);
+
+                DisableItemPhysics(spawnedItem);
 
                 itemSlots[i] = spawnedItem;
 
@@ -430,6 +434,8 @@ public class PlayerInventory : MonoBehaviour
                 spawnedFish.transform.localRotation = Quaternion.identity;
                 spawnedFish.SetActive(false);
 
+                DisableItemPhysics(spawnedFish);
+
                 itemSlots[i] = spawnedFish;
                 addedToHotbar = true;
                 break;
@@ -450,6 +456,8 @@ public class PlayerInventory : MonoBehaviour
                 ItemHolder holder = spawnedFish.GetComponent<ItemHolder>() ?? spawnedFish.AddComponent<ItemHolder>();
                 holder.itemData = fishItem;
                 spawnedFish.SetActive(false);
+
+                DisableItemPhysics(spawnedFish);
 
                 myItems[emptyInventoryIndex] = spawnedFish;
             }
@@ -729,6 +737,16 @@ public class PlayerInventory : MonoBehaviour
         if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
         {
             GameObject itemToDrop = itemSlots[currentItemIndex];
+            ItemHolder holder = itemToDrop.GetComponent<ItemHolder>();
+
+            if (holder != null && holder.itemData != null)
+            {
+                if (holder.itemData.isFishingRod)
+                {
+                    return; 
+                }
+            }
+
 
             itemSlots[currentItemIndex] = null;
             currentItemIndex = -1;
@@ -817,9 +835,17 @@ public class PlayerInventory : MonoBehaviour
 
             // 3. (สำคัญ) ลบข้อมูลออกจากระบบ Inventory ของคุณด้วย 
             // สมมติว่าคุณใช้ตัวแปรชื่อ currentEquippedItem หรือคล้ายๆ กันให้เคลียร์เป็น null
-            // และถ้าคุณมี List ในกระเป๋า ก็อย่าลืมสั่ง Remove ออกด้วยครับ
 
             Debug.Log("Item consumed and removed from hand.");
         }
+    }
+
+    private void DisableItemPhysics(GameObject itemObj)
+    {
+        Rigidbody rb = itemObj.GetComponent<Rigidbody>();
+        if (rb != null) Destroy(rb);
+
+        Collider coll = itemObj.GetComponent<Collider>();
+        if (coll != null) coll.enabled = false;
     }
 }

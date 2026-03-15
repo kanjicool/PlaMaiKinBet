@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4707464168367446749}
   - component: {fileID: 3613801326772002860}
   - component: {fileID: -6080779432517736348}
+  - component: {fileID: -923441494830732348}
   m_Layer: 0
   m_Name: First aid kit
   m_TagString: Untagged
@@ -103,3 +104,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemHolder
   itemData: {fileID: 11400000, guid: 1687affa55500274fb2fbb4d8fa04530, type: 2}
+--- !u!65 &-923441494830732348
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 240155180532360570}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2362535, y: 0.12457132, z: 0.2362535}
+  m_Center: {x: -0.0012321472, y: 0.06228566, z: 0.0018358231}
