@@ -13,6 +13,13 @@ public class PlayerCombat : MonoBehaviour
     public Slider healthSlider;
     public Transform spawnPoint;
 
+    [Header("Damge Effect")]
+    public Renderer[] playerRenderers;
+    public Material damageMaterial;
+    public float flashDuration = 0.15f;
+    //private Color[] originalColors;
+    private Material[][] originalMaterials;
+
     [Header("Melee Combat")]
     public float baseAttackDamage = 20f;
     public float attackRange = 0.8f;
@@ -53,6 +60,18 @@ public class PlayerCombat : MonoBehaviour
         {
             healthSlider.maxValue = maxHealth;
             healthSlider.value = currentHealth;
+        }
+
+        if (playerRenderers != null && playerRenderers.Length > 0)
+        {
+            originalMaterials = new Material[playerRenderers.Length][];
+            for (int i = 0; i < playerRenderers.Length; i++)
+            {
+                if (playerRenderers[i] != null)
+                {
+                    originalMaterials[i] = playerRenderers[i].materials;
+                }
+            }
         }
     }
 
@@ -317,6 +336,7 @@ public class PlayerCombat : MonoBehaviour
     {
         currentHealth -= damage;
         if (healthSlider != null) healthSlider.value = currentHealth;
+        StartCoroutine(DamageFlashRoutine());
         if (currentHealth <= 0) DieAndRespawn();
     }
 
@@ -381,5 +401,35 @@ public class PlayerCombat : MonoBehaviour
             if (found != null) return found;
         }
         return null;
+    }
+
+    private IEnumerator DamageFlashRoutine()
+    {
+        if (playerRenderers == null || playerRenderers.Length == 0 || damageMaterial == null) yield break;
+
+        // เปลี่ยนทุกชิ้นส่วนเป็น Material สีแดง
+        for (int i = 0; i < playerRenderers.Length; i++)
+        {
+            if (playerRenderers[i] != null)
+            {
+                Material[] flashMats = new Material[playerRenderers[i].materials.Length];
+                for (int j = 0; j < flashMats.Length; j++)
+                {
+                    flashMats[j] = damageMaterial; // สวมทับสีแดง
+                }
+                playerRenderers[i].materials = flashMats;
+            }
+        }
+
+        yield return new WaitForSeconds(flashDuration);
+
+        // คืนค่า Material เดิม
+        for (int i = 0; i < playerRenderers.Length; i++)
+        {
+            if (playerRenderers[i] != null && originalMaterials[i] != null)
+            {
+                playerRenderers[i].materials = originalMaterials[i];
+            }
+        }
     }
 }
