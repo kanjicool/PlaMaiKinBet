@@ -6,6 +6,10 @@ public class NPCBuyer : MonoBehaviour
     [Header("UI TalkButton")]
     public GameObject interactPrompt;
 
+    [Header("Audio Settings")]
+    public AudioSource audioSource;
+    public AudioClip[] talkSounds; // ใส่เสียงคุยหลายๆ เสียงตรงนี้
+
     private bool isPlayerNear = false;
 
     private void Start()
@@ -20,6 +24,9 @@ public class NPCBuyer : MonoBehaviour
             if (!BuyerManager.instance.dialogueUI.activeSelf)
             {
                 BuyerManager.instance.OpenDialogue();
+
+                PlayRandomTalkSound(); // สุ่มเล่นเสียงคุย
+
                 if (interactPrompt != null) interactPrompt.SetActive(false);
             }
         }
@@ -45,6 +52,15 @@ public class NPCBuyer : MonoBehaviour
             if (interactPrompt != null) interactPrompt.SetActive(false);
 
             BuyerManager.instance.CloseDialogue();
+        }
+    }
+
+    private void PlayRandomTalkSound()
+    {
+        if (audioSource != null && talkSounds != null && talkSounds.Length > 0)
+        {
+            int randomIndex = Random.Range(0, talkSounds.Length);
+            audioSource.PlayOneShot(talkSounds[randomIndex]);
         }
     }
 }

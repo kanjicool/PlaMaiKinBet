@@ -11,6 +11,11 @@ public class ShopItemUI : MonoBehaviour
     public Button buyButton;
     public TextMeshProUGUI buttonText;
 
+    [Header("Audio Settings")]
+    public AudioSource audioSource;
+    public AudioClip buySuccessSound; // เสียงตอนซื้อสำเร็จ
+    public AudioClip buyFailSound;    // เสียงตอนเงินไม่พอ
+
     private int currentStock;
     private bool isUnlimited; // เช็คว่าเป็นไอเทมไม่จำกัดไหม
 
@@ -23,9 +28,19 @@ public class ShopItemUI : MonoBehaviour
         buyButton.onClick.AddListener(() => {
             if (isUnlimited || currentStock > 0)
             {
-                manager.OnBuyButtonClicked(data);
-                if (!isUnlimited) currentStock--;
-                UpdateStockDisplay();
+                // รับค่าจาก Manager ว่าซื้อสำเร็จไหม (เงินพอไหม)
+                bool isSuccess = manager.OnBuyButtonClicked(data);
+
+                if (isSuccess)
+                {
+                    PlaySound(buySuccessSound); // เล่นเสียงซื้อสำเร็จ
+                    if (!isUnlimited) currentStock--; // ลดสต็อกเฉพาะตอนซื้อผ่าน
+                    UpdateStockDisplay();
+                }
+                else
+                {
+                    PlaySound(buyFailSound); // เล่นเสียงเงินไม่พอ/ซื้อไม่สำเร็จ
+                }
             }
         });
     }
@@ -39,9 +54,19 @@ public class ShopItemUI : MonoBehaviour
         buyButton.onClick.AddListener(() => {
             if (isUnlimited || currentStock > 0)
             {
-                manager.OnBuyButtonClicked(data);
-                if (!isUnlimited) currentStock--;
-                UpdateStockDisplay();
+                // รับค่าจาก Bait Manager ว่าซื้อสำเร็จไหม (เงินพอไหม)
+                bool isSuccess = manager.OnBuyButtonClicked(data);
+
+                if (isSuccess)
+                {
+                    PlaySound(buySuccessSound); // เล่นเสียงซื้อสำเร็จ
+                    if (!isUnlimited) currentStock--; // ลดสต็อกเฉพาะตอนซื้อผ่าน
+                    UpdateStockDisplay();
+                }
+                else
+                {
+                    PlaySound(buyFailSound); // เล่นเสียงเงินไม่พอ/ซื้อไม่สำเร็จ
+                }
             }
         });
     }
@@ -58,7 +83,7 @@ public class ShopItemUI : MonoBehaviour
         if (iconImage != null) iconImage.sprite = data.icon;
         if (titleText != null) titleText.text = data.itemName;
 
-        // 🌟 ถ้าราคาเป็น 0 ให้โชว์คำว่า Free ถ้าไม่ใช่ก็โชว์ราคาปกติ
+        // ถ้าราคาเป็น 0 ให้โชว์คำว่า Free ถ้าไม่ใช่ก็โชว์ราคาปกติ
         if (priceText != null) priceText.text = data.price == 0 ? "Free" : "Price : " + data.price;
 
         UpdateStockDisplay();
@@ -70,8 +95,8 @@ public class ShopItemUI : MonoBehaviour
         {
             if (isUnlimited)
             {
-                stockText.text = "Stock: Unlimited"; // หรือใช้คำว่า Unlimited
-                stockText.color = Color.black; // เปลี่ยนสีให้ดูพิเศษหน่อย
+                stockText.text = "Stock: Unlimited";
+                stockText.color = Color.black;
             }
             else if (currentStock <= 0)
             {
@@ -94,6 +119,15 @@ public class ShopItemUI : MonoBehaviour
         {
             buyButton.interactable = true;
             if (buttonText != null) buttonText.text = "Buy";
+        }
+    }
+
+    // ฟังก์ชันสำหรับเล่นเสียง
+    private void PlaySound(AudioClip clip)
+    {
+        if (audioSource != null && clip != null)
+        {
+            audioSource.PlayOneShot(clip);
         }
     }
 }
