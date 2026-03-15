@@ -20,6 +20,11 @@ public class PlayerCombat : MonoBehaviour
     //private Color[] originalColors;
     private Material[][] originalMaterials;
 
+    [Header("Consumable / Healing Settings")]
+    public float useItemHoldTime = 2.0f;
+    private float currentHoldTimer = 0f;
+    private bool isUsingItem = false;
+
     [Header("Melee Combat")]
     public float baseAttackDamage = 20f;
     public float attackRange = 0.8f;
@@ -117,15 +122,52 @@ public class PlayerCombat : MonoBehaviour
             return; 
         }
 
+
+
         // 1 = เบ็ดตกปลา, 2 = ถือปลา (แก้ไขเลขให้ตรงกับเกมของคุณ)
         if (holdType == 1 || holdType == 2)
         {
             return;
         }
 
+        if (heldItem != null && heldItem.isConsumable)
+        {
+            if (inputActions.Player.Attack.IsPressed()) // เช็คว่ากดค้างอยู่ไหม
+            {
+                isUsingItem = true;
+                currentHoldTimer += Time.deltaTime;
+
+                Debug.Log($"กำลังใช้ยา... ({currentHoldTimer:F1}/{useItemHoldTime}s)");
+
+                if (currentHoldTimer >= useItemHoldTime)
+                {
+                    UseConsumable(heldItem);
+                    currentHoldTimer = 0f;
+                    isUsingItem = false;
+                }
+                return; // 🛑 สำคัญ: return ออกไปเลยเพื่อไม่ให้มันไปทำงานส่วน Melee ด้านล่างขณะกดยา
+            }
+            else
+            {
+                if (currentHoldTimer > 0)
+                {
+                    Debug.Log("ยกเลิกการใช้ยา");
+                    currentHoldTimer = 0f;
+                    isUsingItem = false;
+                }
+            }
+        }
+
         // แยกการทำงานระหว่าง ปืน กับ อาวุธระยะประชิด (ดาบ/มือเปล่า)
         if (heldItem != null && heldItem.isGun)
         {
+            if (heldItem.isConsumable)
+            { 
+                Debug.Log("ถือยาาาาาา");
+            }
+
+            Debug.Log("ถือปืนนนนนน");
+
             if (heldItem.isAutomatic && inputActions.Player.Attack.IsPressed())
             {
                 ShootGun(heldItem, holdType);
@@ -430,6 +472,39 @@ public class PlayerCombat : MonoBehaviour
             {
                 playerRenderers[i].materials = originalMaterials[i];
             }
+        }
+    }
+
+    // ===================== HEALING SYSTEM =====================
+    private void UseConsumable(ItemData itemData)
+    {
+        if (currentHealth >= maxHealth)
+        {
+            Debug.Log("เลือดเต็มแล้ว");
+            return;
+        }
+
+        Heal(itemData.healAmount);
+
+        // เล่นเสียงฮีลสำเร็จ
+        if (audioSource != null && itemData.useSound != null)
+            audioSource.PlayOneShot(itemData.useSound);
+
+        // ลบยาออกจากมือ
+        if (inventory != null)
+            inventory.ConsumeHeldItem();
+
+        Debug.Log("ใช้ยาสำเร็จ!");
+    }
+
+    public void Heal(float amount)
+    {
+        currentHealth += amount;
+        currentHealth = Mathf.Min(currentHealth, maxHealth); // ไม่ให้เลือดเกิน Max
+
+        if (healthSlider != null)
+        {
+            healthSlider.value = currentHealth;
         }
     }
 }

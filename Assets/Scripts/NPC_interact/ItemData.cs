@@ -23,7 +23,7 @@ public class ItemData : ScriptableObject
     public float escapePowerReduction = 0f; // ลดความเก่งของปลาในมินิเกม (ทำให้หลุดยากขึ้น)
 
     [Header("Animation Settings")]
-    [Tooltip("0=Bare hands, 1=Holding FishingRob, 2=Holding Fish, 3=Sword Idle, 4=Pistol Aim, 5=Rifle Idle")]
+    [Tooltip("0=Bare hands, 1=Holding FishingRob, 2=Holding Fish, 3=Sword Idle, 4=Pistol Aim, 5=Rifle Idle, 6=items Idle")]
     public int holdAnimID = 1;
 
     public float equipDelay = 0.5f;
@@ -54,4 +54,11 @@ public class ItemData : ScriptableObject
     public float bulletSpread = 0f;
     public float fireRate = 0.2f;
     public GameObject hitEffectPrefab;
+
+    [Header("Consumable / Healing Settings")]
+    public bool isConsumable = false;
+    public float useItemHoldTime = 2.0f;
+    public float healAmount = 20f;
+    public AudioClip useSound;
+
 }

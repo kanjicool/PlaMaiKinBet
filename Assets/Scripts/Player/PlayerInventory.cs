@@ -804,4 +804,22 @@ public class PlayerInventory : MonoBehaviour
             UpdateInventoryUI();
         }
     }
+
+    public void ConsumeHeldItem()
+    {
+        // 1. ดึง GameObject ของที่ถืออยู่ในมืออกมา
+        GameObject heldObject = GetHeldItem();
+
+        if (heldObject != null)
+        {
+            // 2. ทำลายโมเดลยาที่ถืออยู่ทิ้ง
+            Destroy(heldObject);
+
+            // 3. (สำคัญ) ลบข้อมูลออกจากระบบ Inventory ของคุณด้วย 
+            // สมมติว่าคุณใช้ตัวแปรชื่อ currentEquippedItem หรือคล้ายๆ กันให้เคลียร์เป็น null
+            // และถ้าคุณมี List ในกระเป๋า ก็อย่าลืมสั่ง Remove ออกด้วยครับ
+
+            Debug.Log("Item consumed and removed from hand.");
+        }
+    }
 }

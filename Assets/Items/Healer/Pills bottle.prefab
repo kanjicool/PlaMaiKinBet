@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6853924067516821956}
   - component: {fileID: 6045875630119067310}
   - component: {fileID: 5078995123877803837}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,9 @@ GameObject:
   - component: {fileID: 8834669957280182492}
   - component: {fileID: 1847033297288520333}
   - component: {fileID: 5475702351958113233}
-  m_Layer: 0
+  - component: {fileID: 3092101281195985732}
+  - component: {fileID: -4814381755370507309}
+  m_Layer: 10
   m_Name: Pills bottle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,3 +195,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemHolder
   itemData: {fileID: 11400000, guid: 7927e8143220d944da16935ed4a4911f, type: 2}
+--- !u!65 &3092101281195985732
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880203401669702855}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.05063133, y: 0.093357, z: 0.049862124}
+  m_Center: {x: 0.000003138557, y: 0.0466785, z: -0.0007749414}
+--- !u!54 &-4814381755370507309
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880203401669702855}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
