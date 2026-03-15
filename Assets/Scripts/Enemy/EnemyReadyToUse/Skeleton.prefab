@@ -109,7 +109,9 @@ MonoBehaviour:
   enemyRenderer: {fileID: 6421653096063340063}
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
+  dieAtDawn: 1
   currentState: 0
+  despawnDistance: 70
 --- !u!95 &8149956329320789867
 Animator:
   serializedVersion: 7
@@ -299,7 +301,9 @@ MonoBehaviour:
   enemyRenderer: {fileID: 6421653096063340063}
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
+  dieAtDawn: 0
   currentState: 0
+  despawnDistance: 70
 --- !u!95 &5005241303467561560
 Animator:
   serializedVersion: 7
