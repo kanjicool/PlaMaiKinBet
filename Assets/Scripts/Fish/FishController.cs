@@ -19,7 +19,6 @@ public class FishController : MonoBehaviour
     private float nibbleTimer = 0f;
     private Vector3 baitOffset;
 
-
     [Header("Detection")]
     public LayerMask scareLayer;
     public string baitTag = "Bait";
@@ -99,7 +98,7 @@ public class FishController : MonoBehaviour
                 {
                     currentState = FishState.Wander;
                     currentBait = null;
-                    SetNewTargetPosition(); 
+                    SetNewTargetPosition();
                 }
                 break;
 
@@ -182,28 +181,48 @@ public class FishController : MonoBehaviour
     {
         if (currentBait != null && currentBait.TryGetComponent<Bobber>(out Bobber bobber))
         {
-            if (bobber.ReceiveFishBite(this))
-            {
-                currentState = FishState.HookedAndWait;
-                if (anim != null) anim.SetTrigger("isHooked");
+            // 🌟 1. คำนวณโอกาสกินเบ็ด (Bite Chance)
+            float biteChance = 5f; // โอกาสกินเบ็ดพื้นฐาน (เบ็ดเปล่าๆ ไม่ใส่เหยื่อ = 5%)
 
-                hookPosition = transform.position;
-                struggleTarget = hookPosition;
-                struggleTimer = 0f;
-                bobberRb = currentBait.GetComponent<Rigidbody>();
+            // 🌟 2. ถ้ามีเหยื่อห้อยอยู่ ดึงโบนัสมาบวกเพิ่ม
+            if (bobber.attachedBaitData != null)
+            {
+                biteChance += bobber.attachedBaitData.biteChanceBonus;
+            }
+
+            // 🌟 3. สุ่มตัวเลข 0-100 เพื่อเช็คว่าปลาจะงับไหม
+            if (UnityEngine.Random.Range(0f, 100f) <= biteChance)
+            {
+                // ---- ปลากินเบ็ด! ----
+                if (bobber.ReceiveFishBite(this))
+                {
+                    currentState = FishState.HookedAndWait;
+                    if (anim != null) anim.SetTrigger("isHooked");
+
+                    hookPosition = transform.position;
+                    struggleTarget = hookPosition;
+                    struggleTimer = 0f;
+                    bobberRb = currentBait.GetComponent<Rigidbody>();
+                }
+                else
+                {
+                    currentState = FishState.Wander;
+                    currentBait = null;
+                }
             }
             else
             {
+                // ---- ปลาเมินเหยื่อ (ไม่กิน) ----
+                Debug.Log($"ปลา {myData.name} เมินเบ็ด! เพราะเหยื่อไม่ดึงดูดพอ (โอกาสปัจจุบัน: {biteChance}%)");
                 currentState = FishState.Wander;
                 currentBait = null;
+                SetNewTargetPosition(); // สั่งให้ปลาว่ายหนีไปที่อื่น
             }
         }
         else
         {
             currentState = FishState.Wander;
         }
-
-
     }
 
     public void StartReeling(Transform target, System.Action onComplete)
@@ -265,7 +284,7 @@ public class FishController : MonoBehaviour
             float randomDepth = Random.Range(-0.5f, -2.5f);
 
             struggleTarget = EnsureUnderwater(hookPosition + new Vector3(rand.x, randomDepth, rand.y));
-            struggleTimer = Random.Range(0.15f, 0.4f); 
+            struggleTimer = Random.Range(0.15f, 0.4f);
         }
 
         Vector3 direction = (struggleTarget - transform.position).normalized;
@@ -289,8 +308,6 @@ public class FishController : MonoBehaviour
                 bobberRb.rotation = Quaternion.Slerp(bobberRb.rotation, Quaternion.LookRotation(pullDir), Time.deltaTime * 10f);
             }
 
-
-
             Vector3 pullDirection = (transform.position - currentBait.position).normalized;
 
             float pullForce = myData.escapePower * 3f;
@@ -302,12 +319,9 @@ public class FishController : MonoBehaviour
     private void GenerateBaitOffset()
     {
         Vector2 rand = UnityEngine.Random.insideUnitCircle * 0.8f;
-
         float randomDepth = UnityEngine.Random.Range(-0.1f, -0.6f);
-
         baitOffset = new Vector3(rand.x, randomDepth, rand.y);
     }
-
 
     // ==========================================
     // DEBUG GIZMOS
@@ -332,7 +346,7 @@ public class FishController : MonoBehaviour
             if (currentState == FishState.HookedAndWait)
             {
                 Gizmos.color = Color.magenta;
-                Gizmos.DrawWireSphere(hookPosition, 1.5f); // 1.5f คือระยะดิ้นที่เราตั้งไว้
+                Gizmos.DrawWireSphere(hookPosition, 1.5f);
                 Gizmos.DrawSphere(struggleTarget, 0.1f);
                 Gizmos.DrawLine(transform.position, struggleTarget);
             }

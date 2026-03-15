@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections; // 🌟 เพิ่มบรรทัดนี้เพื่อใช้งาน Coroutine
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -20,6 +21,11 @@ public class PlayerInventory : MonoBehaviour
     public Image[] inventoryIcons;
     public RectTransform selectionHighlight;
     public TextMeshProUGUI goldText;
+
+    // 🌟 ตัวแปรแสดงชื่อไอเทม และระบบตั้งเวลา
+    public TextMeshProUGUI heldItemNameText;
+    public float nameDisplayDuration = 2.5f; // เวลาที่จะให้ชื่อโชว์ค้างไว้ (หน่วยเป็นวินาที)
+    private Coroutine hideNameCoroutine; // ตัวแปรเก็บ Coroutine เพื่อใช้ยกเลิกถ้ารีบเปลี่ยนของ
 
     [Header("Bait System")]
     public GameObject baitSlotUI;
@@ -107,6 +113,10 @@ public class PlayerInventory : MonoBehaviour
         }
 
         if (inventoryMenu != null) inventoryMenu.SetActive(false);
+
+        // ซ่อนข้อความไว้ตั้งแต่เริ่มเกม
+        if (heldItemNameText != null) heldItemNameText.gameObject.SetActive(false);
+
         UpdateInventoryUI();
     }
 
@@ -184,12 +194,28 @@ public class PlayerInventory : MonoBehaviour
         }
 
         bool isHoldingFishingRod = false;
-        if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
+
+        // 🌟 2. อัปเดตการแสดงชื่อไอเทมแบบชั่วคราว
+        if (heldItemNameText != null)
         {
-            ItemHolder holder = itemSlots[currentItemIndex].GetComponent<ItemHolder>();
-            if (holder != null && holder.itemData != null && holder.itemData.isFishingRod)
+            if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
             {
-                isHoldingFishingRod = true;
+                ItemHolder holder = itemSlots[currentItemIndex].GetComponent<ItemHolder>();
+                if (holder != null && holder.itemData != null)
+                {
+                    heldItemNameText.text = holder.itemData.name;
+                    heldItemNameText.gameObject.SetActive(true); // เปิดให้มองเห็นข้อความ
+
+                    // ยกเลิกการนับเวลาเก่า (ถ้ามี) แล้วเริ่มนับถอยหลังซ่อนข้อความใหม่
+                    if (hideNameCoroutine != null) StopCoroutine(hideNameCoroutine);
+                    hideNameCoroutine = StartCoroutine(HideItemNameRoutine());
+
+                    if (holder.itemData.isFishingRod) isHoldingFishingRod = true;
+                }
+            }
+            else
+            {
+                heldItemNameText.gameObject.SetActive(false); // ซ่อนข้อความถ้าไม่ได้ถืออะไร
             }
         }
 
@@ -232,7 +258,18 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
-    private void EquipItem(int index)
+    // 🌟 3. ฟังก์ชัน Coroutine สำหรับนับเวลาถอยหลังซ่อนชื่อไอเทม
+    private IEnumerator HideItemNameRoutine()
+    {
+        yield return new WaitForSeconds(nameDisplayDuration); // รอเวลาตามที่ตั้งไว้
+
+        if (heldItemNameText != null)
+        {
+            heldItemNameText.gameObject.SetActive(false); // ปิดการแสดงผลข้อความ
+        }
+    }
+
+    public void EquipItem(int index)
     {
         PlayerCombat combat = GetComponent<PlayerCombat>();
         if (combat != null && combat.IsAttacking()) return;
@@ -748,7 +785,6 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
-    // 🌟 1. ดึงข้อมูลเหยื่อปัจจุบัน
     public ItemData GetCurrentBaitData()
     {
         if (currentBaitItem != null)
@@ -759,7 +795,6 @@ public class PlayerInventory : MonoBehaviour
         return null;
     }
 
-    // 🌟 2. ลบเหยื่อออกจากช่อง (กินเหยื่อ)
     public void ConsumeBait()
     {
         if (currentBaitItem != null)

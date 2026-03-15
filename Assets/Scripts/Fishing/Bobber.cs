@@ -22,8 +22,10 @@ public class Bobber : MonoBehaviour
 
     public event Action<FishController> OnFishBitten;
 
-    // 🌟 ตัวแปรเก็บโมเดลเหยื่อที่ห้อยอยู่
     private GameObject visualBait;
+
+    // 🌟 ตัวแปรเก็บข้อมูล ItemData ของเหยื่อ
+    public ItemData attachedBaitData;
 
     private void Awake()
     {
@@ -77,24 +79,20 @@ public class Bobber : MonoBehaviour
         }
     }
 
-    // 🌟 ฟังก์ชันสร้างเหยื่อมาห้อยใต้ทุ่น
-    public void SetBaitVisual(GameObject baitPrefab)
+    // 🌟 รับค่า ItemData มาด้วยเพื่อให้ทุ่นจำค่าพลังเหยื่อได้
+    public void SetBaitVisual(GameObject baitPrefab, ItemData baitData = null)
     {
+        attachedBaitData = baitData;
+
         if (baitPrefab != null)
         {
-            // สร้างเหยื่อและตั้งให้เป็นลูกของ Bobber ทันที
             visualBait = Instantiate(baitPrefab, transform);
 
-            // 🌟 1. ตั้งค่า Position ตามในภาพ
+            // 🌟 ตั้งค่า Transform ตามที่คุณต้องการ
             visualBait.transform.localPosition = new Vector3(0.771f, 0.122f, -0.086f);
-
-            // 🌟 2. ตั้งค่า Rotation ตามในภาพ (ใช้ Quaternion.Euler เพื่อแปลงองศา)
             visualBait.transform.localRotation = Quaternion.Euler(2.127f, 187.1f, -16.593f);
-
-            // 🌟 3. ตั้งค่า Scale ตามในภาพ
             visualBait.transform.localScale = new Vector3(80f, 80f, 80f);
 
-            // ปิดระบบฟิสิกส์ของเหยื่อ เพื่อไม่ให้ถ่วงน้ำหนักหรือชนกับทุ่น
             if (visualBait.TryGetComponent<Rigidbody>(out Rigidbody rbBait)) Destroy(rbBait);
             if (visualBait.TryGetComponent<Collider>(out Collider colBait)) colBait.enabled = false;
         }
@@ -106,7 +104,6 @@ public class Bobber : MonoBehaviour
 
         isBitten = true;
 
-        // 🌟 ปลากินปุ๊บ ทำลายโมเดลเหยื่อที่ห้อยอยู่ทิ้ง
         if (visualBait != null)
         {
             Destroy(visualBait);

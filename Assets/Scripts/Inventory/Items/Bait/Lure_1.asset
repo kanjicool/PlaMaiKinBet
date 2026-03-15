@@ -19,6 +19,9 @@ MonoBehaviour:
   maxStock: -1
   isFishingRod: 0
   isBait: 1
+  baitTier: 2
+  biteChanceBonus: 20
+  escapePowerReduction: 1
   holdAnimID: 1
   equipDelay: 0.5
   holdPositionOffset: {x: 0, y: 0, z: 0}

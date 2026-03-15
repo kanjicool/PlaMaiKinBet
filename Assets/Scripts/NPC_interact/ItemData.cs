@@ -17,6 +17,11 @@ public class ItemData : ScriptableObject
     public bool isFishingRod = false; // ติ๊กถูกถ้าเป็นเบ็ด
     public bool isBait = false;       // ติ๊กถูกถ้าเป็นเหยื่อ
 
+    [Header("Bait Settings")]
+    public int baitTier = 1;                // ระดับเหยื่อ (1-6)
+    public float biteChanceBonus = 10f;     // โบนัส % ทำให้ปลางับเบ็ดง่ายขึ้น
+    public float escapePowerReduction = 0f; // ลดความเก่งของปลาในมินิเกม (ทำให้หลุดยากขึ้น)
+
     [Header("Animation Settings")]
     [Tooltip("0=Bare hands, 1=Holding FishingRob, 2=Holding Fish, 3=Sword Idle, 4=Pistol Aim, 5=Rifle Idle")]
     public int holdAnimID = 1;

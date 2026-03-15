@@ -15,10 +15,13 @@ MonoBehaviour:
   itemName: Lure_5
   icon: {fileID: -2140426678, guid: 7e5c7aa6062eb024eb2a2e6466bfdf56, type: 3}
   itemPrefab: {fileID: 8868597340506327003, guid: d1edd1bca08ed5b45aebb7665fdf65da, type: 3}
-  price: 400
+  price: 200
   maxStock: -1
   isFishingRod: 0
   isBait: 1
+  baitTier: 6
+  biteChanceBonus: 70
+  escapePowerReduction: 10
   holdAnimID: 1
   equipDelay: 0.5
   holdPositionOffset: {x: 0, y: 0, z: 0}

@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
-    // 🌟 เพิ่ม Bait ลงใน Enum
     public enum SlotType { Hotbar, Inventory, Bait }
 
     [Header("Slot Info")]
@@ -29,9 +28,18 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.clickCount == 2)
+        // 🌟 1. เช็คถ้าคลิก 1 ครั้ง และเป็นช่อง Hotbar ให้ทำการถือไอเทม
+        if (eventData.clickCount == 1)
         {
-            // 🌟 เช็คว่าช่องว่างหรือไม่ ถ้าว่างให้ return ออกไปเลย ไม่ต้องล็อก
+            if (slotType == SlotType.Hotbar && inventory != null)
+            {
+                // โค้ดจะอนุญาตให้สลับถือของ/เก็บของได้เลยเมื่อคลิก
+                inventory.EquipItem(slotIndex);
+            }
+        }
+        // 2. เช็คถ้าดับเบิ้ลคลิก (โค้ดเดิม) เพื่อล็อก/ปลดล็อกไอเทม
+        else if (eventData.clickCount == 2)
+        {
             if (itemIcon == null || itemIcon.sprite == null || itemIcon.color.a == 0)
             {
                 Debug.LogWarning("ช่องว่าง ไม่สามารถล็อกได้!");
@@ -85,7 +93,6 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
     {
         if (slotBeingDragged != null && slotBeingDragged != this && !isLocked)
         {
-            // 🌟 เช็คเงื่อนไขถ้าจะลากมาใส่ช่อง Bait
             if (this.slotType == SlotType.Bait)
             {
                 GameObject draggedObj = inventory.GetGameObjectFromSlot(slotBeingDragged);
@@ -95,12 +102,11 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
                     if (holder == null || holder.itemData == null || !holder.itemData.isBait)
                     {
                         Debug.LogWarning("ช่องนี้ใส่ได้เฉพาะเหยื่อตกปลาเท่านั้น!");
-                        return; // ยกเลิกการใส่
+                        return;
                     }
                 }
             }
 
-            // 🌟 เช็คเงื่อนไขถ้าจะลากออกจากช่อง Bait ไปทับช่องอื่น
             if (slotBeingDragged.slotType == SlotType.Bait)
             {
                 GameObject targetObj = inventory.GetGameObjectFromSlot(this);

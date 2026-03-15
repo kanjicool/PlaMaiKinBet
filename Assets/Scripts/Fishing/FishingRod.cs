@@ -27,7 +27,6 @@ public class FishingRod : MonoBehaviour
     private int chargeDirection = 1;
 
     private FishController currentHookedFish;
-
     private PlayerFishing playerFishing;
 
     private void Awake()
@@ -68,7 +67,6 @@ public class FishingRod : MonoBehaviour
     {
         UpdateLineRenderer();
         HandleCharging();
-
         CheckFishingConditions();
     }
 
@@ -83,18 +81,13 @@ public class FishingRod : MonoBehaviour
         if (currentBobberObj != null)
         {
             float distance = Vector3.Distance(transform.root.position, currentBobberObj.transform.position);
-
-            if (distance > maxLineDistance)
-            {
-                CancelFishing();
-            }
+            if (distance > maxLineDistance) CancelFishing();
         }
     }
 
     private void UpdateLineRenderer()
     {
         if (!lineRenderer.enabled) return;
-
         lineRenderer.SetPosition(0, rodTip.position);
 
         if (currentBobberObj != null)
@@ -132,16 +125,10 @@ public class FishingRod : MonoBehaviour
     {
         if (!gameObject.activeInHierarchy) return;
 
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
         PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
-        if (inventory != null && inventory.isInventoryOpen)
-        {
-            return;
-        }
+        if (inventory != null && inventory.isInventoryOpen) return;
 
         if (currentBobberObj != null || currentHookedFish != null)
         {
@@ -184,23 +171,13 @@ public class FishingRod : MonoBehaviour
             {
                 ItemData baitData = inventory.GetCurrentBaitData();
 
-                // 🌟 ใส่ Debug มาเช็คว่าเจอเหยื่อไหม
                 if (baitData != null)
                 {
-                    Debug.Log("<color=green>คันเบ็ด: เจอเหยื่อชื่อ " + baitData.name + " กำลังจะสร้างโมเดลห้อยทุ่น!</color>");
-
                     if (baitData.itemPrefab != null)
                     {
-                        activeBobber.SetBaitVisual(baitData.itemPrefab);
+                        // 🌟 ส่งข้อมูล ItemData เข้าไปด้วย
+                        activeBobber.SetBaitVisual(baitData.itemPrefab, baitData);
                     }
-                    else
-                    {
-                        Debug.LogWarning("<color=red>คันเบ็ด: เจอเหยื่อ แต่คุณลืมใส่ Item Prefab ในไฟล์ ItemData ของเหยื่อตัวนี้!</color>");
-                    }
-                }
-                else
-                {
-                    Debug.Log("<color=yellow>คันเบ็ด: ไม่มีเหยื่อในช่อง (Bait Slot ว่างเปล่า)</color>");
                 }
             }
         }
@@ -215,9 +192,18 @@ public class FishingRod : MonoBehaviour
 
     private void HandleFishBite(FishController fish)
     {
-        Debug.Log("2. คันเบ็ด (FishingRod) รับทราบจากทุ่น กำลังจะเปิดมินิเกม!");
+        // 🌟 ดึงค่าความเก่งตั้งต้นของปลามาก่อน
+        float finalEscapePower = fish.myData.escapePower;
 
-        // 🌟 หักเหยื่อออกจากช่อง UI ตอนปลากินทันที
+        // 🌟 คำนวณบัฟลดพลังปลา (ดึงค่าจากทุ่นที่จำไว้)
+        if (activeBobber != null && activeBobber.attachedBaitData != null)
+        {
+            finalEscapePower -= activeBobber.attachedBaitData.escapePowerReduction;
+
+            // ป้องกันไม่ให้พลังปลาติดลบ (ให้น้อยสุดคือ 1)
+            if (finalEscapePower < 1f) finalEscapePower = 1f;
+        }
+
         PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
         if (inventory != null)
         {
@@ -226,8 +212,9 @@ public class FishingRod : MonoBehaviour
 
         currentHookedFish = fish;
 
+        // 🌟 ส่งค่า finalEscapePower (ที่โดนบัฟเหยื่อลดแล้ว) ไปให้มินิเกม
         FishingMiniGame.Instance.StartMiniGame(
-            fish.myData.escapePower,
+            finalEscapePower,
             OnMinigameWin,
             OnMinigameLose
         );
@@ -278,7 +265,6 @@ public class FishingRod : MonoBehaviour
         if (GameLoopManager.Instance == null || GameLoopManager.Instance.currentQuests.Count == 0) return;
 
         bool isQuestFish = false;
-
         foreach (var quest in GameLoopManager.Instance.currentQuests)
         {
             if (fish.myData.fishItemData == quest.fish.fishItemData)
@@ -294,7 +280,6 @@ public class FishingRod : MonoBehaviour
             if (inventory == null) return;
 
             bool allQuestsCompleted = true;
-
             foreach (var quest in GameLoopManager.Instance.currentQuests)
             {
                 int currentAmount = inventory.GetItemCount(quest.fish.fishItemData);
@@ -307,7 +292,6 @@ public class FishingRod : MonoBehaviour
 
             if (allQuestsCompleted)
             {
-                Debug.Log("ได้ปลาครบตามเควสต์แล้ว! กลับไปหาบอสกันเถอะ!");
                 if (GameLoopManager.Instance.compass != null)
                 {
                     GameLoopManager.Instance.compass.SetTarget(GameLoopManager.Instance.hubIsland);
