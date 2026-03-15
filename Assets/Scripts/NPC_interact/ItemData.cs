@@ -18,9 +18,9 @@ public class ItemData : ScriptableObject
     public bool isBait = false;       // ติ๊กถูกถ้าเป็นเหยื่อ
 
     [Header("Bait Settings")]
-    public int baitTier = 1;                // ระดับเหยื่อ (1-6)
-    public float biteChanceBonus = 10f;     // โบนัส % ทำให้ปลางับเบ็ดง่ายขึ้น
-    public float escapePowerReduction = 0f; // ลดความเก่งของปลาในมินิเกม (ทำให้หลุดยากขึ้น)
+    public int baitTier = 1;                 // ระดับเหยื่อ (1-6)
+    public float biteChanceBonus = 10f;      // โบนัส % ทำให้ปลางับเบ็ดง่ายขึ้น
+    public float escapePowerReduction = 0f;  // ลดความเก่งของปลาในมินิเกม (ทำให้หลุดยากขึ้น)
 
     [Header("Animation Settings")]
     [Tooltip("0=Bare hands, 1=Holding FishingRob, 2=Holding Fish, 3=Sword Idle, 4=Pistol Aim, 5=Rifle Idle, 6=items Idle")]
@@ -61,4 +61,11 @@ public class ItemData : ScriptableObject
     public float healAmount = 20f;
     public AudioClip useSound;
 
+    // 🔦 หมวดหมู่ใหม่สำหรับไฟฉาย
+    [Header("Flashlight Settings")]
+    public bool isFlashlight = false;       // ติ๊กถูกถ้าไอเทมนี้คือไฟฉาย
+    public float lightIntensity = 10f;      // ความสว่างของไฟฉาย
+    public float lightRange = 30f;          // ระยะการส่องสว่าง
+    public Color lightColor = Color.white;  // สีของแสงไฟ
+    public AudioClip toggleSound;           // เสียงคลิกตอนกดเปิด-ปิดไฟฉาย
 }

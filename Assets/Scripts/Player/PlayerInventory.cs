@@ -1,4 +1,4 @@
-﻿using System.Collections; 
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -24,8 +24,8 @@ public class PlayerInventory : MonoBehaviour
 
     // 🌟 ตัวแปรแสดงชื่อไอเทม และระบบตั้งเวลา
     public TextMeshProUGUI heldItemNameText;
-    public float nameDisplayDuration = 2.5f; // เวลาที่จะให้ชื่อโชว์ค้างไว้ (หน่วยเป็นวินาที)
-    private Coroutine hideNameCoroutine; // ตัวแปรเก็บ Coroutine เพื่อใช้ยกเลิกถ้ารีบเปลี่ยนของ
+    public float nameDisplayDuration = 2.5f;
+    private Coroutine hideNameCoroutine;
 
     [Header("Bait System")]
     public GameObject baitSlotUI;
@@ -114,7 +114,6 @@ public class PlayerInventory : MonoBehaviour
 
         if (inventoryMenu != null) inventoryMenu.SetActive(false);
 
-        // ซ่อนข้อความไว้ตั้งแต่เริ่มเกม
         if (heldItemNameText != null) heldItemNameText.gameObject.SetActive(false);
 
         UpdateInventoryUI();
@@ -125,6 +124,12 @@ public class PlayerInventory : MonoBehaviour
         if (Keyboard.current.bKey.wasPressedThisFrame)
         {
             ToggleInventory();
+        }
+
+        // 🔦 กด F เพื่อเปิด-ปิดไฟฉาย
+        if (Keyboard.current.fKey.wasPressedThisFrame)
+        {
+            ToggleFlashlight();
         }
     }
 
@@ -146,6 +151,33 @@ public class PlayerInventory : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
+    }
+
+    // 🌟 แก้ไขฟังก์ชันเปิด-ปิดไฟ ให้ใช้คำสั่งเปิดปิดแค่แสง ไม่ปิดโมเดล
+    private void ToggleFlashlight()
+    {
+        GameObject heldItem = GetHeldItem();
+        if (heldItem == null) return;
+
+        ItemHolder holder = heldItem.GetComponent<ItemHolder>();
+        if (holder != null && holder.itemData != null && holder.itemData.isFlashlight)
+        {
+            Light flashlightLight = heldItem.GetComponentInChildren<Light>(true);
+            if (flashlightLight != null)
+            {
+                // เปลี่ยนจาก gameObject.SetActive เป็นการปิด/เปิดแค่ Component Light (.enabled)
+                flashlightLight.enabled = !flashlightLight.enabled;
+
+                flashlightLight.intensity = holder.itemData.lightIntensity;
+                flashlightLight.range = holder.itemData.lightRange;
+                flashlightLight.color = holder.itemData.lightColor;
+
+                if (holder.itemData.toggleSound != null && audioSource != null)
+                {
+                    audioSource.PlayOneShot(holder.itemData.toggleSound);
+                }
+            }
         }
     }
 
@@ -195,7 +227,6 @@ public class PlayerInventory : MonoBehaviour
 
         bool isHoldingFishingRod = false;
 
-        // 🌟 2. อัปเดตการแสดงชื่อไอเทมแบบชั่วคราว
         if (heldItemNameText != null)
         {
             if (currentItemIndex != -1 && itemSlots[currentItemIndex] != null)
@@ -203,10 +234,9 @@ public class PlayerInventory : MonoBehaviour
                 ItemHolder holder = itemSlots[currentItemIndex].GetComponent<ItemHolder>();
                 if (holder != null && holder.itemData != null)
                 {
-                    heldItemNameText.text = holder.itemData.name;
-                    heldItemNameText.gameObject.SetActive(true); // เปิดให้มองเห็นข้อความ
+                    heldItemNameText.text = holder.itemData.itemName;
+                    heldItemNameText.gameObject.SetActive(true);
 
-                    // ยกเลิกการนับเวลาเก่า (ถ้ามี) แล้วเริ่มนับถอยหลังซ่อนข้อความใหม่
                     if (hideNameCoroutine != null) StopCoroutine(hideNameCoroutine);
                     hideNameCoroutine = StartCoroutine(HideItemNameRoutine());
 
@@ -215,7 +245,7 @@ public class PlayerInventory : MonoBehaviour
             }
             else
             {
-                heldItemNameText.gameObject.SetActive(false); // ซ่อนข้อความถ้าไม่ได้ถืออะไร
+                heldItemNameText.gameObject.SetActive(false);
             }
         }
 
@@ -258,14 +288,13 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
-    // 🌟 3. ฟังก์ชัน Coroutine สำหรับนับเวลาถอยหลังซ่อนชื่อไอเทม
     private IEnumerator HideItemNameRoutine()
     {
-        yield return new WaitForSeconds(nameDisplayDuration); // รอเวลาตามที่ตั้งไว้
+        yield return new WaitForSeconds(nameDisplayDuration);
 
         if (heldItemNameText != null)
         {
-            heldItemNameText.gameObject.SetActive(false); // ปิดการแสดงผลข้อความ
+            heldItemNameText.gameObject.SetActive(false);
         }
     }
 
@@ -283,6 +312,15 @@ public class PlayerInventory : MonoBehaviour
 
         if (currentItemIndex != -1 && currentItemIndex < itemSlots.Length && itemSlots[currentItemIndex] != null)
         {
+            // หากเปลี่ยนของ บังคับปิดไฟฉายก่อนเก็บ
+            ItemHolder oldHolder = itemSlots[currentItemIndex].GetComponent<ItemHolder>();
+            if (oldHolder != null && oldHolder.itemData != null && oldHolder.itemData.isFlashlight)
+            {
+                Light oldLight = itemSlots[currentItemIndex].GetComponentInChildren<Light>(true);
+                // 🌟 ใช้ .enabled แทน
+                if (oldLight != null) oldLight.enabled = false;
+            }
+
             itemSlots[currentItemIndex].SetActive(false);
         }
 
@@ -299,9 +337,19 @@ public class PlayerInventory : MonoBehaviour
                 itemSlots[currentItemIndex].SetActive(true);
 
                 ItemHolder holder = itemSlots[currentItemIndex].GetComponent<ItemHolder>();
-                if (holder != null && holder.itemData != null && holder.itemData.equipSound != null)
+                if (holder != null && holder.itemData != null)
                 {
-                    audioSource.PlayOneShot(holder.itemData.equipSound);
+                    // 🌟 ถือของขึ้นมาใหม่ ต้องมั่นใจว่าไฟ "ปิด" อยู่เสมอ
+                    if (holder.itemData.isFlashlight)
+                    {
+                        Light newLight = itemSlots[currentItemIndex].GetComponentInChildren<Light>(true);
+                        if (newLight != null) newLight.enabled = false;
+                    }
+
+                    if (holder.itemData.equipSound != null)
+                    {
+                        audioSource.PlayOneShot(holder.itemData.equipSound);
+                    }
                 }
             }
         }
@@ -743,10 +791,16 @@ public class PlayerInventory : MonoBehaviour
             {
                 if (holder.itemData.isFishingRod)
                 {
-                    return; 
+                    return;
+                }
+
+                // 🔦 ปิดไฟฉายก่อนทิ้งลงพื้น (ใช้ .enabled)
+                if (holder.itemData.isFlashlight)
+                {
+                    Light lightComp = itemToDrop.GetComponentInChildren<Light>(true);
+                    if (lightComp != null) lightComp.enabled = false;
                 }
             }
-
 
             itemSlots[currentItemIndex] = null;
             currentItemIndex = -1;
@@ -825,18 +879,17 @@ public class PlayerInventory : MonoBehaviour
 
     public void ConsumeHeldItem()
     {
-        // 1. ดึง GameObject ของที่ถืออยู่ในมืออกมา
         GameObject heldObject = GetHeldItem();
 
         if (heldObject != null)
         {
-            // 2. ทำลายโมเดลยาที่ถืออยู่ทิ้ง
             Destroy(heldObject);
 
-            // 3. (สำคัญ) ลบข้อมูลออกจากระบบ Inventory ของคุณด้วย 
-            // สมมติว่าคุณใช้ตัวแปรชื่อ currentEquippedItem หรือคล้ายๆ กันให้เคลียร์เป็น null
+            itemSlots[currentItemIndex] = null;
+            currentItemIndex = -1;
 
             Debug.Log("Item consumed and removed from hand.");
+            UpdateInventoryUI();
         }
     }
 
