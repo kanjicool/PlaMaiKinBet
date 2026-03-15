@@ -2983,6 +2983,7 @@ MonoBehaviour:
   notificationText: {fileID: 1241719513720866512}
   notifyDuration: 2
   permanentItems:
+  - {fileID: 11400000, guid: bd36f7eb76c55f742a7c7de145bd5163, type: 2}
   - {fileID: 11400000, guid: f1c72ced1e6c464429575b9e36ceb21f, type: 2}
   - {fileID: 11400000, guid: 7927e8143220d944da16935ed4a4911f, type: 2}
   - {fileID: 11400000, guid: 1687affa55500274fb2fbb4d8fa04530, type: 2}
