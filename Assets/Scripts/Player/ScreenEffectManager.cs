@@ -152,6 +152,18 @@ public class ScreenEffectManager : MonoBehaviour
         }
     }
 
+    public void ForceStopBossPressure()
+    {
+        targetDangerWeight = 0f;
+
+        if (bossDangerVolume != null) bossDangerVolume.weight = 0f;
+
+        if (currentFadeCoroutine != null) StopCoroutine(currentFadeCoroutine);
+
+        if (bgmAudioSource != null) bgmAudioSource.Stop();
+        if (alertAudioSource != null) alertAudioSource.Stop();
+    }
+
     #endregion
 
     #region Audio Fading System

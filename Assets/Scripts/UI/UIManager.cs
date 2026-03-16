@@ -89,6 +89,11 @@ public class UIManager : MonoBehaviour
     // =============================
     public void ShowDeathScreen(int waveReached, int livesRemaining)
     {
+        if (ScreenEffectManager.Instance != null)
+        {
+            ScreenEffectManager.Instance.ForceStopBossPressure();
+        }
+
         if (deathPanel != null) deathPanel.SetActive(true);
 
         // คำนวณ Wave ที่รอด
