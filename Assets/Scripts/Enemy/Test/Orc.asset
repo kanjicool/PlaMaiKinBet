@@ -20,4 +20,5 @@ MonoBehaviour:
   sightRange: 15
   attackRange: 2
   timeBetweenAttacks: 2
-  damage: 10
+  damage: 15
+  attackDamage: 15

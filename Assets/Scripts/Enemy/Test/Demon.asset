@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d068f406d17f324f9a30cc24526e597, type: 3}
   m_Name: Demon
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  maxHealth: 50
+  maxHealth: 40
   walkPointRange: 10
   patrolSpeed: 2
   chaseSpeed: 10
   acceleration: 20
   sightRange: 15
-  attackRange: 2
+  attackRange: 5
   timeBetweenAttacks: 2
   damage: 20
-  attackDamage: 10
+  attackDamage: 20

@@ -15,9 +15,10 @@ MonoBehaviour:
   maxHealth: 100
   walkPointRange: 10
   patrolSpeed: 2
-  chaseSpeed: 7
+  chaseSpeed: 10
   acceleration: 12
   sightRange: 15
   attackRange: 2
   timeBetweenAttacks: 2
   damage: 10
+  attackDamage: 10
