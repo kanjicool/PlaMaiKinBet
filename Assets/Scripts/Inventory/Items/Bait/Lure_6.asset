@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lure_6
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Lure_6
-  icon: {fileID: -1659026669, guid: 7e5c7aa6062eb024eb2a2e6466bfdf56, type: 3}
+  icon: {fileID: 21300000, guid: 08687ef541ece424fa9dc59e72b3833b, type: 3}
   itemPrefab: {fileID: 9192849815764732870, guid: f7f638b1fcd086a4a8b556e29a06e7fa, type: 3}
   price: 300
   maxStock: -1
@@ -27,6 +27,7 @@ MonoBehaviour:
   holdPositionOffset: {x: 0, y: 0, z: 0}
   holdRotationOffset: {x: 0, y: 0, z: 0}
   equipSound: {fileID: 0}
+  attackSound: {fileID: 0}
   attackHoldPositionOffset: {x: 0, y: 0, z: 0}
   attackHoldRotationOffset: {x: 0, y: 0, z: 0}
   attackDamage: 20
@@ -41,3 +42,12 @@ MonoBehaviour:
   bulletSpread: 0
   fireRate: 0.2
   hitEffectPrefab: {fileID: 0}
+  isConsumable: 0
+  useItemHoldTime: 2
+  healAmount: 20
+  useSound: {fileID: 0}
+  isFlashlight: 0
+  lightIntensity: 10
+  lightRange: 30
+  lightColor: {r: 1, g: 1, b: 1, a: 1}
+  toggleSound: {fileID: 0}
