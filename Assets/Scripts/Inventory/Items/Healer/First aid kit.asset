@@ -45,7 +45,7 @@ MonoBehaviour:
   isConsumable: 1
   useItemHoldTime: 2
   healAmount: 150
-  useSound: {fileID: 0}
+  useSound: {fileID: 8300000, guid: 33ae836b499e10341b42ee9a3cbf6a18, type: 3}
   isFlashlight: 0
   lightIntensity: 10
   lightRange: 30
