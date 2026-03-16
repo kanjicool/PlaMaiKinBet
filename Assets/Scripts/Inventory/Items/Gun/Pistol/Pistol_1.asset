@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Pistol_1
   icon: {fileID: -182245376, guid: 97993459d79f7af4fb71d27e393743ac, type: 3}
   itemPrefab: {fileID: 7901705796515663827, guid: 8a70ff6f0c617b44f8c504e68b433bd0, type: 3}
-  price: 500
+  price: 200
   maxStock: 1
   isFishingRod: 0
   isBait: 0
