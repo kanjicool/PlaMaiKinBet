@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: AssaultRifle_2
   icon: {fileID: 998839187, guid: 97993459d79f7af4fb71d27e393743ac, type: 3}
   itemPrefab: {fileID: 5533410735107293931, guid: 48f14342da3ac4c49b651027dc4222da, type: 3}
-  price: 15
+  price: 25000
   maxStock: 1
   isFishingRod: 0
   isBait: 0
@@ -27,10 +27,11 @@ MonoBehaviour:
   holdPositionOffset: {x: -0.08, y: -0.197, z: -0.074}
   holdRotationOffset: {x: 24.041, y: 166.361, z: 55.005}
   equipSound: {fileID: 8300000, guid: 1f2e9f05e947d604abc8bad3fdd8ab1e, type: 3}
+  attackSound: {fileID: 0}
   attackHoldPositionOffset: {x: -0.073, y: -0.208, z: -0.067}
   attackHoldRotationOffset: {x: 22.88, y: 167.241, z: 55.356}
-  attackDamage: 15
-  attackRange: 100
+  attackDamage: 150
+  attackRange: 120
   muzzleScale: 0.15
   shootSound: {fileID: 8300000, guid: ae07488261e013844a09f07bbd4ccca1, type: 3}
   muzzleFlashPrefab: {fileID: 100006, guid: 7e9c50938e32351438a7df9ccad2f2a5, type: 3}
@@ -45,3 +46,8 @@ MonoBehaviour:
   useItemHoldTime: 2
   healAmount: 20
   useSound: {fileID: 0}
+  isFlashlight: 0
+  lightIntensity: 10
+  lightRange: 30
+  lightColor: {r: 1, g: 1, b: 1, a: 1}
+  toggleSound: {fileID: 0}

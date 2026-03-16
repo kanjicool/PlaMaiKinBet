@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Shotgun_3
   icon: {fileID: 910403982, guid: 97993459d79f7af4fb71d27e393743ac, type: 3}
   itemPrefab: {fileID: 1508042330321677949, guid: f52407b5c1831154f80c904e449c8efd, type: 3}
-  price: 15
+  price: 4500
   maxStock: 1
   isFishingRod: 0
   isBait: 0
@@ -27,10 +27,11 @@ MonoBehaviour:
   holdPositionOffset: {x: -0.134, y: -0.135, z: 0.065}
   holdRotationOffset: {x: 26.943, y: -195.232, z: 64.751}
   equipSound: {fileID: 8300000, guid: cc45fea8620fd1349b7f32abc94f689a, type: 3}
+  attackSound: {fileID: 0}
   attackHoldPositionOffset: {x: -0.114, y: -0.189, z: 0.092}
   attackHoldRotationOffset: {x: 23.305, y: -189.321, z: 67.619}
-  attackDamage: 20
-  attackRange: 100
+  attackDamage: 28
+  attackRange: 20
   muzzleScale: 0.01
   shootSound: {fileID: 8300000, guid: 191731b6cf7e1e74d80644aaa73bcccd, type: 3}
   muzzleFlashPrefab: {fileID: 100006, guid: 7e9c50938e32351438a7df9ccad2f2a5, type: 3}
@@ -45,3 +46,8 @@ MonoBehaviour:
   useItemHoldTime: 2
   healAmount: 20
   useSound: {fileID: 0}
+  isFlashlight: 0
+  lightIntensity: 10
+  lightRange: 30
+  lightColor: {r: 1, g: 1, b: 1, a: 1}
+  toggleSound: {fileID: 0}
